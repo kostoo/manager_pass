@@ -1,8 +1,8 @@
 package com.managerPass.entity;
 
-
-import com.managerPass.entity.Enum.ERole;
+import com.managerPass.entity.Enum.EPriority;
 import lombok.Data;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,10 +13,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
+
 @Entity
-@Table(name = "roles")
+@Table(name = "priority")
 @Data
-public class Role {
+public class PriorityEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,5 +26,5 @@ public class Role {
     @NotBlank
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
-    private ERole name;
+    private EPriority name;
 }

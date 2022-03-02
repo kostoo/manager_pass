@@ -15,11 +15,9 @@ public interface UserEntityRepository extends JpaRepository<UserEntity, Long> {
 
     ArrayList<UserEntity> findAllByLastName(@Param("last_name") String last_name);
 
-    UserEntity findUserEntityByIdUser(@Param("id_user") Long id);
+    Optional<UserEntity> findUserEntityByIdUser(@Param("id_user") Long id);
 
-    UserEntity deleteUserEntityByIdUser(@Param("id_user") Long id);
-
-    Optional<Object> findByEmail(String email);
+    void deleteById(@Param("id_user") Long id);
 
     Optional<UserEntity> findByUsername(String username);
 
