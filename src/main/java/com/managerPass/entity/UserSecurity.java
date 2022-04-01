@@ -6,7 +6,6 @@ import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,15 +25,19 @@ public class UserSecurity implements UserDetails {
     @JsonIgnore
     private String password;
 
+    private boolean isAccountNonLocked;
+
+    private boolean isAccountActive;
+
     private Collection<? extends GrantedAuthority> authorities;
 
     public static UserSecurity build(UserEntity user) {
         List<GrantedAuthority> authorities = user.getRoles()
-                .stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
-                .collect(Collectors.toList());
-
-        return new UserSecurity(user.getIdUser(),user.getUsername(),user.getEmail(),user.getPassword(),authorities);
+                                                 .stream()
+                                                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
+                                                 .collect(Collectors.toList());
+       return new UserSecurity(user.getIdUser(),user.getUsername(),user.getEmail(),user.getPassword(),
+                               user.getIsAccountNonBlock(),user.getIsAccountActive(),authorities);
     }
 
     @Override
@@ -44,7 +47,7 @@ public class UserSecurity implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return isAccountNonLocked;
     }
 
     @Override
@@ -54,6 +57,6 @@ public class UserSecurity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isAccountActive;
     }
 }

@@ -1,7 +1,5 @@
 package com.managerPass.config;
 
-
-
 import com.managerPass.security.AuthEntryPointJwt;
 import com.managerPass.security.AuthTokenFilter;
 import com.managerPass.service.UserDetailsServiceImpl;
@@ -54,14 +52,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-<<<<<<< HEAD
-=======
-                .antMatchers("/api/test/**").permitAll()
->>>>>>> 60c4390 (initial auth and registration)
-                .anyRequest().authenticated();
+                                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+                                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                                .authorizeRequests().antMatchers("/api/**").permitAll()
+                                .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }

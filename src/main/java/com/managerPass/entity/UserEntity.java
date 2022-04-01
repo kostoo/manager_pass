@@ -1,21 +1,22 @@
 package com.managerPass.entity;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
 @Table(name = "users",
@@ -55,12 +56,34 @@ public class UserEntity {
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
+    @ToString.Exclude
+    private Set<RoleEntity> roles = new HashSet<>();
+
+    @NotBlank
+    @Column(name = "isAccountActive")
+    private Boolean isAccountActive = false;
+
+    @NotBlank
+    @Column(name = "isAccountNonBlock")
+    private Boolean isAccountNonBlock = true;
 
     public UserEntity(@NotBlank @Size(max = 20) String username, @NotBlank @Size(max = 50) @Email String email,
                       @NotBlank @Size(max = 120) String password) {
         this.username = username;
         this.email = email;
         this.password = password;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        UserEntity that = (UserEntity) o;
+        return idUser != null && Objects.equals(idUser, that.idUser);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

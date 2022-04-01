@@ -1,6 +1,5 @@
 package com.managerPass.security;
 
-
 import com.managerPass.service.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
