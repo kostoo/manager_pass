@@ -1,24 +1,20 @@
 package com.managerPass.entity;
 
-import lombok.Builder;
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
+import org.hibernate.Hibernate;
 import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
-
+import java.util.Objects;
 
 @Entity
 @Table(name = "task")
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 public class TaskEntity {
 
     @Id
@@ -31,9 +27,13 @@ public class TaskEntity {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @ToString.Exclude
     private UserEntity userEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @ToString.Exclude
     private PriorityEntity priority;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -42,5 +42,16 @@ public class TaskEntity {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     LocalDateTime dateTimeFinish;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        TaskEntity that = (TaskEntity) o;
+        return idTask != null && Objects.equals(idTask, that.idTask);
+    }
 
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

@@ -28,6 +28,7 @@ dependencies {
 	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 	compileOnly 'org.projectlombok:lombok:1.18.22'
 	annotationProcessor 'org.projectlombok:lombok:1.18.22'
+	implementation 'org.springframework.boot:spring-boot-starter-mail:2.6.5'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools:2.6.3'
 	runtimeOnly 'org.postgresql:postgresql:42.3.2'
 	implementation 'org.springframework.boot:spring-boot-starter-security:2.6.3'

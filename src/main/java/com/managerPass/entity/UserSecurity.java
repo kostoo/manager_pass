@@ -25,6 +25,10 @@ public class UserSecurity implements UserDetails {
     @JsonIgnore
     private String password;
 
+    private boolean isAccountNonLocked;
+
+    private boolean isAccountActive;
+
     private Collection<? extends GrantedAuthority> authorities;
 
     public static UserSecurity build(UserEntity user) {
@@ -32,8 +36,8 @@ public class UserSecurity implements UserDetails {
                                                  .stream()
                                                  .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                                                  .collect(Collectors.toList());
-
-        return new UserSecurity(user.getIdUser(),user.getUsername(),user.getEmail(),user.getPassword(),authorities);
+       return new UserSecurity(user.getIdUser(),user.getUsername(),user.getEmail(),user.getPassword(),
+                               user.getIsAccountNonBlock(),user.getIsAccountActive(),authorities);
     }
 
     @Override
@@ -43,7 +47,7 @@ public class UserSecurity implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return isAccountNonLocked;
     }
 
     @Override
@@ -53,6 +57,6 @@ public class UserSecurity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isAccountActive;
     }
 }

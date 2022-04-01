@@ -1,6 +1,5 @@
 package com.managerPass;
 
-import com.managerPass.entity.TaskEntity;
 import com.managerPass.entity.UserEntity;
 import com.managerPass.payload.request.LoginRequest;
 import com.managerPass.payload.response.JwtResponse;
@@ -11,7 +10,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.List;
+
 import java.util.Objects;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -20,15 +19,12 @@ public class UserTest {
     @LocalServerPort
     int randomServerPort;
 
-    String randomString = RandomStringUtils.random(10, true, false);
-
-
     @Test
-    public void postEmployee_success() {
+    public void postUser_success() {
         UserEntity employee = UserEntity.builder()
-                                        .name(randomString)
-                                        .lastName(randomString)
-                                        .username(randomString)
+                                        .name(RandomStringUtils.random(10, true, false))
+                                        .lastName(RandomStringUtils.random(10, true, false))
+                                        .username(RandomStringUtils.random(10, true, false))
                                         .build();
 
         WebClient client = WebClient.builder().baseUrl("http://localhost:" + randomServerPort).build();
@@ -36,7 +32,7 @@ public class UserTest {
         LoginRequest loginRequest = new LoginRequest("kosto","password");
 
         JwtResponse userJwtResponse = client.post()
-                                            .uri("/api/postAuthUser")
+                                            .uri("/api/authUser")
                                             .bodyValue(loginRequest)
                                             .retrieve().bodyToMono(JwtResponse.class).block();
 
@@ -48,24 +44,21 @@ public class UserTest {
                           .build();
 
         ResponseEntity<UserEntity> responseEntity = client.post()
-                                                          .uri("/api/addUser")
+                                                          .uri("/api/user")
                                                           .bodyValue(employee)
                                                           .retrieve()
                                                           .toEntity(UserEntity.class).block();
 
         assert Objects.requireNonNull(responseEntity).getStatusCode().is2xxSuccessful();
         assert employee.getName().equals(Objects.requireNonNull(responseEntity.getBody()).getName());
-        //  ResponseEntity<Void> responseEntity = responseSpec.toBodilessEntity().block();
-        //Verify request succeed
-      //  assert responseEntity != null;
     }
 
     @Test
-    public void getEmployeeByName_success(){
+    public void getUserByName_success(){
         UserEntity employee = UserEntity.builder()
-                                        .name(randomString)
-                                        .lastName(randomString)
-                                        .username(randomString)
+                                        .name(RandomStringUtils.random(10, true, false))
+                                        .lastName(RandomStringUtils.random(10, true, false))
+                                        .username(RandomStringUtils.random(10, true, false))
                                         .build();
 
 
@@ -74,7 +67,7 @@ public class UserTest {
         WebClient client = WebClient.builder().baseUrl("http://localhost:" + randomServerPort).build();
 
         JwtResponse userJwtResponse = client.post()
-                                            .uri("/api/postAuthUser")
+                                            .uri("/api/authUser")
                                             .bodyValue(loginRequest)
                                             .retrieve().bodyToMono(JwtResponse.class).block();
 
@@ -85,19 +78,19 @@ public class UserTest {
                           .defaultHeader("Authorization","Bearer " + jwtToken)
                           .build();
 
-        ResponseEntity<?> responseEntity = client.get()
-                                                 .uri("/api/getUserByName/"+ employee.getName())
+        ResponseEntity<?> responseUserByName = client.get()
+                                                 .uri("/api/user/lastName/"+ employee.getLastName())
                                                  .retrieve().toBodilessEntity().block();
 
-        assert Objects.requireNonNull(responseEntity).getStatusCode().is2xxSuccessful();
+        assert Objects.requireNonNull(responseUserByName).getStatusCode().is2xxSuccessful();
     }
 
     @Test
-    public void getEmployeeByUserName_success(){
+    public void getUserByUserName_success(){
         UserEntity employee = UserEntity.builder()
-                                        .name(randomString)
-                                        .lastName(randomString)
-                                        .username(randomString)
+                                        .name(RandomStringUtils.random(10, true, false))
+                                        .lastName(RandomStringUtils.random(10, true, false))
+                                        .username(RandomStringUtils.random(10, true, false))
                                         .build();
 
 
@@ -106,7 +99,7 @@ public class UserTest {
         WebClient client = WebClient.builder().baseUrl("http://localhost:" + randomServerPort).build();
 
         JwtResponse userJwtResponse = client.post()
-                                            .uri("/api/postAuthUser")
+                                            .uri("/api/authUser")
                                             .bodyValue(loginRequest)
                                             .retrieve().bodyToMono(JwtResponse.class).block();
 
@@ -118,7 +111,7 @@ public class UserTest {
                           .build();
 
         ResponseEntity<UserEntity> addUserResponseEntity = client.post()
-                                                                 .uri("/api/addUser")
+                                                                 .uri("/api/user")
                                                                  .bodyValue(employee)
                                                                  .retrieve()
                                                                  .toEntity(UserEntity.class).block();
@@ -126,7 +119,7 @@ public class UserTest {
         assert Objects.requireNonNull(addUserResponseEntity).getStatusCode().is2xxSuccessful();
 
         ResponseEntity<UserEntity> responseEntity = client.get()
-                                                          .uri("/api/getUserByUserName/"+ employee.getUsername())
+                                                          .uri("/api/user/userName/"+ employee.getUsername())
                                                           .retrieve()
                                                           .toEntity(UserEntity.class).block();
 
@@ -135,11 +128,11 @@ public class UserTest {
     }
 
     @Test
-    public void deleteEmployeeById_success(){
+    public void deleteUserById_success(){
         UserEntity employee = UserEntity.builder()
-                                        .name(randomString)
-                                        .lastName(randomString)
-                                        .username(randomString)
+                                        .name(RandomStringUtils.random(10, true, false))
+                                        .lastName(RandomStringUtils.random(10, true, false))
+                                        .username(RandomStringUtils.random(10, true, false))
                                         .build();
 
         WebClient client = WebClient.builder().baseUrl("http://localhost:" + randomServerPort).build();
@@ -147,7 +140,7 @@ public class UserTest {
         LoginRequest loginRequest = new LoginRequest("kosto","password");
 
         JwtResponse userJwtResponse = client.post()
-                                            .uri("/api/postAuthUser")
+                                            .uri("/api/authUser")
                                             .bodyValue(loginRequest)
                                             .retrieve().bodyToMono(JwtResponse.class).block();
 
@@ -159,29 +152,26 @@ public class UserTest {
                           .build();
 
         ResponseEntity<UserEntity> addUserResponseEntity = client.post()
-                                                                 .uri("/api/addUser")
+                                                                 .uri("/api/user")
                                                                  .bodyValue(employee)
                                                                  .retrieve()
                                                                  .toEntity(UserEntity.class).block();
 
         assert addUserResponseEntity != null;
-        ResponseEntity<?> deleteUserResponseEntity = client.delete()
-                                                           .uri("api/deleteUser/"+
-                                                                 Objects.requireNonNull(
-                                                                            addUserResponseEntity.getBody())
-                                                                                                 .getIdUser()
-                                                            )
-                                                           .retrieve().toBodilessEntity().block();
+        ResponseEntity<UserEntity> deleteUserResponseEntity = client.delete()
+                                                                    .uri("/api/user/"+ Objects.requireNonNull(
+                                                                        addUserResponseEntity.getBody()).getIdUser())
+                                                                    .retrieve().toEntity(UserEntity.class).block();
 
         assert Objects.requireNonNull(deleteUserResponseEntity).getStatusCode().is2xxSuccessful();
     }
 
     @Test
-    public void putEmployee_success(){
+    public void putUser_success(){
         UserEntity employee = UserEntity.builder()
-                                        .name(randomString)
-                                        .lastName(randomString)
-                                        .username(randomString)
+                                        .name(RandomStringUtils.random(10, true, false))
+                                        .lastName(RandomStringUtils.random(10, true, false))
+                                        .username(RandomStringUtils.random(10, true, false))
                                         .build();
 
 
@@ -190,7 +180,7 @@ public class UserTest {
         LoginRequest loginRequest = new LoginRequest("kosto","password");
 
         JwtResponse userJwtResponse = client.post()
-                                            .uri("/api/postAuthUser")
+                                            .uri("/api/authUser")
                                             .bodyValue(loginRequest)
                                             .retrieve().bodyToMono(JwtResponse.class).block();
 
@@ -202,17 +192,17 @@ public class UserTest {
                           .build();
 
         ResponseEntity<UserEntity> addUserResponseEntity = client.post()
-                                                                 .uri("/api/addUser")
+                                                                 .uri("/api/user")
                                                                  .bodyValue(employee)
                                                                  .retrieve()
                                                                  .toEntity(UserEntity.class).block();
 
         assert addUserResponseEntity != null;
         Objects.requireNonNull(addUserResponseEntity.getBody())
-                                                    .setUsername(randomString);
+                                                    .setUsername(RandomStringUtils.random(10, true, false));
 
         ResponseEntity<UserEntity> updateUserResponseEntity = client.put()
-                                                                    .uri("api/updateUser/")
+                                                                    .uri("api/user/")
                                                                     .bodyValue(addUserResponseEntity.getBody())
                                                                     .retrieve().toEntity(UserEntity.class).block();
 

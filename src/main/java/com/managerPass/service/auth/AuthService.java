@@ -1,19 +1,21 @@
 package com.managerPass.service.auth;
 
-
 import com.managerPass.entity.Enum.ERole;
-import com.managerPass.entity.Role;
+import com.managerPass.entity.RoleEntity;
 import com.managerPass.entity.UserEntity;
 import com.managerPass.entity.UserSecurity;
-import com.managerPass.payload.response.JwtResponse;
 import com.managerPass.payload.request.LoginRequest;
+import com.managerPass.payload.response.JwtToken;
 import com.managerPass.payload.response.MessageResponse;
 import com.managerPass.payload.request.SignupRequest;
 import com.managerPass.repository.RoleRepository;
 import com.managerPass.repository.UserEntityRepository;
 import com.managerPass.security.JwtUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,6 +24,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.HashSet;
@@ -34,14 +37,11 @@ import java.util.stream.Collectors;
 public class AuthService {
 
     private final AuthenticationManager authenticationManager;
-
     private final UserEntityRepository userRepository;
-
     private final RoleRepository roleRepository;
-
     private final PasswordEncoder encoder;
-
     private final JwtUtils jwtUtils;
+    private final JavaMailSender javaMailSender;
 
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -52,15 +52,15 @@ public class AuthService {
         String jwt = jwtUtils.generateJwtToken(authentication);
 
         UserSecurity userDetails = (UserSecurity) authentication.getPrincipal();
+
         List<String> roles = userDetails.getAuthorities().stream()
                                                          .map(GrantedAuthority::getAuthority)
                                                          .collect(Collectors.toList());
+        if (!userDetails.isAccountActive() || !userDetails.isEnabled()){
+            return ResponseEntity.badRequest().body(new MessageResponse("Account not active"));
+        }
 
-        return ResponseEntity.ok(new JwtResponse(jwt,
-                                                 userDetails.getId(),
-                                                 userDetails.getUsername(),
-                                                 userDetails.getEmail(),
-                                                 roles));
+        return ResponseEntity.ok(new JwtToken(jwt));
     }
 
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
@@ -74,41 +74,61 @@ public class AuthService {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
         }
 
-        // Create new user's account
-        UserEntity user = new UserEntity(signUpRequest.getUsername(),
-                                         signUpRequest.getEmail(),
+        UserEntity user = new UserEntity(signUpRequest.getUsername(), signUpRequest.getEmail(),
                                          encoder.encode(signUpRequest.getPassword()));
 
         Set<String> strRoles = signUpRequest.getRole();
-        Set<Role> roles = new HashSet<>();
+        Set<RoleEntity> roles = new HashSet<>();
 
         if (strRoles == null) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+            RoleEntity userRole = roleRepository.findByName(ERole.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(userRole);
         } else {
             strRoles.forEach(role -> {
-                switch (role) {
-                    case "admin":
-                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                                                       .orElseThrow(() ->
-                                                       new RuntimeException("Error: Role is not found."));
-                        roles.add(adminRole);
-
-                        break;
-
-                    default:
-                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                                                      .orElseThrow(() ->
-                                                      new RuntimeException("Error: Role is not found."));
-                        roles.add(userRole);
+                if ("admin".equals(role)) {
+                    RoleEntity adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                    roles.add(adminRole);
+                } else {
+                    RoleEntity userRole = roleRepository.findByName(ERole.ROLE_USER)
+                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                    roles.add(userRole);
                 }
             });
         }
+        sendEmail(signUpRequest.getEmail(), "activate user",
+                "Please go to http://localhost:8082/api/activate/" + user.getUsername() +
+                        " to activate your account");
 
         user.setRoles(roles);
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    }
+
+    public void sendEmail(String emailTo,String subject,String message){
+            SimpleMailMessage msg = new SimpleMailMessage();
+            msg.setFrom("nesterow14@yandex.ru");
+            msg.setTo(emailTo);
+            msg.setSubject(subject);
+            msg.setText(message);
+
+            javaMailSender.send(msg);
+    }
+
+    public ResponseEntity<?> activateUser(String username){
+       UserEntity userEntity =  userRepository.findByUsername(username)
+                                              .orElseThrow(()-> new ResponseStatusException(
+                                                      HttpStatus.NOT_FOUND,"username not found")
+                                              );
+       if (!userEntity.getIsAccountActive()){
+           userEntity.setIsAccountActive(true);
+       } else {
+           return ResponseEntity.ok(new MessageResponse("user already activated"));
+       }
+
+       userRepository.save(userEntity);
+       return ResponseEntity.ok(new MessageResponse("user activated"));
     }
 }

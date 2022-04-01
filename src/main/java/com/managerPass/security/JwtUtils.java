@@ -1,6 +1,5 @@
 package com.managerPass.security;
 
-
 import com.managerPass.entity.UserSecurity;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
@@ -10,7 +9,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-
 
 @Component
 public class JwtUtils {
@@ -27,11 +25,11 @@ public class JwtUtils {
         UserSecurity userPrincipal = (UserSecurity) authentication.getPrincipal();
 
         return Jwts.builder()
-                .setSubject((userPrincipal.getUsername()))
-                .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
-                .compact();
+                   .setSubject((userPrincipal.getUsername()))
+                   .setIssuedAt(new Date())
+                   .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                   .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                   .compact();
     }
 
     public String getUserNameFromJwtToken(String token) {
@@ -53,7 +51,6 @@ public class JwtUtils {
         } catch (IllegalArgumentException e) {
             logger.error("JWT claims string is empty: {}", e.getMessage());
         }
-
         return false;
     }
 }
