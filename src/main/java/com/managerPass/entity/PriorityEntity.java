@@ -1,6 +1,10 @@
 package com.managerPass.entity;
 
-import lombok.*;
+import com.managerPass.entity.Enum.EPriority;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.Hibernate;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -20,8 +24,9 @@ public class PriorityEntity {
     private Long id;
 
     @NotBlank
+    @Enumerated(EnumType.STRING)
     @Column(length = 20)
-    private String name;
+    private EPriority name;
 
     @Override
     public boolean equals(Object o) {

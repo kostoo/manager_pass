@@ -10,13 +10,7 @@ import java.util.Optional;
 @Repository
 public interface UserEntityRepository extends JpaRepository<UserEntity, Long> {
 
-    ArrayList<UserEntity> findAll();
-
     ArrayList<UserEntity> findAllByLastName(@Param("last_name") String last_name);
-
-    Optional<UserEntity> findUserEntityByIdUser(@Param("id_user") Long id);
-
-    void deleteById(@Param("id_user") Long id);
 
     Optional<UserEntity> findByUsername(@Param("username")String username);
 

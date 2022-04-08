@@ -25,6 +25,8 @@ public class UserTest {
                                         .name(RandomStringUtils.random(10, true, false))
                                         .lastName(RandomStringUtils.random(10, true, false))
                                         .username(RandomStringUtils.random(10, true, false))
+                                        .isAccountActive(false)
+                                        .isAccountNonBlock(false)
                                         .build();
 
         WebClient client = WebClient.builder().baseUrl("http://localhost:" + randomServerPort).build();
@@ -32,7 +34,7 @@ public class UserTest {
         LoginRequest loginRequest = new LoginRequest("kosto","password");
 
         JwtResponse userJwtResponse = client.post()
-                                            .uri("/api/authUser")
+                                            .uri("/api/auth")
                                             .bodyValue(loginRequest)
                                             .retrieve().bodyToMono(JwtResponse.class).block();
 
@@ -44,7 +46,7 @@ public class UserTest {
                           .build();
 
         ResponseEntity<UserEntity> responseEntity = client.post()
-                                                          .uri("/api/user")
+                                                          .uri("/api/users")
                                                           .bodyValue(employee)
                                                           .retrieve()
                                                           .toEntity(UserEntity.class).block();
@@ -59,6 +61,8 @@ public class UserTest {
                                         .name(RandomStringUtils.random(10, true, false))
                                         .lastName(RandomStringUtils.random(10, true, false))
                                         .username(RandomStringUtils.random(10, true, false))
+                                        .isAccountActive(false)
+                                        .isAccountNonBlock(false)
                                         .build();
 
 
@@ -67,7 +71,7 @@ public class UserTest {
         WebClient client = WebClient.builder().baseUrl("http://localhost:" + randomServerPort).build();
 
         JwtResponse userJwtResponse = client.post()
-                                            .uri("/api/authUser")
+                                            .uri("/api/auth")
                                             .bodyValue(loginRequest)
                                             .retrieve().bodyToMono(JwtResponse.class).block();
 
@@ -79,7 +83,7 @@ public class UserTest {
                           .build();
 
         ResponseEntity<?> responseUserByName = client.get()
-                                                 .uri("/api/user/lastName/"+ employee.getLastName())
+                                                 .uri("/api/users/lastName/" + employee.getLastName())
                                                  .retrieve().toBodilessEntity().block();
 
         assert Objects.requireNonNull(responseUserByName).getStatusCode().is2xxSuccessful();
@@ -91,15 +95,16 @@ public class UserTest {
                                         .name(RandomStringUtils.random(10, true, false))
                                         .lastName(RandomStringUtils.random(10, true, false))
                                         .username(RandomStringUtils.random(10, true, false))
+                                        .isAccountActive(false)
+                                        .isAccountNonBlock(false)
                                         .build();
-
 
         LoginRequest loginRequest = new LoginRequest("kosto","password");
 
         WebClient client = WebClient.builder().baseUrl("http://localhost:" + randomServerPort).build();
 
         JwtResponse userJwtResponse = client.post()
-                                            .uri("/api/authUser")
+                                            .uri("/api/auth")
                                             .bodyValue(loginRequest)
                                             .retrieve().bodyToMono(JwtResponse.class).block();
 
@@ -111,7 +116,7 @@ public class UserTest {
                           .build();
 
         ResponseEntity<UserEntity> addUserResponseEntity = client.post()
-                                                                 .uri("/api/user")
+                                                                 .uri("/api/users")
                                                                  .bodyValue(employee)
                                                                  .retrieve()
                                                                  .toEntity(UserEntity.class).block();
@@ -119,12 +124,15 @@ public class UserTest {
         assert Objects.requireNonNull(addUserResponseEntity).getStatusCode().is2xxSuccessful();
 
         ResponseEntity<UserEntity> responseEntity = client.get()
-                                                          .uri("/api/user/userName/"+ employee.getUsername())
+                                                          .uri("/api/users/userName/" + employee.getUsername())
                                                           .retrieve()
                                                           .toEntity(UserEntity.class).block();
 
         assert Objects.requireNonNull(responseEntity).getStatusCode().is2xxSuccessful();
-        assert Objects.equals(responseEntity.getBody().getUsername(), addUserResponseEntity.getBody().getUsername());
+
+        assert Objects.equals(Objects.requireNonNull(responseEntity.getBody()).getUsername(),
+                              Objects.requireNonNull(addUserResponseEntity.getBody()).getUsername()
+        );
     }
 
     @Test
@@ -133,6 +141,8 @@ public class UserTest {
                                         .name(RandomStringUtils.random(10, true, false))
                                         .lastName(RandomStringUtils.random(10, true, false))
                                         .username(RandomStringUtils.random(10, true, false))
+                                        .isAccountActive(false)
+                                        .isAccountNonBlock(false)
                                         .build();
 
         WebClient client = WebClient.builder().baseUrl("http://localhost:" + randomServerPort).build();
@@ -140,7 +150,7 @@ public class UserTest {
         LoginRequest loginRequest = new LoginRequest("kosto","password");
 
         JwtResponse userJwtResponse = client.post()
-                                            .uri("/api/authUser")
+                                            .uri("/api/auth")
                                             .bodyValue(loginRequest)
                                             .retrieve().bodyToMono(JwtResponse.class).block();
 
@@ -152,14 +162,14 @@ public class UserTest {
                           .build();
 
         ResponseEntity<UserEntity> addUserResponseEntity = client.post()
-                                                                 .uri("/api/user")
+                                                                 .uri("/api/users")
                                                                  .bodyValue(employee)
                                                                  .retrieve()
                                                                  .toEntity(UserEntity.class).block();
 
         assert addUserResponseEntity != null;
         ResponseEntity<UserEntity> deleteUserResponseEntity = client.delete()
-                                                                    .uri("/api/user/"+ Objects.requireNonNull(
+                                                                    .uri("/api/users/" + Objects.requireNonNull(
                                                                         addUserResponseEntity.getBody()).getIdUser())
                                                                     .retrieve().toEntity(UserEntity.class).block();
 
@@ -172,6 +182,8 @@ public class UserTest {
                                         .name(RandomStringUtils.random(10, true, false))
                                         .lastName(RandomStringUtils.random(10, true, false))
                                         .username(RandomStringUtils.random(10, true, false))
+                                        .isAccountActive(false)
+                                        .isAccountNonBlock(false)
                                         .build();
 
 
@@ -180,7 +192,7 @@ public class UserTest {
         LoginRequest loginRequest = new LoginRequest("kosto","password");
 
         JwtResponse userJwtResponse = client.post()
-                                            .uri("/api/authUser")
+                                            .uri("/api/auth")
                                             .bodyValue(loginRequest)
                                             .retrieve().bodyToMono(JwtResponse.class).block();
 
@@ -192,21 +204,22 @@ public class UserTest {
                           .build();
 
         ResponseEntity<UserEntity> addUserResponseEntity = client.post()
-                                                                 .uri("/api/user")
+                                                                 .uri("/api/users")
                                                                  .bodyValue(employee)
                                                                  .retrieve()
                                                                  .toEntity(UserEntity.class).block();
 
         assert addUserResponseEntity != null;
         Objects.requireNonNull(addUserResponseEntity.getBody())
-                                                    .setUsername(RandomStringUtils.random(10, true, false));
+                                                    .setUsername(RandomStringUtils.random(
+                                                            10, true, false)
+                                                    );
 
         ResponseEntity<UserEntity> updateUserResponseEntity = client.put()
-                                                                    .uri("api/user/")
+                                                                    .uri("api/users")
                                                                     .bodyValue(addUserResponseEntity.getBody())
                                                                     .retrieve().toEntity(UserEntity.class).block();
 
         assert Objects.requireNonNull(updateUserResponseEntity).getStatusCode().is2xxSuccessful();
     }
-
 }
