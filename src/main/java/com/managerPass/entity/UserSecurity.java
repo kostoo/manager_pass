@@ -32,12 +32,13 @@ public class UserSecurity implements UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
 
     public static UserSecurity build(UserEntity user) {
-        List<GrantedAuthority> authorities = user.getRoles()
-                                                 .stream()
-                                                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
-                                                 .collect(Collectors.toList());
-       return new UserSecurity(user.getIdUser(),user.getUsername(),user.getEmail(),user.getPassword(),
-                               user.getIsAccountNonBlock(),user.getIsAccountActive(),authorities);
+       List<GrantedAuthority> authorities = user.getRoles()
+                                                .stream()
+                                                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
+                                                .collect(Collectors.toList());
+
+       return new UserSecurity(user.getIdUser(), user.getUsername(), user.getEmail(), user.getPassword(),
+                               user.getIsAccountNonBlock(), user.getIsAccountActive(), authorities);
     }
 
     @Override
