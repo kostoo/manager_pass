@@ -40,14 +40,15 @@ public class AuthService {
 
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+        );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
 
         UserSecurity userDetails = (UserSecurity) authentication.getPrincipal();
 
-        if (!userDetails.isAccountActive() || !userDetails.isEnabled()){
+        if (!userDetails.isAccountActive() || !userDetails.isEnabled()) {
             return ResponseEntity.badRequest().body(new MessageResponse("Account not active"));
         }
 
@@ -64,7 +65,8 @@ public class AuthService {
         }
 
         UserEntity user = new UserEntity(signUpRequest.getUsername(), signUpRequest.getEmail(),
-                                         encoder.encode(signUpRequest.getPassword()));
+            encoder.encode(signUpRequest.getPassword())
+        );
 
         Set<String> strRoles = signUpRequest.getRole();
         Set<RoleEntity> roles = new HashSet<>();
@@ -78,12 +80,12 @@ public class AuthService {
 
         } else {
             strRoles.forEach(role -> {
-                if ("admin".equals(role)) {
+                if (role.equals("admin")) {
                     RoleEntity adminRole = roleRepository.findByName(ERole.ROLE_ADMIN).orElseThrow(() ->
                             new RuntimeException("Error: Role is not found.")
                     );
                     roles.add(adminRole);
-                } else {
+                } else if(role.equals("user")) {
                     RoleEntity userRole = roleRepository.findByName(ERole.ROLE_USER).orElseThrow(() ->
                             new RuntimeException("Error: Role is not found.")
                     );
@@ -102,7 +104,7 @@ public class AuthService {
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
-    public ResponseEntity<?> activateUser(String username){
+    public ResponseEntity<MessageResponse> activateUser(String username) {
        UserEntity userEntity =  userRepository.findByUsername(username).orElseThrow(()->
                new ResponseStatusException(HttpStatus.NOT_FOUND,"username not found")
        );
@@ -114,6 +116,7 @@ public class AuthService {
        }
 
        userRepository.save(userEntity);
+
        return ResponseEntity.ok(new MessageResponse("user activated"));
     }
 }

@@ -31,7 +31,7 @@ public class AuthController {
     }
 
     @PostMapping(path = "/register/activate/{userName}")
-    public ResponseEntity<?> postRegisterActivate(@PathVariable(value = "userName") String userName) {
+    public ResponseEntity<?> postRegisterActivate(@PathVariable (value = "userName") String userName) {
         return authService.activateUser(userName);
     }
 }

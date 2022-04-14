@@ -20,53 +20,55 @@ public class UserController {
                 produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = " hasRole('ADMIN')")
     public ResponseEntity<List<UserEntity>> getUsers() {
-        return ResponseEntity.ok(userService.getAll());
+        return ResponseEntity.ok(userService.getUsers());
     }
 
     @GetMapping(path = "/lastName/{lastName}")
     @PreAuthorize(value = " hasRole('ADMIN')")
-    public ResponseEntity<List<UserEntity>> getUsersByLastName(@PathVariable(value = "lastName") String lastName) {
-        return ResponseEntity.ok(userService.getAllByLastName(lastName));
+    public ResponseEntity<List<UserEntity>> getUsersLastName(@PathVariable (value = "lastName") String lastName) {
+        return ResponseEntity.ok(userService.getUsersByLastName(lastName));
     }
 
     @GetMapping(path = "/userName/{userName}")
     @PreAuthorize(value = " hasRole('ADMIN')")
-    public ResponseEntity<UserEntity> getUsersByUserName(@PathVariable(value = "userName") String userName) {
-        return ResponseEntity.ok(userService.getByUserName(userName));
+    public ResponseEntity<UserEntity> getUsersUserName(@PathVariable (value = "userName") String userName) {
+        return ResponseEntity.ok(userService.getUsersUserName(userName));
     }
 
     @DeleteMapping(path = "/{idUser}")
     @PreAuthorize(value = " hasRole('ADMIN')")
-    public ResponseEntity<UserEntity> deleteUserById(@PathVariable(value = "idUser") Long id) {
-        userService.deleteById(id);
+    public ResponseEntity<UserEntity> deleteUsersIdUser(@PathVariable (value = "idUser") Long id) {
+        userService.deleteUsersById(id);
         return ResponseEntity.ok().build();
    }
 
-    @GetMapping(path = "/users/{idUser}",
+    @GetMapping(path = "/{idUser}",
                 consumes = MediaType.APPLICATION_JSON_VALUE,
                 produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = " hasRole('ADMIN')")
-    public ResponseEntity<UserEntity> getUserById(@PathVariable(value = "idUser") Long idUser) {
-        return ResponseEntity.ok().body(userService.getById(idUser));
+    public ResponseEntity<UserEntity> getUserIdUser(@PathVariable (value = "idUser") Long idUser) {
+        return ResponseEntity.ok().body(userService.getUsersById(idUser));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
                  produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = " hasRole('ADMIN')")
-    public ResponseEntity<UserEntity> postUser(@RequestBody UserEntity userEntity) {
+    public ResponseEntity<UserEntity> postUsers(@RequestBody UserEntity userEntity) {
         return ResponseEntity.ok(userService.postUser(userEntity));
     }
 
-    @PutMapping()
+    @PutMapping
     @PreAuthorize(value = " hasRole('ADMIN')")
-    public ResponseEntity<UserEntity> putUserUpdate(@RequestBody UserEntity userEntity) {
+    public ResponseEntity<UserEntity> putUsers(@RequestBody UserEntity userEntity) {
        return ResponseEntity.ok().body(userService.putUser(userEntity));
     }
 
-    @PostMapping(path = "/block/{idUser}",
+    @PostMapping(path = "/block/{idUser}/{isBlock}",
                  consumes = MediaType.APPLICATION_JSON_VALUE,
                  produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserEntity> postUserBlock(@PathVariable(value = "idUser") Long idUser) {
-        return ResponseEntity.ok(userService.postUserBlock(idUser));
+    @PreAuthorize(value = " hasRole('ADMIN')")
+    public ResponseEntity<UserEntity> postUsersBlockIdUserIsBlock(@PathVariable (value = "idUser") Long idUser,
+                                                                  @PathVariable (value = "isBlock") Boolean isBlock) {
+        return ResponseEntity.ok(userService.postUserBlock(idUser, isBlock));
     }
 }
