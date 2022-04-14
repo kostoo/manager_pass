@@ -36,13 +36,13 @@ public class TaskEntityService {
 
     public TaskEntity getByIdTask(Long id) {
         return taskEntityRepository.findById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Id : " + id)
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "task not found by Id : " + id)
         );
     }
 
     public void deleteByIdTask(Long id) {
         taskEntityRepository.findById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Id : " + id)
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "task not found by Id : " + id)
         );
         taskEntityRepository.deleteById(id);
     }
@@ -51,17 +51,18 @@ public class TaskEntityService {
         context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
         taskEntity.setUserEntity(userEntityRepository.findByUsername(authentication.getName()).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND,"user not found"))
+                new ResponseStatusException(HttpStatus.NOT_FOUND,"user not found " + authentication.getName()))
         );
-
 
         if (taskEntity.getPriority() != null) {
             taskEntity.setPriority(priorityEntityRepository.findByName(taskEntity.getPriority().getName()).orElseThrow(
-                    ()-> new ResponseStatusException(HttpStatus.NOT_FOUND," Not found priority name "))
+                    ()-> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND," Not found priority name " + taskEntity.getPriority().getName())
+                    )
             );
         } else {
             taskEntity.setPriority(priorityEntityRepository.findByName(EPriority.MEDIUM).orElseThrow(()->
-                    new ResponseStatusException(HttpStatus.NOT_FOUND," Not found priority name "))
+                    new ResponseStatusException(HttpStatus.NOT_FOUND," Not found priority name "+ EPriority.MEDIUM))
             );
         }
         return taskEntityRepository.save(taskEntity);
@@ -75,7 +76,8 @@ public class TaskEntityService {
         context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
         Long idUser = userEntityRepository.findByUsername(authentication.getName()).orElseThrow(()->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found")).getIdUser();
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found "+ authentication.getName())
+        ).getIdUser();
 
         return taskEntityRepository.findAllByUserEntity(idUser);
     }
@@ -84,16 +86,18 @@ public class TaskEntityService {
         context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
         Long idUser = userEntityRepository.findByUsername(authentication.getName()).orElseThrow(()->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found")).getIdUser();
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found " + authentication.getName())
+        ).getIdUser();
 
         return taskEntityRepository.findAllByPriority(idPriority,idUser);
     }
 
-    public Page<TaskEntity> findAllByUserEntityPage(Pageable pageable){
+    public Page<TaskEntity> findAllByUserEntityPage(Pageable pageable) {
         context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
         Long idUser = userEntityRepository.findByUsername(authentication.getName()).orElseThrow(()->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found")).getIdUser();
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found "+ authentication.getName())
+        ).getIdUser();
 
         return taskEntityRepository.findAllByUserEntityPage(idUser,pageable);
     }
@@ -104,7 +108,8 @@ public class TaskEntityService {
         context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
         Long idUser = userEntityRepository.findByUsername(authentication.getName()).orElseThrow(()->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found")).getIdUser();
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found "+ authentication.getName())
+        ).getIdUser();
 
         return taskEntityRepository.findAllByUserEntityAndDateTimeStartIsAfterAndDateTimeFinishBefore(
                                                          dateTimeStart, dateTimeFinish, pageable, idUser);

@@ -2,22 +2,60 @@ package com.managerPass;
 
 import com.managerPass.entity.UserEntity;
 import com.managerPass.payload.request.LoginRequest;
+import com.managerPass.payload.request.SignupRequest;
 import com.managerPass.payload.response.JwtResponse;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.reactive.function.client.WebClient;
 
 
 import java.util.Objects;
+import java.util.Set;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserTest {
 
     @LocalServerPort
     int randomServerPort;
+
+    @BeforeAll
+    public void beforeTest() {
+        try {
+            WebClient client = WebClient.builder()
+                                        .baseUrl("http://localhost:" + randomServerPort)
+                                        .build();
+
+            SignupRequest signupRequest = new SignupRequest();
+            signupRequest.setUsername("nesterov");
+            signupRequest.setRole(Set.of("user", "admin"));
+            signupRequest.setEmail("nesterov1@gmail.com");
+            signupRequest.setPassword("password");
+
+            WebClient.ResponseSpec responseSpec = client.post()
+                                                        .uri("/api/register")
+                                                        .bodyValue(signupRequest)
+                                                        .retrieve();
+
+            Objects.requireNonNull(responseSpec.toBodilessEntity().block()).getStatusCode();
+
+            Thread.sleep(200);
+
+            WebClient.ResponseSpec responseActivate = client.post().uri(
+                                                             "api/register/activate/" + signupRequest.getUsername()
+                                                            )
+                                                            .retrieve();
+            responseActivate.toBodilessEntity().block();
+        } catch (Exception ignored) {
+        }
+    }
 
     @Test
     public void postUser_success() {
@@ -31,7 +69,7 @@ public class UserTest {
 
         WebClient client = WebClient.builder().baseUrl("http://localhost:" + randomServerPort).build();
 
-        LoginRequest loginRequest = new LoginRequest("kosto","password");
+        LoginRequest loginRequest = new LoginRequest("nesterov","password");
 
         JwtResponse userJwtResponse = client.post()
                                             .uri("/api/auth")
@@ -56,7 +94,7 @@ public class UserTest {
     }
 
     @Test
-    public void getUserByName_success(){
+    public void getUserLastName_success() {
         UserEntity employee = UserEntity.builder()
                                         .name(RandomStringUtils.random(10, true, false))
                                         .lastName(RandomStringUtils.random(10, true, false))
@@ -66,7 +104,7 @@ public class UserTest {
                                         .build();
 
 
-        LoginRequest loginRequest = new LoginRequest("kosto","password");
+        LoginRequest loginRequest = new LoginRequest("nesterov","password");
 
         WebClient client = WebClient.builder().baseUrl("http://localhost:" + randomServerPort).build();
 
@@ -90,7 +128,7 @@ public class UserTest {
     }
 
     @Test
-    public void getUserByUserName_success(){
+    public void getUserUserName_success() {
         UserEntity employee = UserEntity.builder()
                                         .name(RandomStringUtils.random(10, true, false))
                                         .lastName(RandomStringUtils.random(10, true, false))
@@ -99,7 +137,7 @@ public class UserTest {
                                         .isAccountNonBlock(false)
                                         .build();
 
-        LoginRequest loginRequest = new LoginRequest("kosto","password");
+        LoginRequest loginRequest = new LoginRequest("nesterov","password");
 
         WebClient client = WebClient.builder().baseUrl("http://localhost:" + randomServerPort).build();
 
@@ -136,7 +174,7 @@ public class UserTest {
     }
 
     @Test
-    public void deleteUserById_success(){
+    public void deleteUserById_success() {
         UserEntity employee = UserEntity.builder()
                                         .name(RandomStringUtils.random(10, true, false))
                                         .lastName(RandomStringUtils.random(10, true, false))
@@ -147,7 +185,7 @@ public class UserTest {
 
         WebClient client = WebClient.builder().baseUrl("http://localhost:" + randomServerPort).build();
 
-        LoginRequest loginRequest = new LoginRequest("kosto","password");
+        LoginRequest loginRequest = new LoginRequest("nesterov","password");
 
         JwtResponse userJwtResponse = client.post()
                                             .uri("/api/auth")
@@ -177,7 +215,7 @@ public class UserTest {
     }
 
     @Test
-    public void putUser_success(){
+    public void putUser_success() {
         UserEntity employee = UserEntity.builder()
                                         .name(RandomStringUtils.random(10, true, false))
                                         .lastName(RandomStringUtils.random(10, true, false))
@@ -189,7 +227,7 @@ public class UserTest {
 
         WebClient client = WebClient.builder().baseUrl("http://localhost:" + randomServerPort).build();
 
-        LoginRequest loginRequest = new LoginRequest("kosto","password");
+        LoginRequest loginRequest = new LoginRequest("nesterov","password");
 
         JwtResponse userJwtResponse = client.post()
                                             .uri("/api/auth")
