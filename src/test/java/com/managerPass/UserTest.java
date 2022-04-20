@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.reactive.function.client.WebClient;
 
-
 import java.util.Objects;
 import java.util.Set;
 
@@ -121,8 +120,8 @@ public class UserTest {
                           .build();
 
         ResponseEntity<?> responseUserByName = client.get()
-                                                 .uri("/api/users/lastName/" + employee.getLastName())
-                                                 .retrieve().toBodilessEntity().block();
+                                                     .uri("/api/users/lastName/" + employee.getLastName())
+                                                     .retrieve().toBodilessEntity().block();
 
         assert Objects.requireNonNull(responseUserByName).getStatusCode().is2xxSuccessful();
     }

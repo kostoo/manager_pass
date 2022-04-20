@@ -156,7 +156,9 @@ public class TaskTest {
                                                         .retrieve()
                                                         .toEntity(TaskEntity.class).block();
 
-        assert Objects.equals(Objects.requireNonNull(Objects.requireNonNull(updateEntity).getBody()).getName(), addEntity.getBody().getName());
+        assert Objects.equals(
+        Objects.requireNonNull(Objects.requireNonNull(updateEntity).getBody()).getName(), addEntity.getBody().getName()
+        );
     }
 
     @Test

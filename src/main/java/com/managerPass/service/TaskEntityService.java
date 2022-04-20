@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -27,7 +28,7 @@ public class TaskEntityService {
     private SecurityContext context;
 
     public ArrayList<TaskEntity> getAll() {
-        return (ArrayList<TaskEntity>) taskEntityRepository.findAll();
+        return  taskEntityRepository.findAll();
     }
 
     public ArrayList<TaskEntity> getAllByName(String name) {
@@ -56,10 +57,9 @@ public class TaskEntityService {
 
         if (taskEntity.getPriority() != null) {
             taskEntity.setPriority(priorityEntityRepository.findByName(taskEntity.getPriority().getName()).orElseThrow(
-                    ()-> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND," Not found priority name " + taskEntity.getPriority().getName())
-                    )
-            );
+            ()-> new ResponseStatusException(
+                    HttpStatus.NOT_FOUND," Not found priority name " + taskEntity.getPriority().getName())
+            ));
         } else {
             taskEntity.setPriority(priorityEntityRepository.findByName(EPriority.MEDIUM).orElseThrow(()->
                     new ResponseStatusException(HttpStatus.NOT_FOUND," Not found priority name "+ EPriority.MEDIUM))
@@ -79,7 +79,7 @@ public class TaskEntityService {
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found "+ authentication.getName())
         ).getIdUser();
 
-        return taskEntityRepository.findAllByUserEntity(idUser);
+        return taskEntityRepository.findAllByUserEntity_IdUser(idUser);
     }
 
     public ArrayList<TaskEntity> getAllByAuthUserAndPriority(Long idPriority) {
@@ -89,7 +89,7 @@ public class TaskEntityService {
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found " + authentication.getName())
         ).getIdUser();
 
-        return taskEntityRepository.findAllByPriority(idPriority,idUser);
+        return taskEntityRepository.findAllByPriority_IdAndUserEntity_IdUser(idPriority,idUser);
     }
 
     public Page<TaskEntity> findAllByUserEntityPage(Pageable pageable) {
@@ -99,7 +99,7 @@ public class TaskEntityService {
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found "+ authentication.getName())
         ).getIdUser();
 
-        return taskEntityRepository.findAllByUserEntityPage(idUser,pageable);
+        return taskEntityRepository.findAllByUserEntity_IdUser(idUser,pageable);
     }
 
     public Page<TaskEntity> findAllByUserIdDateTimeStartAfterAndDateTimeFinishBefore(LocalDateTime dateTimeStart,
@@ -111,7 +111,8 @@ public class TaskEntityService {
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found "+ authentication.getName())
         ).getIdUser();
 
-        return taskEntityRepository.findAllByUserEntityAndDateTimeStartIsAfterAndDateTimeFinishBefore(
-                                                         dateTimeStart, dateTimeFinish, pageable, idUser);
+        return taskEntityRepository.findAllByUserEntity_IdUserAndDateTimeStartIsAfterAndDateTimeFinishBefore(
+                idUser,  dateTimeStart, dateTimeFinish, pageable
+        );
     }
 }

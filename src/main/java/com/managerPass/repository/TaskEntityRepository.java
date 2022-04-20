@@ -3,8 +3,8 @@ package com.managerPass.repository;
 import com.managerPass.entity.TaskEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -14,23 +14,40 @@ import java.util.ArrayList;
 @Repository
 public interface TaskEntityRepository extends JpaRepository<TaskEntity, Long> {
 
+    @Override
+    @EntityGraph(attributePaths = {"idTask", "name", "message", "userEntity", "priority", "dateTimeStart",
+                                   "dateTimeFinish"
+                                  },
+                 type = EntityGraph.EntityGraphType.FETCH)
+    ArrayList<TaskEntity> findAll();
+
+    @EntityGraph(attributePaths = {"idTask", "name", "message", "dateTimeStart", "dateTimeFinish"},
+                 type = EntityGraph.EntityGraphType.FETCH)
     ArrayList<TaskEntity> findAllByName(@Param("name") String name);
 
-    @Query("SELECT task FROM TaskEntity task  WHERE task.userEntity.idUser = :idUser")
-    ArrayList<TaskEntity> findAllByUserEntity(@Param("idUser") Long idUser);
+    @EntityGraph(attributePaths = {"idTask", "name", "message", "userEntity", "priority", "dateTimeStart",
+                                   "dateTimeFinish"
+                                  },
+                 type = EntityGraph.EntityGraphType.FETCH)
+    ArrayList<TaskEntity> findAllByUserEntity_IdUser(@Param("idUser")Long idUser);
 
-    @Query("SELECT task FROM TaskEntity task WHERE task.priority.id = :idPriority and task.userEntity.idUser = :idUser")
-    ArrayList<TaskEntity> findAllByPriority(@Param("idPriority") Long idPriority, @Param("idUser") Long idUser);
+    @EntityGraph(attributePaths = {"idTask", "name", "message", "userEntity", "priority", "dateTimeStart",
+                                   "dateTimeFinish"
+                                  },
+                 type = EntityGraph.EntityGraphType.FETCH)
+    ArrayList<TaskEntity> findAllByPriority_IdAndUserEntity_IdUser(@Param("idPriority") Long idPriority,
+                                                                   @Param("idUser") Long idUser);
 
-    @Query(value = "SELECT task FROM TaskEntity task  WHERE task.userEntity.idUser = :idUser",
-           countQuery = "SELECT count(task) FROM TaskEntity task  WHERE task.userEntity.idUser = :idUser")
-    Page<TaskEntity> findAllByUserEntityPage(@Param("idUser") Long idUser,Pageable pageable);
+    @EntityGraph(attributePaths = {"idTask", "name", "message", "userEntity", "priority", "dateTimeStart",
+                                   "dateTimeFinish"},
+                 type = EntityGraph.EntityGraphType.FETCH)
+    Page<TaskEntity> findAllByUserEntity_IdUser(@Param("idUser") Long idUser,Pageable pageable);
 
-    @Query(value = "SELECT task FROM TaskEntity task WHERE task.userEntity.idUser = :idUser" +
-                   " and task.dateTimeStart >= :dateTimeStart and task.dateTimeFinish <= :dateTimeFinish",
-    countQuery = "SELECT count(task) FROM TaskEntity task WHERE task.userEntity.idUser = :idUser" +
-                 " and task.dateTimeStart >= :dateTimeStart and task.dateTimeFinish <= :dateTimeFinish" )
-    Page<TaskEntity> findAllByUserEntityAndDateTimeStartIsAfterAndDateTimeFinishBefore(LocalDateTime dateTimeStart,
-                                                                                       LocalDateTime dateTimeFinish,
-                                                                                       Pageable pageable, Long idUser);
+    @EntityGraph(attributePaths = {"idTask", "name", "message", "userEntity", "priority", "dateTimeStart",
+                                   "dateTimeFinish"
+                                  },
+                 type = EntityGraph.EntityGraphType.FETCH)
+    Page<TaskEntity> findAllByUserEntity_IdUserAndDateTimeStartIsAfterAndDateTimeFinishBefore(
+            Long idUser, LocalDateTime dateTimeStart, LocalDateTime dateTimeFinish, Pageable pageable
+    );
 }
