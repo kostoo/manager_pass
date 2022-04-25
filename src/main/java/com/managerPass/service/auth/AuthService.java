@@ -65,8 +65,8 @@ public class AuthService {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
         }
 
-        UserEntity user = new UserEntity(signUpRequest.getUsername(), signUpRequest.getEmail(),
-            encoder.encode(signUpRequest.getPassword())
+        UserEntity user = new UserEntity(
+                signUpRequest.getUsername(), signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword())
         );
 
         Set<String> strRoles = signUpRequest.getRole();
@@ -106,8 +106,8 @@ public class AuthService {
     }
 
     public ResponseEntity<MessageResponse> activateUser(String username) {
-       UserEntity userEntity =  userRepository.findByUsername(username).orElseThrow(()->
-               new ResponseStatusException(HttpStatus.NOT_FOUND,"username not found")
+       UserEntity userEntity =  userRepository.findByUsername(username).orElseThrow(() ->
+               new ResponseStatusException(HttpStatus.NOT_FOUND,"username not found "+ username)
        );
 
        if (!userEntity.getIsAccountActive()) {
