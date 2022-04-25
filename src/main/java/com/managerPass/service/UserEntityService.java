@@ -24,20 +24,22 @@ public class UserEntityService {
     }
 
     public void deleteUsersById(Long id) throws ResponseStatusException {
-       userEntityRepository.findById(id).orElseThrow(() -> new ResponseStatusException(
-               HttpStatus.NOT_FOUND, "Id : " + id)
+       userEntityRepository.findById(id).orElseThrow(
+               () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Id : " + id)
        );
        userEntityRepository.deleteById(id);
     }
 
     public UserEntity getUsersById(Long idUser) {
-        return userEntityRepository.findById(idUser).orElseThrow(()-> new ResponseStatusException(
-                HttpStatus.NOT_FOUND,"user not found" + idUser));
+        return userEntityRepository.findById(idUser).orElseThrow(
+                ()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"user not found" + idUser)
+        );
     }
 
     public UserEntity getUsersUserName(String userName) {
-        return userEntityRepository.findByUsername(userName).orElseThrow(() -> new ResponseStatusException(
-                HttpStatus.NOT_FOUND, "user Not Found" + userName));
+        return userEntityRepository.findByUsername(userName).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "user Not Found" + userName)
+        );
     }
 
     public UserEntity postUser(UserEntity userEntity) {

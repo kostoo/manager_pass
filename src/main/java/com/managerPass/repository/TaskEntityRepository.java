@@ -15,38 +15,23 @@ import java.util.ArrayList;
 public interface TaskEntityRepository extends JpaRepository<TaskEntity, Long> {
 
     @Override
-    @EntityGraph(attributePaths = {"idTask", "name", "message", "userEntity", "priority", "dateTimeStart",
-                                   "dateTimeFinish"
-                                  },
-                 type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(value = "taskEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
     ArrayList<TaskEntity> findAll();
 
-    @EntityGraph(attributePaths = {"idTask", "name", "message", "dateTimeStart", "dateTimeFinish"},
-                 type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(value = "taskEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
     ArrayList<TaskEntity> findAllByName(@Param("name") String name);
 
-    @EntityGraph(attributePaths = {"idTask", "name", "message", "userEntity", "priority", "dateTimeStart",
-                                   "dateTimeFinish"
-                                  },
-                 type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(value = "taskEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
     ArrayList<TaskEntity> findAllByUserEntity_IdUser(@Param("idUser")Long idUser);
 
-    @EntityGraph(attributePaths = {"idTask", "name", "message", "userEntity", "priority", "dateTimeStart",
-                                   "dateTimeFinish"
-                                  },
-                 type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(value = "taskEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
     ArrayList<TaskEntity> findAllByPriority_IdAndUserEntity_IdUser(@Param("idPriority") Long idPriority,
                                                                    @Param("idUser") Long idUser);
 
-    @EntityGraph(attributePaths = {"idTask", "name", "message", "userEntity", "priority", "dateTimeStart",
-                                   "dateTimeFinish"},
-                 type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(value = "taskEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
     Page<TaskEntity> findAllByUserEntity_IdUser(@Param("idUser") Long idUser,Pageable pageable);
 
-    @EntityGraph(attributePaths = {"idTask", "name", "message", "userEntity", "priority", "dateTimeStart",
-                                   "dateTimeFinish"
-                                  },
-                 type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(value = "taskEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
     Page<TaskEntity> findAllByUserEntity_IdUserAndDateTimeStartIsAfterAndDateTimeFinishBefore(
             Long idUser, LocalDateTime dateTimeStart, LocalDateTime dateTimeFinish, Pageable pageable
     );

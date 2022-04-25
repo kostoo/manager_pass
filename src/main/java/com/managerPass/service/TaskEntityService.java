@@ -52,18 +52,18 @@ public class TaskEntityService {
         context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
         taskEntity.setUserEntity(userEntityRepository.findByUsername(authentication.getName()).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND,"user not found " + authentication.getName()))
-        );
+                new ResponseStatusException(HttpStatus.NOT_FOUND,"user not found " + authentication.getName())
+        ));
 
         if (taskEntity.getPriority() != null) {
             taskEntity.setPriority(priorityEntityRepository.findByName(taskEntity.getPriority().getName()).orElseThrow(
-            ()-> new ResponseStatusException(
-                    HttpStatus.NOT_FOUND," Not found priority name " + taskEntity.getPriority().getName())
-            ));
+            () -> new ResponseStatusException(
+                    HttpStatus.NOT_FOUND," Not found priority name " + taskEntity.getPriority().getName()
+            )));
         } else {
-            taskEntity.setPriority(priorityEntityRepository.findByName(EPriority.MEDIUM).orElseThrow(()->
-                    new ResponseStatusException(HttpStatus.NOT_FOUND," Not found priority name "+ EPriority.MEDIUM))
-            );
+            taskEntity.setPriority(priorityEntityRepository.findByName(EPriority.MEDIUM).orElseThrow(() ->
+                    new ResponseStatusException(HttpStatus.NOT_FOUND," Not found priority name " + EPriority.MEDIUM)
+            ));
         }
         return taskEntityRepository.save(taskEntity);
     }
@@ -75,7 +75,7 @@ public class TaskEntityService {
     public ArrayList<TaskEntity> getAllByAuthUser() {
         context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
-        Long idUser = userEntityRepository.findByUsername(authentication.getName()).orElseThrow(()->
+        Long idUser = userEntityRepository.findByUsername(authentication.getName()).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found "+ authentication.getName())
         ).getIdUser();
 
@@ -85,7 +85,7 @@ public class TaskEntityService {
     public ArrayList<TaskEntity> getAllByAuthUserAndPriority(Long idPriority) {
         context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
-        Long idUser = userEntityRepository.findByUsername(authentication.getName()).orElseThrow(()->
+        Long idUser = userEntityRepository.findByUsername(authentication.getName()).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found " + authentication.getName())
         ).getIdUser();
 
@@ -95,7 +95,7 @@ public class TaskEntityService {
     public Page<TaskEntity> findAllByUserEntityPage(Pageable pageable) {
         context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
-        Long idUser = userEntityRepository.findByUsername(authentication.getName()).orElseThrow(()->
+        Long idUser = userEntityRepository.findByUsername(authentication.getName()).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found "+ authentication.getName())
         ).getIdUser();
 
@@ -107,12 +107,12 @@ public class TaskEntityService {
                                                                                      Pageable pageable) {
         context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
-        Long idUser = userEntityRepository.findByUsername(authentication.getName()).orElseThrow(()->
+        Long idUser = userEntityRepository.findByUsername(authentication.getName()).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found "+ authentication.getName())
         ).getIdUser();
 
         return taskEntityRepository.findAllByUserEntity_IdUserAndDateTimeStartIsAfterAndDateTimeFinishBefore(
-                idUser,  dateTimeStart, dateTimeFinish, pageable
+              idUser,  dateTimeStart, dateTimeFinish, pageable
         );
     }
 }

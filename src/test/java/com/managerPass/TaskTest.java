@@ -51,17 +51,21 @@ public class TaskTest {
 
 
             WebClient.ResponseSpec responseSpec = client.post()
-                    .uri("/api/register")
-                    .bodyValue(signupRequest)
-                    .retrieve();
+                                                        .uri("/api/register")
+                                                        .bodyValue(signupRequest)
+                                                        .retrieve();
 
             Objects.requireNonNull(responseSpec.toBodilessEntity().block()).getStatusCode();
 
             Thread.sleep(200);
             WebClient.ResponseSpec responseActivate = client.post()
-                    .uri("api/register/activate/" + signupRequest.getUsername()).retrieve();
+                                                            .uri(
+                                                             "api/register/activate/" + signupRequest.getUsername()
+                                                            ).retrieve();
+
             responseActivate.toBodilessEntity().block();
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -75,27 +79,25 @@ public class TaskTest {
 
         taskEntity.setPriority(priority);
         taskEntity.setDateTimeStart(LocalDateTime.now());
-        taskEntity.setDateTimeFinish(LocalDateTime.of(LocalDate.of(LocalDateTime.now().getYear(),
-                        LocalDateTime.now().getMonth(),
-                        LocalDateTime.now().getDayOfMonth()+1),
-                LocalTime.now())
-        );
+        taskEntity.setDateTimeFinish(LocalDateTime.of(LocalDate.of(
+           LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(), LocalDateTime.now().getDayOfMonth()+1
+        ), LocalTime.now()));
 
         WebClient client = WebClient.builder().baseUrl("http://localhost:" + randomServerPort).build();
 
         LoginRequest loginRequest = new LoginRequest("nesterov","password");
 
         JwtResponse userJwtResponse = client.post()
-                .uri("/api/auth")
-                .bodyValue(loginRequest)
-                .retrieve().bodyToMono(JwtResponse.class).block();
+                                            .uri("/api/auth")
+                                            .bodyValue(loginRequest)
+                                            .retrieve().bodyToMono(JwtResponse.class).block();
 
         String jwtToken = Objects.requireNonNull(userJwtResponse).getToken();
 
         client = WebClient.builder()
-                .baseUrl("http://localhost:" + randomServerPort)
-                .defaultHeader("Authorization","Bearer " + jwtToken)
-                .build();
+                          .baseUrl("http://localhost:" + randomServerPort)
+                          .defaultHeader("Authorization","Bearer " + jwtToken)
+                          .build();
 
 
          ResponseEntity<TaskEntity> responseEntity = client.post()
@@ -118,11 +120,9 @@ public class TaskTest {
 
         taskEntity.setPriority(priority);
         taskEntity.setDateTimeStart(LocalDateTime.now());
-        taskEntity.setDateTimeFinish(LocalDateTime.of(LocalDate.of(LocalDateTime.now().getYear(),
-                        LocalDateTime.now().getMonth(),
-                        LocalDateTime.now().getDayOfMonth()+1),
-                LocalTime.now())
-        );
+        taskEntity.setDateTimeFinish(LocalDateTime.of(LocalDate.of(
+           LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(), LocalDateTime.now().getDayOfMonth()+1
+        ), LocalTime.now()));
 
         WebClient client = WebClient.builder().baseUrl("http://localhost:" + randomServerPort).build();
 
@@ -171,10 +171,9 @@ public class TaskTest {
 
         taskEntity.setPriority(priority);
         taskEntity.setDateTimeStart(LocalDateTime.now());
-        taskEntity.setDateTimeFinish(LocalDateTime.of(LocalDate.of(LocalDateTime.now().getYear(),
-                        LocalDateTime.now().getMonth(), LocalDateTime.now().getDayOfMonth()+1),
-                                     LocalTime.now())
-        );
+        taskEntity.setDateTimeFinish(LocalDateTime.of(LocalDate.of(
+           LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(), LocalDateTime.now().getDayOfMonth()+1
+        ), LocalTime.now()));
 
         WebClient client = WebClient.builder().baseUrl("http://localhost:" + randomServerPort).build();
 
@@ -218,11 +217,9 @@ public class TaskTest {
 
         taskEntity.setPriority(priority);
         taskEntity.setDateTimeStart(LocalDateTime.now());
-        taskEntity.setDateTimeFinish(LocalDateTime.of(LocalDate.of(LocalDateTime.now().getYear(),
-                        LocalDateTime.now().getMonth(),
-                        LocalDateTime.now().getDayOfMonth()+1),
-                LocalTime.now())
-        );
+        taskEntity.setDateTimeFinish(LocalDateTime.of(LocalDate.of(
+           LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(), LocalDateTime.now().getDayOfMonth()+1
+        ), LocalTime.now()));
 
         WebClient client = WebClient.builder()
                                     .baseUrl("http://localhost:" + randomServerPort)
@@ -272,10 +269,9 @@ public class TaskTest {
 
         taskEntity.setPriority(priority);
         taskEntity.setDateTimeStart(LocalDateTime.now());
-        taskEntity.setDateTimeFinish(LocalDateTime.of(LocalDate.of(LocalDateTime.now().getYear(),
-                        LocalDateTime.now().getMonth(),
-                        LocalDateTime.now().getDayOfMonth()+1),
-                LocalTime.now()));
+        taskEntity.setDateTimeFinish(LocalDateTime.of(LocalDate.of(
+           LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(), LocalDateTime.now().getDayOfMonth()+1
+        ), LocalTime.now()));
 
         WebClient client = WebClient.builder()
                                     .baseUrl("http://localhost:" + randomServerPort)
@@ -307,6 +303,7 @@ public class TaskTest {
         Mono<List<TaskEntity>> getAllEntity = client.get()
                                                     .uri("/api/tasks")
                                                     .retrieve().bodyToMono(new ParameterizedTypeReference<>() {});
+
         List<TaskEntity> taskEntities = getAllEntity.block();
 
         assert Objects.requireNonNull(taskEntities).size() > 0;
@@ -323,10 +320,9 @@ public class TaskTest {
 
         taskEntity.setPriority(priority);
         taskEntity.setDateTimeStart(LocalDateTime.now());
-        taskEntity.setDateTimeFinish(LocalDateTime.of(LocalDate.of(LocalDateTime.now().getYear(),
-                        LocalDateTime.now().getMonth(),
-                        LocalDateTime.now().getDayOfMonth()+1),
-                LocalTime.now()));
+        taskEntity.setDateTimeFinish(LocalDateTime.of(LocalDate.of(
+           LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(), LocalDateTime.now().getDayOfMonth()+1
+        ), LocalTime.now()));
 
         WebClient client = WebClient.builder()
                                     .baseUrl("http://localhost:" + randomServerPort)
@@ -358,6 +354,7 @@ public class TaskTest {
         Mono<List<TaskEntity>> getAllEntity = client.get()
                                                     .uri("/api/tasks/user")
                                                     .retrieve().bodyToMono(new ParameterizedTypeReference<>() {});
+
         List<TaskEntity> taskEntities = getAllEntity.block();
 
         assert Objects.requireNonNull(taskEntities).size() > 0;
@@ -374,10 +371,9 @@ public class TaskTest {
 
         taskEntity.setPriority(priority);
         taskEntity.setDateTimeStart(LocalDateTime.now());
-        taskEntity.setDateTimeFinish(LocalDateTime.of(LocalDate.of(LocalDateTime.now().getYear(),
-                        LocalDateTime.now().getMonth(),
-                        LocalDateTime.now().getDayOfMonth()+1),
-                LocalTime.now()));
+        taskEntity.setDateTimeFinish(LocalDateTime.of(LocalDate.of(
+           LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(), LocalDateTime.now().getDayOfMonth()+1
+        ), LocalTime.now()));
 
         WebClient client = WebClient.builder()
                                     .baseUrl("http://localhost:" + randomServerPort)
@@ -409,8 +405,8 @@ public class TaskTest {
         Mono<List<TaskEntity>> getAllEntity = client.get()
                                                     .uri("/api/tasks/user/0")
                                                     .retrieve().bodyToMono(new ParameterizedTypeReference<>() {});
-        List<TaskEntity> taskEntities = getAllEntity.block();
 
+        List<TaskEntity> taskEntities = getAllEntity.block();
 
         assert Objects.requireNonNull(taskEntities).size() > 0;
 
@@ -425,10 +421,9 @@ public class TaskTest {
 
         taskEntity.setPriority(priority);
         taskEntity.setDateTimeStart(LocalDateTime.now());
-        taskEntity.setDateTimeFinish(LocalDateTime.of(LocalDate.of(LocalDateTime.now().getYear(),
-                        LocalDateTime.now().getMonth(),
-                        LocalDateTime.now().getDayOfMonth()+1),
-                LocalTime.now()));
+        taskEntity.setDateTimeFinish(LocalDateTime.of(LocalDate.of(
+           LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(), LocalDateTime.now().getDayOfMonth()+1
+        ), LocalTime.now()));
 
         WebClient client = WebClient.builder()
                                     .baseUrl("http://localhost:" + randomServerPort)
@@ -476,12 +471,9 @@ public class TaskTest {
 
         taskEntity.setPriority(priority);
         taskEntity.setDateTimeStart(LocalDateTime.now());
-        taskEntity.setDateTimeFinish(
-              LocalDateTime.of(LocalDate.of(LocalDateTime.now().getYear(),
-                                            LocalDateTime.now().getMonth(),
-                                 LocalDateTime.now().getDayOfMonth()+1),
-                                            LocalTime.now())
-        );
+        taskEntity.setDateTimeFinish(LocalDateTime.of(LocalDate.of(
+           LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(), LocalDateTime.now().getDayOfMonth()+1
+        ), LocalTime.now()));
 
         WebClient client = WebClient.builder()
                                     .baseUrl("http://localhost:" + randomServerPort)
@@ -515,10 +507,10 @@ public class TaskTest {
         taskEntity.setDateTimeFinish(taskEntity.getDateTimeFinish().plusHours(1));
 
         Mono<List<TaskEntity>> getAllEntity = client.get()
-                                                    .uri("/api/tasks/user/0/"+ taskEntity.getDateTimeStart()
+                                                    .uri(
+                                                     "/api/tasks/user/0/"+ taskEntity.getDateTimeStart()
                                                             +"/"+ taskEntity.getDateTimeFinish()
-                                                    )
-                                                    .retrieve().bodyToMono(new ParameterizedTypeReference<>() {});
+                                                    ).retrieve().bodyToMono(new ParameterizedTypeReference<>() {});
 
         List<TaskEntity> taskEntities = getAllEntity.block();
         assert taskEntities != null;

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,13 +45,13 @@ public class TaskController {
    }
 
    @GetMapping(path = "/{idTask}")
-   @PreAuthorize(value = "hasRole('USER')  or hasRole('ADMIN')")
+   @PreAuthorize(value = "hasRole('USER') or hasRole('ADMIN')")
    public ResponseEntity<TaskEntity> getTasksIdTask(@PathVariable(value = "idTask") Long idTask) {
      return ResponseEntity.ok(taskService.getByIdTask(idTask));
    }
 
    @DeleteMapping(path = "/{idTask}")
-   @PreAuthorize(value = "hasRole('USER')  or hasRole('ADMIN')")
+   @PreAuthorize(value = "hasRole('USER') or hasRole('ADMIN')")
    public ResponseEntity<TaskEntity> deleteTasksIdTask(@PathVariable(value = "idTask") Long idTask) {
       taskService.deleteByIdTask(idTask);
       return ResponseEntity.ok().build();
@@ -60,32 +59,32 @@ public class TaskController {
 
    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
                 produces = MediaType.APPLICATION_JSON_VALUE)
-   @PreAuthorize(value = "hasRole('USER')  or hasRole('ADMIN')")
+   @PreAuthorize(value = "hasRole('USER') or hasRole('ADMIN')")
    public ResponseEntity<TaskEntity> postTasks(@RequestBody TaskEntity taskEntity) {
       return ResponseEntity.ok(taskService.postTask(taskEntity));
    }
 
    @PutMapping
-   @PreAuthorize(value = "hasRole('USER')  or hasRole('ADMIN')")
+   @PreAuthorize(value = "hasRole('USER') or hasRole('ADMIN')")
    public ResponseEntity<TaskEntity> putTasks(@RequestBody TaskEntity taskEntity) {
       return ResponseEntity.ok(taskService.putTask(taskEntity));
    }
 
    @GetMapping(path = "/user")
-   @PreAuthorize(value = "hasRole('USER')  or hasRole('ADMIN')")
+   @PreAuthorize(value = "hasRole('USER') or hasRole('ADMIN')")
    public ResponseEntity<ArrayList<TaskEntity>> getTasksUser() {
       return ResponseEntity.ok().body(taskService.getAllByAuthUser());
    }
 
    @GetMapping(path = "/user/priority/{idPriority}")
-   @PreAuthorize(value = "hasRole('USER')  or hasRole('ADMIN')")
+   @PreAuthorize(value = "hasRole('USER') or hasRole('ADMIN')")
    public ResponseEntity<ArrayList<TaskEntity>> getTasksUserPriorityIdPriority(@PathVariable (value = "idPriority")
                                                                                Long idPriority) {
       return ResponseEntity.ok().body(taskService.getAllByAuthUserAndPriority(idPriority));
    }
 
    @GetMapping(path = "/user/{page}")
-   @PreAuthorize(value = "hasRole('USER')  or hasRole('ADMIN')")
+   @PreAuthorize(value = "hasRole('USER') or hasRole('ADMIN')")
    public ResponseEntity<List<TaskEntity>> getTasksUserPage(@PathVariable (value = "page") int page) {
       int sizePage = 10;
       Pageable pageable = PageRequest.of(page,sizePage);
@@ -94,12 +93,12 @@ public class TaskController {
    }
 
    @GetMapping(path = "/user/{page}/{dateTimeStart}/{dateTimeFinish}")
-   @PreAuthorize(value = "hasRole('USER')  or hasRole('ADMIN')")
+   @PreAuthorize(value = "hasRole('USER') or hasRole('ADMIN')")
    public ResponseEntity<List<TaskEntity>> getTasksUserIdAndDateAfterBefore(@PathVariable(value = "page") int page,
                                                                             @PathVariable(value = "dateTimeStart")
                                                                             @DateTimeFormat(
                                                                                   iso = DateTimeFormat.ISO.DATE_TIME
-                                                                             )
+                                                                            )
                                                                             LocalDateTime startDateTime,
                                                                             @PathVariable(value = "dateTimeFinish")
                                                                             @DateTimeFormat(
@@ -110,9 +109,8 @@ public class TaskController {
       Pageable pageable = PageRequest.of(page,sizePage);
 
       return ResponseEntity.ok().body(taskService.findAllByUserIdDateTimeStartAfterAndDateTimeFinishBefore(
-                                   startDateTime, dateTimeFinish, pageable)
-             .getContent()
-      );
+                startDateTime, dateTimeFinish, pageable
+             ).getContent());
    }
 }
 

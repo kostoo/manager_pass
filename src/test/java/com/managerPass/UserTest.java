@@ -49,8 +49,7 @@ public class UserTest {
 
             WebClient.ResponseSpec responseActivate = client.post().uri(
                                                              "api/register/activate/" + signupRequest.getUsername()
-                                                            )
-                                                            .retrieve();
+                                                            ).retrieve();
             responseActivate.toBodilessEntity().block();
         } catch (Exception ignored) {
         }
@@ -207,8 +206,8 @@ public class UserTest {
         assert addUserResponseEntity != null;
         ResponseEntity<UserEntity> deleteUserResponseEntity = client.delete()
                                                                     .uri("/api/users/" + Objects.requireNonNull(
-                                                                        addUserResponseEntity.getBody()).getIdUser())
-                                                                    .retrieve().toEntity(UserEntity.class).block();
+                                                                        addUserResponseEntity.getBody()).getIdUser()
+                                                                    ).retrieve().toEntity(UserEntity.class).block();
 
         assert Objects.requireNonNull(deleteUserResponseEntity).getStatusCode().is2xxSuccessful();
     }
