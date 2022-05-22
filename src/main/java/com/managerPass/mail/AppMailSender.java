@@ -8,14 +8,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class Mail {
+public class AppMailSender {
 
     private final JavaMailSender javaMailSender;
 
      @Value(value = "${app.mail}")
      private String address;
 
-    public void sendEmail(String emailTo,String subject,String message) {
+    public void sendEmail(String emailTo, String subject, String message) {
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setFrom(address);
         msg.setTo(emailTo);

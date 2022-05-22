@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface PriorityEntityRepository extends JpaRepository<PriorityEntity,Long> {
+public interface PriorityEntityRepository extends JpaRepository<PriorityEntity, Long> {
 
     Optional<PriorityEntity> findByName(EPriority name);
 }

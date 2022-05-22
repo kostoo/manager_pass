@@ -1,20 +1,25 @@
 package com.managerPass.payload.request;
 
-import com.managerPass.entity.Enum.ERole;
-import lombok.Getter;
-import lombok.Setter;
+import com.managerPass.entity.RoleEntity;
+import lombok.Data;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-
+import java.util.HashSet;
 import java.util.Set;
 
-@Getter
-@Setter
-public class SignupRequest {
+@Data
+public class UserRequest {
 
     @NotBlank
-    @Size( max = 20)
+    private String name;
+
+    @NotBlank
+    private String lastName;
+
+    @NotBlank
+    @Size(max = 20)
     private String username;
 
     @NotBlank
@@ -22,10 +27,6 @@ public class SignupRequest {
     @Email
     private String email;
 
-    private Set<ERole> role;
-
-    @NotBlank
-    @Size( max = 40)
-    private String password;
+    private Set<RoleEntity> roles = new HashSet<>();
 
 }

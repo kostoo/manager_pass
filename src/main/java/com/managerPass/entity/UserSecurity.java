@@ -15,8 +15,6 @@ import java.util.stream.Collectors;
 @Data
 public class UserSecurity implements UserDetails {
 
-    private static final long serialVersionUID = 1L;
-
     private Long id;
 
     private String username;
@@ -32,7 +30,7 @@ public class UserSecurity implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public static UserSecurity build(UserEntity user) {
+    public static UserSecurity buildUserSecurity(UserEntity user) {
        List<GrantedAuthority> authorities = user.getRoles()
                                                 .stream()
                                                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))

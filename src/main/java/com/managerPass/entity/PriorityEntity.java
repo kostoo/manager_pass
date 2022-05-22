@@ -33,7 +33,6 @@ public class PriorityEntity {
 
     @NotBlank
     @Enumerated(EnumType.STRING)
-    @Column(length = 20)
     private EPriority name;
 
     @Override
