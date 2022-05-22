@@ -17,21 +17,23 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping(path = "/auth")
-    public ResponseEntity<?> postAuth(@Valid @RequestBody LoginRequest loginRequest) {
+    @PostMapping(path = "/auth",
+                 consumes = MediaType.APPLICATION_JSON_VALUE,
+                 produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> postAuth(@Valid LoginRequest loginRequest) {
         return authService.authenticateUser(loginRequest);
     }
 
     @PostMapping(path = "/register",
                  consumes = MediaType.APPLICATION_JSON_VALUE,
                  produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> postRegister(@Valid @RequestBody SignupRequest signUpRequest) {
+    public ResponseEntity<?> postRegister(@RequestBody @Valid SignupRequest signUpRequest) {
         return authService.registerUser(signUpRequest);
     }
 
-    @PostMapping(path = "/register/activate/{userName}")
-    public ResponseEntity<?> postRegisterActivate(@PathVariable (value = "userName") String userName) {
-        return authService.activateUser(userName);
+    @PatchMapping(path = "/register/activate/{token}")
+    public ResponseEntity<?> patchRegisterActivate(@PathVariable String token) {
+        return authService.activateUser(token);
     }
 }
 

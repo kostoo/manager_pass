@@ -1,10 +1,7 @@
 package com.managerPass.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.Hibernate;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -19,13 +16,15 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
+@Builder
+@AllArgsConstructor
 @NamedEntityGraph(name = "taskEntityGraph",
                   attributeNodes = {
-                  @NamedAttributeNode(value = "userEntity"),
-                  @NamedAttributeNode("priority")
+                        @NamedAttributeNode(value = "userEntity"),
+                        @NamedAttributeNode("priority")
                   }
 )
+@NoArgsConstructor
 public class TaskEntity {
 
     @Id

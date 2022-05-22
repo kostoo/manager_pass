@@ -4,16 +4,20 @@ import com.managerPass.entity.Enum.ERole;
 import com.managerPass.entity.RoleEntity;
 import com.managerPass.entity.UserEntity;
 import com.managerPass.entity.UserSecurity;
-import com.managerPass.mail.Mail;
+import com.managerPass.entity.ValidateTokenEntity;
+import com.managerPass.mail.AppMailSender;
 import com.managerPass.payload.request.LoginRequest;
 import com.managerPass.payload.request.SignupRequest;
 import com.managerPass.payload.response.JwtToken;
 import com.managerPass.payload.response.MessageResponse;
+import com.managerPass.payload.response.RegistrationResponse;
 import com.managerPass.repository.RoleRepository;
 import com.managerPass.repository.UserEntityRepository;
 import com.managerPass.security.JwtUtils;
+import com.managerPass.service.ValidateTokenRegisterEntityService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,15 +25,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.server.ResponseStatusException;
-import javax.validation.Valid;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthService {
 
     private final AuthenticationManager authenticationManager;
@@ -37,9 +41,13 @@ public class AuthService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder encoder;
     private final JwtUtils jwtUtils;
-    private final Mail mailSender;
+    private final AppMailSender mailSender;
+    private final ValidateTokenRegisterEntityService validateTokenRegisterEntityService;
 
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    @Value("${app.urlToRegister}")
+    private String urlToRegister;
+
+    public ResponseEntity<?> authenticateUser(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
         );
@@ -56,64 +64,83 @@ public class AuthService {
         return ResponseEntity.ok(new JwtToken(jwt));
     }
 
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+    public ResponseEntity<?> registerUser(SignupRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
+            log.warn(String.format("Username %s is already taken!", signUpRequest.getUsername()));
+
+            return ResponseEntity.badRequest().body(
+               new MessageResponse(String.format("Username %s is already taken!", signUpRequest.getUsername())
+            ));
         }
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
+            log.warn(String.format("Email %s is already in use!", signUpRequest.getEmail()));
+
+            return ResponseEntity.badRequest().body(new MessageResponse(
+                    String.format("Email %s is already in use!", signUpRequest.getEmail())
+            ));
         }
 
         UserEntity user = new UserEntity(
                 signUpRequest.getUsername(), signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword())
         );
 
-        Set<String> strRoles = signUpRequest.getRole();
+        Set<ERole> strRoles = signUpRequest.getRole();
         Set<RoleEntity> roles = new HashSet<>();
 
         if (strRoles == null) {
             RoleEntity userRole = roleRepository.findByName(ERole.ROLE_USER).orElseThrow(() ->
-                    new RuntimeException("Error: Role is not found.")
+                    new RuntimeException(String.format("Error: Role %s is not found", ERole.ROLE_USER))
             );
 
             roles.add(userRole);
-
         } else {
-            strRoles.forEach(role -> {
-                if (role.equals("admin")) {
-                    RoleEntity adminRole = roleRepository.findByName(ERole.ROLE_ADMIN).orElseThrow(() ->
-                            new RuntimeException("Error: Role is not found.")
-                    );
-                    roles.add(adminRole);
-                } else if(role.equals("user")) {
-                    RoleEntity userRole = roleRepository.findByName(ERole.ROLE_USER).orElseThrow(() ->
-                            new RuntimeException("Error: Role is not found.")
-                    );
-                    roles.add(userRole);
+            strRoles.forEach( role -> {
+                switch (role) {
+                    case ROLE_ADMIN:
+                        RoleEntity adminRole = roleRepository.findByName(ERole.ROLE_ADMIN).orElseThrow(() ->
+                                new RuntimeException(String.format("Error: Role %s is not found", ERole.ROLE_ADMIN))
+                        );
+                        roles.add(adminRole);
+
+                        break;
+                    default:
+                        RoleEntity userRole = roleRepository.findByName(ERole.ROLE_USER).orElseThrow(() ->
+                                new RuntimeException(String.format("Error: Role %s is not found", ERole.ROLE_USER))
+                        );
+                        roles.add(userRole);
+
+                        break;
                 }
-            });
-        }
+           });
+       }
+        user.setRoles(roles);
+        user = userRepository.save(user);
+
+        String generatedTokenRegister = UUID.randomUUID().toString();
+
+        ValidateTokenEntity validateTokenEntity = new ValidateTokenEntity();
+        int expiryTimeInMinutes = 1440;
+        Date expiryDateToken = validateTokenEntity.calculateExpiryDate(expiryTimeInMinutes);
+
+        validateTokenEntity.setToken(generatedTokenRegister);
+        validateTokenEntity.setExpiryDate(expiryDateToken);
+        validateTokenEntity.setUserEntity(user);
+
+        validateTokenRegisterEntityService.addToken(validateTokenEntity);
 
         mailSender.sendEmail(signUpRequest.getEmail(), "activate user",
-                     "Please go to http://localhost:8082/api/activate/" + user.getUsername() +
-                             " to activate your account");
+                     "Please activate your account " + urlToRegister + generatedTokenRegister);
 
-        user.setRoles(roles);
-        userRepository.save(user);
-
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        return ResponseEntity.ok(new RegistrationResponse(generatedTokenRegister));
     }
 
-    public ResponseEntity<MessageResponse> activateUser(String username) {
-       UserEntity userEntity =  userRepository.findByUsername(username).orElseThrow(() ->
-               new ResponseStatusException(HttpStatus.NOT_FOUND,"username not found "+ username)
-       );
+    public ResponseEntity<MessageResponse> activateUser(String token) {
+        ValidateTokenEntity validateTokenEntity = validateTokenRegisterEntityService.findByToken(token);
+        UserEntity userEntity = validateTokenEntity.getUserEntity();
 
-       if (!userEntity.getIsAccountActive()) {
-           userEntity.setIsAccountActive(true);
-       } else {
-           return ResponseEntity.ok(new MessageResponse("user already activated"));
+        if (validateTokenEntity.getExpiryDate().after(new Date())) {
+            userEntity.setIsAccountActive(true);
        }
 
        userRepository.save(userEntity);

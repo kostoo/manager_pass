@@ -9,30 +9,35 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public interface TaskEntityRepository extends JpaRepository<TaskEntity, Long> {
 
     @Override
     @EntityGraph(value = "taskEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
-    ArrayList<TaskEntity> findAll();
+    List<TaskEntity> findAll();
 
     @EntityGraph(value = "taskEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
-    ArrayList<TaskEntity> findAllByName(@Param("name") String name);
+    List<TaskEntity> findAllByName(String name);
 
     @EntityGraph(value = "taskEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
-    ArrayList<TaskEntity> findAllByUserEntity_IdUser(@Param("idUser")Long idUser);
+    List<TaskEntity> findAllByUserEntity_IdUser(Long idUser);
 
     @EntityGraph(value = "taskEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
-    ArrayList<TaskEntity> findAllByPriority_IdAndUserEntity_IdUser(@Param("idPriority") Long idPriority,
-                                                                   @Param("idUser") Long idUser);
+    List<TaskEntity> findAllByPriority_IdAndUserEntity_IdUser(Long idPriority,
+                                                              Long idUser);
 
     @EntityGraph(value = "taskEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
-    Page<TaskEntity> findAllByUserEntity_IdUser(@Param("idUser") Long idUser,Pageable pageable);
+    Page<TaskEntity> findAllByUserEntity_IdUser(@Param("idUser") Long idUser, Pageable pageable);
 
     @EntityGraph(value = "taskEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
     Page<TaskEntity> findAllByUserEntity_IdUserAndDateTimeStartIsAfterAndDateTimeFinishBefore(
             Long idUser, LocalDateTime dateTimeStart, LocalDateTime dateTimeFinish, Pageable pageable
+    );
+
+    @EntityGraph(value = "taskEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
+    Page<TaskEntity> findAllByPriority_IdAndUserEntity_IdUserAndDateTimeStartIsAfterAndDateTimeFinishBefore(
+            Long idPriority, Long idUser, LocalDateTime dateTimeStart, LocalDateTime dateTimeFinish, Pageable pageable
     );
 }
