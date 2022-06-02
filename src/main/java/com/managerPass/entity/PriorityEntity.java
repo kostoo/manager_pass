@@ -6,16 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -31,7 +23,6 @@ public class PriorityEntity {
     @Column(name = "id")
     private Long id;
 
-    @NotBlank
     @Enumerated(EnumType.STRING)
     private EPriority name;
 

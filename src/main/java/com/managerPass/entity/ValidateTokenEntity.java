@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -37,7 +38,7 @@ public class ValidateTokenEntity {
     @ToString.Exclude
     private UserEntity userEntity;
 
-    @NotBlank
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private Date expiryDate;
 
     public Date calculateExpiryDate(int expiryTimeInMinutes) {

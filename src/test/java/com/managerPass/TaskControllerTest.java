@@ -12,7 +12,6 @@ import com.managerPass.repository.PriorityEntityRepository;
 import com.managerPass.repository.RoleRepository;
 import com.managerPass.repository.TaskEntityRepository;
 import com.managerPass.repository.UserEntityRepository;
-import com.managerPass.service.TaskEntityService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,12 +28,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Random;
 import java.util.Set;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -64,13 +61,11 @@ public class TaskControllerTest {
     @Autowired
     UserEntityRepository userEntityRepository;
 
-    @Autowired
-    TaskEntityService taskEntityService;
-
-    public TaskEntity taskEntity;
-    public RoleEntity roleEntity;
-    public PriorityEntity priority;
+    TaskEntity taskEntity;
+    RoleEntity roleEntity;
+    PriorityEntity priority;
     TaskRequest taskRequest;
+    UserEntity userEntity;
 
     public static LocalDateTime localDateTimeFinishPlus1Month = LocalDateTime.of(LocalDate.of(
          LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(), LocalDateTime.now().getDayOfMonth()+1
@@ -89,7 +84,7 @@ public class TaskControllerTest {
 
         roleEntity = roleRepository.save(roleEntity);
 
-        UserEntity userEntity = UserEntity.builder()
+        userEntity = UserEntity.builder()
                                           .username("kosto")
                                           .email("test@gmail.com")
                                           .roles(Set.of(roleEntity))
@@ -236,10 +231,32 @@ public class TaskControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "kostos" , roles = "USER")
-    public void deleteTasksWithUser_ok() throws Exception {
+    @WithMockUser(username = "kostos" , roles = "ADMIN")
+    public void deleteTasksRandomIdTasksWithAdmin_fail() throws Exception {
         assert taskEntity.getIdTask() != null;
-        Long idTask = taskEntity.getIdTask();
+        Long idTaskRandom = new Random().nextLong();
+
+        mvc.perform(delete("/api/tasks/{idTask}", idTaskRandom ))
+           .andDo(print())
+           .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    @WithMockUser(username = "kostos" , roles = "ADMIN")
+    public void deleteTasksRandomIdTasksWithUser_fail() throws Exception {
+        assert taskEntity.getIdTask() != null;
+        Long idTaskRandom = new Random().nextLong();
+
+        mvc.perform(delete("/api/tasks/{idTask}", idTaskRandom ))
+           .andDo(print())
+           .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    @WithMockUser(username = "kostos" , roles = "USER")
+    public void deleteTasksIdTasksWithUser_ok() throws Exception {
+        assert taskEntity.getIdTask() != null;
+        Long idTask = taskEntity.getIdTask() ;
 
         mvc.perform(delete("/api/tasks/{idTask}", idTask ))
            .andDo(print())
@@ -249,7 +266,7 @@ public class TaskControllerTest {
     }
 
     @Test
-    public void deleteTasksWithUnAuthorized_fail() throws Exception {
+    public void deleteTasksIdTasksWithUnAuthorized_fail() throws Exception {
         assert taskEntity.getIdTask() != null;
         Long idTask = taskEntity.getIdTask();
 
@@ -257,8 +274,26 @@ public class TaskControllerTest {
            .contentType(MediaType.APPLICATION_JSON)
            ).andDo(print())
            .andExpect(status().isUnauthorized());
+    }
 
-        assert !taskEntityRepository.existsById(idTask);
+    @Test
+    @WithMockUser( username = "kosto" , roles = "ADMIN")
+    public void addTasksWithAdmin_fail() throws Exception {
+        mvc.perform(post("/api/tasks", taskEntity)
+           .contentType(MediaType.APPLICATION_JSON)
+           .content(objectMapper.writeValueAsBytes(userEntity))
+           ).andDo(print())
+           .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    @WithMockUser( username = "kosto" , roles = "ADMIN")
+    public void addTasksWithUser_fail() throws Exception {
+        mvc.perform(post("/api/tasks", taskEntity)
+           .contentType(MediaType.APPLICATION_JSON)
+           .content(objectMapper.writeValueAsBytes(userEntity))
+           ).andDo(print())
+           .andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -267,9 +302,7 @@ public class TaskControllerTest {
         mvc.perform(post("/api/tasks", taskEntity)
            .contentType(MediaType.APPLICATION_JSON)
            .content(objectMapper.writeValueAsBytes(taskRequest))
-           ).andDo(print()).andExpect(status().is2xxSuccessful())
-           .andExpect(jsonPath("$.name").value(taskRequest.getName()))
-           .andExpect(jsonPath("$.message").value(taskRequest.getMessage()));
+           ).andDo(print()).andExpect(status().is2xxSuccessful());
     }
 
     @Test
@@ -306,8 +339,8 @@ public class TaskControllerTest {
            .content(objectMapper.writeValueAsBytes(taskEntity))
            ).andDo(print())
            .andExpect(status().is2xxSuccessful())
-           .andExpect(jsonPath("$.name").value("update name"))
-           .andExpect(jsonPath("$.message").value("update message"));
+           .andExpect(jsonPath("$.name").value(taskEntity.getName()))
+           .andExpect(jsonPath("$.message").value(taskEntity.getMessage()));
     }
 
     @Test
@@ -319,13 +352,13 @@ public class TaskControllerTest {
         taskEntity.setName("update name");
         taskEntity.setMessage("update message");
 
-        mvc.perform(put("/api/users")
+        mvc.perform(put("/api/tasks")
            .contentType(MediaType.APPLICATION_JSON)
            .content(objectMapper.writeValueAsBytes(taskEntity))
            ).andDo(print())
            .andExpect(status().is2xxSuccessful())
-           .andExpect(jsonPath("$.name").value("update name"))
-           .andExpect(jsonPath("$.message").value("update message"));
+           .andExpect(jsonPath("$.name").value(taskEntity.getName()))
+           .andExpect(jsonPath("$.message").value(taskEntity.getMessage()));
     }
 
     @Test
@@ -346,8 +379,6 @@ public class TaskControllerTest {
            ).andDo(print())
            .andExpect(status().is2xxSuccessful());
     }
-
-
 
     @Test
     public void getTasksUsersWithIdPriorityUnAuthorized_fail() throws Exception {
@@ -375,5 +406,27 @@ public class TaskControllerTest {
        ).andDo(print())
        .andExpect(status()
        .is2xxSuccessful());
+    }
+
+    @Test
+    @WithMockUser( username = "kosto" , roles = "ADMIN")
+    public void getTasksUsersWithPriorityDateStartFinishAdmin_ok() throws Exception {
+        mvc.perform(get(
+         "/api/tasks/users?idPriority={idPriority}&startDateTime={startdateTime}&dateTimeFinish={dateTimeFinish}",
+                        priority.getId(), taskEntity.getDateTimeStart(), taskEntity.getDateTimeFinish())
+            ).andDo(print())
+            .andExpect(status()
+            .is2xxSuccessful());
+    }
+
+    @Test
+    @WithMockUser( username = "kosto" , roles = "USER")
+    public void getTasksUsersWithPriorityDateStartFinishUser_ok() throws Exception {
+        mvc.perform(get(
+         "/api/tasks/users?idPriority={idPriority}&startDateTime={startdateTime}&dateTimeFinish={dateTimeFinish}",
+                                priority.getId(), taskEntity.getDateTimeStart(), taskEntity.getDateTimeFinish())
+           ).andDo(print())
+           .andExpect(status()
+           .is2xxSuccessful());
     }
 }

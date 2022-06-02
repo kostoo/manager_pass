@@ -4,6 +4,7 @@ import com.managerPass.entity.UserEntity;
 import com.managerPass.payload.request.UserRequest;
 import com.managerPass.repository.UserEntityRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -20,18 +21,30 @@ public class UserEntityService {
         return userEntityRepository.findAll();
     }
 
-    public List<UserEntity> getUsersByLastName(String lastName) {
-        return userEntityRepository.findAllByLastName(lastName);
+    public List<UserEntity> getUsersNameLastName(String name, String lastName, Pageable pageable) {
+
+        List<UserEntity> listUsers;
+
+        if (name != null & lastName != null) {
+           listUsers = userEntityRepository.findAllByNameContainsAndLastNameContains(name, lastName , pageable);
+        } else  if (name == null & lastName != null) {
+           listUsers = userEntityRepository.findAllByLastNameContains(lastName, pageable);
+        } else if (name != null) {
+           listUsers = userEntityRepository.findAllByNameContains(name, pageable);
+        } else {
+           listUsers = userEntityRepository.findAll(pageable).getContent();
+        }
+        return listUsers;
     }
 
-    public void deleteUsersById(Long id) throws ResponseStatusException {
-       userEntityRepository.findById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User not found Id : %x", id))
+    public void deleteUsersIdUser(Long IdUser) throws ResponseStatusException {
+       userEntityRepository.findById(IdUser).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User not found Id : %x", IdUser))
        );
-       userEntityRepository.deleteById(id);
+       userEntityRepository.deleteById(IdUser);
     }
 
-    public UserEntity getUsersById(Long idUser) {
+    public UserEntity getUsersIdUser(Long idUser) {
         return userEntityRepository.findById(idUser).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User not found Id : %x", idUser))
         );
@@ -47,6 +60,7 @@ public class UserEntityService {
         UserEntity userEntity = UserEntity.builder()
                                           .username(userRequest.getUsername())
                                           .name(userRequest.getName())
+                                          .lastName(userRequest.getLastName())
                                           .email(userRequest.getEmail())
                                           .roles(userRequest.getRoles())
                                           .build();

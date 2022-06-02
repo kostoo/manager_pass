@@ -79,10 +79,13 @@ public class UserControllerTest {
 
         userEntity = userEntityRepository.save(userEntity);
 
-        userRequest = new UserRequest();
-        userRequest.setName("kosto");
-        userRequest.setEmail("test1@gmail.com");
-        userRequest.setRoles(Set.of(roleEntity));
+        userRequest = UserRequest.builder()
+                .name("nikita")
+                .username("kostos")
+                .lastName("nesterov")
+                .roles(Set.of(roleEntity))
+                .email("test1@gmail.com")
+                .build();
 
     }
 
@@ -175,6 +178,45 @@ public class UserControllerTest {
            .andDo(print())
            .andExpect(status().is4xxClientError());
     }
+
+    @Test
+    @WithMockUser( username = "kosto" , roles = "ADMIN")
+    public void getUsersNameLastNameWithAdmin_ok() throws Exception {
+        mvc.perform(get("/api/users?name={name}&lastName={lastName}",
+                        userEntity.getName(), userEntity.getLastName()
+           ).contentType(MediaType.APPLICATION_JSON))
+           .andDo(print())
+           .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser( username = "kosto" , roles = "ADMIN")
+    public void getUsersNameLastNameWithUser_ok() throws Exception {
+        mvc.perform(get("/api/users?name={name}&lastName={lastName}",
+                        userEntity.getName(), userEntity.getLastName()
+                ).contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser( username = "kosto" , roles = "ADMIN")
+    public void getUsersNameWithUser_ok() throws Exception {
+        mvc.perform(get("/api/users?name={name}", userEntity.getName()
+           ).contentType(MediaType.APPLICATION_JSON))
+           .andDo(print())
+           .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser( username = "kosto" , roles = "ADMIN")
+    public void getUsersLastNameWithUser_ok() throws Exception {
+        mvc.perform(get("/api/users?lastName={lastName}", userEntity.getName()
+           ).contentType(MediaType.APPLICATION_JSON))
+           .andDo(print())
+           .andExpect(status().isOk());
+    }
+
     @Test
     @WithMockUser( username = "kosto" , roles = "ADMIN")
     public void getUsersUserNameWithAdmin_ok() throws Exception {

@@ -101,7 +101,7 @@ public class TaskEntityService {
         List<TaskEntity> taskEntities;
 
         if (idPriority != null && dateTimeStart == null && dateTimeFinish == null ) {
-            taskEntities = getAllByAuthUserAndPriority(idPriority);
+            taskEntities = getAllByAuthUserAndPriority(idPriority, pageable);
         }
         else if (idPriority == null && dateTimeStart != null && dateTimeFinish != null) {
             taskEntities = getAllByUserIdDateTimeStartAfterAndDateTimeFinishBefore(
@@ -119,8 +119,6 @@ public class TaskEntityService {
 
         return taskEntities;
     }
-
-
 
     public List<TaskEntity> getAllByAuthUser() {
         String username = getAuthentication().getUsername();
@@ -146,13 +144,13 @@ public class TaskEntityService {
          ).getContent();
     }
 
-    public List<TaskEntity> getAllByAuthUserAndPriority(Long idPriority) {
+    public List<TaskEntity> getAllByAuthUserAndPriority(Long idPriority, Pageable pageable) {
         String username = getAuthentication().getUsername();
         Long idUser = userEntityRepository.findByUsername(username).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User %s not found ", username))
         ).getIdUser();
 
-        return taskEntityRepository.findAllByPriority_IdAndUserEntity_IdUser(idPriority, idUser);
+        return taskEntityRepository.findAllByPriority_IdAndUserEntity_IdUser(idPriority, idUser, pageable);
     }
 
     public Page<TaskEntity> getAllByUserIdDateTimeStartAfterAndDateTimeFinishBefore(LocalDateTime dateTimeStart,

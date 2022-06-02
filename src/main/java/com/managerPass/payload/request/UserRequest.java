@@ -1,15 +1,16 @@
 package com.managerPass.payload.request;
 
 import com.managerPass.entity.RoleEntity;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
 import java.util.Set;
 
 @Data
+@Builder
 public class UserRequest {
 
     @NotBlank
@@ -27,6 +28,6 @@ public class UserRequest {
     @Email
     private String email;
 
-    private Set<RoleEntity> roles = new HashSet<>();
+    private Set<RoleEntity> roles ;
 
 }

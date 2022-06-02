@@ -26,7 +26,8 @@ public interface TaskEntityRepository extends JpaRepository<TaskEntity, Long> {
 
     @EntityGraph(value = "taskEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
     List<TaskEntity> findAllByPriority_IdAndUserEntity_IdUser(Long idPriority,
-                                                              Long idUser);
+                                                              Long idUser,
+                                                              Pageable pageable);
 
     @EntityGraph(value = "taskEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
     Page<TaskEntity> findAllByUserEntity_IdUser(@Param("idUser") Long idUser, Pageable pageable);

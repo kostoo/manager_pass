@@ -1,6 +1,7 @@
 package com.managerPass.repository;
 
 import com.managerPass.entity.UserEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
@@ -13,7 +14,15 @@ import java.util.Optional;
 public interface UserEntityRepository extends JpaRepository<UserEntity, Long> {
 
     @EntityGraph(attributePaths = { "roles"}, type = EntityGraph.EntityGraphType.LOAD)
-    List<UserEntity> findAllByLastName(@Param("lastName") String lastName);
+    List<UserEntity> findAllByLastNameContains(@Param("lastName") String lastName, Pageable pageable);
+
+    @EntityGraph(attributePaths = { "roles"}, type = EntityGraph.EntityGraphType.LOAD)
+    List<UserEntity> findAllByNameContains(@Param("name") String name, Pageable pageable);
+
+    @EntityGraph(attributePaths = { "roles"}, type = EntityGraph.EntityGraphType.LOAD)
+    List<UserEntity> findAllByNameContainsAndLastNameContains(@Param("name") String name,
+                                                              @Param("lastName") String lastName,
+                                                              Pageable pageable);
 
     @EntityGraph(attributePaths = { "roles" }, type = EntityGraph.EntityGraphType.LOAD)
     Optional<UserEntity> findByUsername(@Param("username")String username);

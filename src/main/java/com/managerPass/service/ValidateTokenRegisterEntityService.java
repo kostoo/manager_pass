@@ -19,7 +19,7 @@ public class ValidateTokenRegisterEntityService {
 
     public ValidateTokenEntity findByToken(String token) {
         return validateTokenRepository.findByToken(token).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Token  %s not found ")
+                new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Token  %s not found ", token))
         );
     }
 }

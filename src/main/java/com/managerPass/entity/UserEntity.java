@@ -56,11 +56,9 @@ public class UserEntity {
     @Column(name = "id_user")
     private Long idUser;
 
-    @NotBlank
     @Column(name = "name")
     private String name;
 
-    @NotBlank
     @Column(name = "last_name")
     private String lastName;
 
@@ -73,7 +71,6 @@ public class UserEntity {
     @Email
     private String email;
 
-    @NotBlank
     @Size(max = 120)
     private String password;
 
@@ -84,16 +81,13 @@ public class UserEntity {
     @ToString.Exclude
     private Set<RoleEntity> roles = new HashSet<>();
 
-    @NotBlank
     @Column(name = "isAccountActive")
     private Boolean isAccountActive;
 
-    @NotBlank
     @Column(name = "isAccountNonBlock")
     private Boolean isAccountNonBlock;
 
-    public UserEntity(@NotBlank @Size(max = 20) String username, @NotBlank @Size(max = 50) @Email String email,
-                      @NotBlank @Size(max = 120) String password) {
+    public UserEntity( String username, @Email String email, String password) {
 
         this.username = username;
         this.email = email;
