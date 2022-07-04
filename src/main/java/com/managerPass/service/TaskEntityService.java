@@ -39,13 +39,22 @@ public class TaskEntityService {
     }
 
     public List<TaskEntity> getAll() {
-        return  taskEntityRepository.findAll();
+        return taskEntityRepository.findAll();
     }
 
     public List<TaskEntity> getAllByName(String name) {
         return taskEntityRepository.findAllByName(name);
     }
 
+    public List<TaskEntity> getAllWithParam(String name) {
+        List<TaskEntity> taskEntities;
+        if (name != null) {
+            taskEntities = getAllByName(name);
+        } else {
+            taskEntities = getAll();
+        }
+        return taskEntities;
+    }
     public TaskEntity getByIdTask(Long id) {
         return taskEntityRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Task not found by Id : %x", id))

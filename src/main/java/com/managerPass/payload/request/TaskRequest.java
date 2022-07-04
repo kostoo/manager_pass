@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
+@AllArgsConstructor
 public class TaskRequest {
 
     @NotBlank

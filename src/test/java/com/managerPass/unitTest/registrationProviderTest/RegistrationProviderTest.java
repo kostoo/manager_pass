@@ -1,13 +1,37 @@
-package com.managerPass;
+package com.managerPass.unitTest.registrationProviderTest;
+
 
 import com.managerPass.payload.request.SignupRequest;
-import com.managerPass.payload.response.MessageResponse;
 import com.managerPass.payload.response.RegistrationResponse;
+import com.managerPass.unitTest.registrationProviderTest.prepareTest.RegistrationPrepareTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.rest.core.annotation.Description;
-@Description("Тестирование регистрации пользователя")
-public class RegistrationTest extends  RegistrationPrepareTest{
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+@Description("Тестирование регистрации пользователя")
+public class RegistrationProviderTest extends RegistrationPrepareTest {
+
+
+    @Test
+    @Description("Повторная регистрация пользователя с одинаковым email неудачная")
+    public void registrationAlreadyEmail_WithUnAuthorized_fail() throws Exception {
+
+        SignupRequest registrationUser = signupRequestGenerate();
+        String userName = registrationUser.getUsername();
+
+        RegistrationResponse registrationResponse = sendSignUpRequestAndGetRegistrationResponse(
+                registrationUser , "/api/register"
+        );
+
+        registrationUser.setUsername("notAlreadyUse");
+        assertRegistrationResponse(registrationResponse);
+
+         assert sendSignUpRequestAndGetErrorMessage(registrationUser , "/api/register").getMessage().equals(
+                 String.format("Email %s is already in use!", registrationUser.getEmail())
+         );
+
+        assert checkExistsUserEntityByUserName(userName);
+    }
 
     @Test
     @Description("Повторная регистрация пользователя с одинаковым username неудачная")
@@ -20,31 +44,12 @@ public class RegistrationTest extends  RegistrationPrepareTest{
                 registrationUser , "/api/register"
         );
 
-        registrationUser.setUsername("notAlreadyUse");
         assertRegistrationResponse(registrationResponse);
 
-        MessageResponse registrationResponseError = sendSignUpRequestAndGetErrorMessage(
-                registrationUser , "/api/register"
+        assert sendSignUpRequestAndGetErrorMessage(registrationUser , "/api/register").getMessage().equals(
+                String.format("Username %s is already taken!", userName)
         );
 
-        assert registrationResponseError.getMessage().equals(
-                String.format("Email %s is already in use!", registrationUser.getEmail())
-        );
-        assert checkExistsUserEntityByUserName(userName);
-    }
-
-    @Test
-    @Description("Повторная регистрация пользователя с одинаковым username неудачная")
-    public void registrationAlreadyEmail_WithUnAuthorized_fail() throws Exception {
-
-        SignupRequest registrationUser = signupRequestGenerate();
-        String userName = registrationUser.getUsername();
-
-        MessageResponse registrationResponseError = sendSignUpRequestAndGetErrorMessage(
-                registrationUser , "/api/register"
-        );
-
-        assert registrationResponseError.getMessage().equals(String.format("Username %s is already taken!", userName));
         assert checkExistsUserEntityByUserName(userName);
     }
 
@@ -78,7 +83,7 @@ public class RegistrationTest extends  RegistrationPrepareTest{
         assertRegistrationResponse(registrationResponse);
         assert checkExistsUserEntityByUserName(userName);
 
-        sendPatchAndGetMockHttpServletResponse(
+        sendPatchAndGetResultActions(
                 "/api/register/activate/{token}", registrationResponse.getRegistrationToken()
         );
 
@@ -101,12 +106,8 @@ public class RegistrationTest extends  RegistrationPrepareTest{
 
         String badToken = registrationResponse.getRegistrationToken() + 1;
 
-        MessageResponse registrationResponseToken = sendPatchAndGetMessageResponse(
-                "/api/register/activate/{token}", badToken
-        );
-
-        assert registrationResponseToken.getMessage().equals(String.format("Token  %s not found ", badToken));
-        assert checkUserEntityIsActive(userName);
+        sendPatchAndGetResultActions("/api/register/activate/{token}", badToken
+        ).andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
     }
 
 

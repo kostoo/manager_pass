@@ -57,6 +57,9 @@ public class UserEntityService {
     }
 
     public UserEntity addUser(UserRequest userRequest) {
+
+
+
         UserEntity userEntity = UserEntity.builder()
                                           .username(userRequest.getUsername())
                                           .name(userRequest.getName())
@@ -64,6 +67,8 @@ public class UserEntityService {
                                           .email(userRequest.getEmail())
                                           .roles(userRequest.getRoles())
                                           .build();
+
+
 
         userEntity.setIsAccountActive(false);
         userEntity.setIsAccountNonBlock(true);

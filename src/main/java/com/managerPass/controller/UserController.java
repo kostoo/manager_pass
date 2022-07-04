@@ -23,7 +23,7 @@ public class UserController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = " hasRole('ADMIN')")
-    public ResponseEntity<List<UserEntity>> getUsersLastName(@RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<List<UserEntity>> getUsersNameLastName(@RequestParam(defaultValue = "0") int page,
                                                              @RequestParam(defaultValue = "10") int sizePage,
                                                              @RequestParam(required = false) String name,
                                                              @RequestParam(required = false) String lastName) {
@@ -54,7 +54,7 @@ public class UserController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
                  produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = " hasRole('ADMIN')")
-    public ResponseEntity<UserEntity> postUsers(@Valid @RequestBody UserRequest userRequest) {
+    public ResponseEntity<?> postUsers(@Valid @RequestBody UserRequest userRequest) {
         return ResponseEntity.ok(userService.addUser(userRequest));
     }
 
@@ -65,7 +65,7 @@ public class UserController {
        return ResponseEntity.ok().body(userService.updateUser(userEntity));
     }
 
-    @PostMapping(path = "/block",
+    @PatchMapping(path = "/block",
                  consumes = MediaType.APPLICATION_JSON_VALUE,
                  produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = " hasRole('ADMIN')")

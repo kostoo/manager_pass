@@ -1,4 +1,4 @@
-package com.managerPass;
+package com.managerPass.unitTest.registrationProviderTest;
 
 import com.managerPass.entity.Enum.ERole;
 import com.managerPass.entity.RoleEntity;
