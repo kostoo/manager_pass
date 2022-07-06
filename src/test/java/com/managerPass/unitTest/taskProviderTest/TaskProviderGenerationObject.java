@@ -18,10 +18,10 @@ public class TaskProviderGenerationObject {
             LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(), LocalDateTime.now().getDayOfMonth()+1
     ), LocalTime.now());
 
-    public static TaskEntity taskEntityGeneration(PriorityEntity priority, UserEntity userEntity) {
+    public static TaskEntity taskEntityGeneration(String name , String message, PriorityEntity priority, UserEntity userEntity) {
         return TaskEntity.builder()
-                .name("testtask")
-                .message("message")
+                .name(name)
+                .message(message)
                 .dateTimeStart(LocalDateTime.now())
                 .dateTimeFinish(localDateTimeFinishPlus1Month)
                 .priority(priority)

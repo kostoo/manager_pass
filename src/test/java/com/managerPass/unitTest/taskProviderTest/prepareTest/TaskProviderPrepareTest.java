@@ -10,7 +10,7 @@ import com.managerPass.unitTest.taskProviderTest.TaskProviderGenerationObject;
 
 public class TaskProviderPrepareTest extends PrepareServiceTest {
 
-  protected TaskEntity taskEntityGenerate(Boolean addInBD) {
+  protected TaskEntity taskEntityGenerate(String name, String message , Boolean addInBD) {
     PriorityEntity priority = priorityEntityRepository.save(TaskProviderGenerationObject.priorityGenerate());
 
     RoleEntity roleEntity = roleRepository.save(TaskProviderGenerationObject.roleGenerate(ERole.ROLE_ADMIN));
@@ -19,9 +19,9 @@ public class TaskProviderPrepareTest extends PrepareServiceTest {
 
     TaskEntity taskEntity;
     if (addInBD) {
-      taskEntity = taskEntityRepository.save(TaskProviderGenerationObject.taskEntityGeneration(priority, userEntity));
+      taskEntity = taskEntityRepository.save(TaskProviderGenerationObject.taskEntityGeneration(name, message, priority, userEntity));
     } else {
-      taskEntity = TaskProviderGenerationObject.taskEntityGeneration(priority, userEntity);
+      taskEntity = TaskProviderGenerationObject.taskEntityGeneration(name, message, priority, userEntity);
     }
 
     return  taskEntity;
