@@ -70,12 +70,12 @@ public class TaskController {
                                                          @RequestParam(defaultValue = "10") int sizePage,
                                                          @RequestParam(required = false) Long idPriority,
 
-                                                         @RequestParam(required = false) @DateTimeFormat(
-                                                                iso = DateTimeFormat.ISO.DATE_TIME
+                                                         @RequestParam(required = false)
+                                                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME
                                                          ) LocalDateTime startDateTime,
 
-                                                         @RequestParam(required = false) @DateTimeFormat(
-                                                                iso = DateTimeFormat.ISO.DATE_TIME
+                                                         @RequestParam(required = false)
+                                                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME
                                                          ) LocalDateTime dateTimeFinish) {
 
       Pageable pageable = PageRequest.of(page, sizePage);

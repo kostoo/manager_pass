@@ -120,8 +120,8 @@ public class AuthService {
         String generatedTokenRegister = UUID.randomUUID().toString();
 
         ValidateTokenEntity validateTokenEntity = new ValidateTokenEntity();
-        int expiryTimeInMinutes = 1440;
-        Date expiryDateToken = validateTokenEntity.calculateExpiryDate(expiryTimeInMinutes);
+
+        Date expiryDateToken = validateTokenEntity.calculateExpiryDate();
 
         validateTokenEntity.setToken(generatedTokenRegister);
         validateTokenEntity.setExpiryDate(expiryDateToken);
@@ -141,7 +141,9 @@ public class AuthService {
 
         if (validateTokenEntity.getExpiryDate().after(new Date())) {
             userEntity.setIsAccountActive(true);
-       }
+       } else {
+            return ResponseEntity.badRequest().body(new MessageResponse("token expired"));
+        }
 
        userRepository.save(userEntity);
 

@@ -86,13 +86,13 @@ public class TaskEntityService {
             EPriority priorityName = taskEntity.getPriority().getName();
             taskEntity.setPriority(priorityEntityRepository.findByName(priorityName).orElseThrow(() ->
                 new ResponseStatusException(
-                      HttpStatus.NOT_FOUND, String.format(" Not found priority name %s ", priorityName)
+                      HttpStatus.NOT_FOUND, String.format("Not found priority name %s ", priorityName)
                 ))
             );
         } else {
             taskEntity.setPriority(priorityEntityRepository.findByName(EPriority.MEDIUM).orElseThrow(() ->
                     new ResponseStatusException(
-                            HttpStatus.NOT_FOUND, String.format(" Not found priority name %s", EPriority.MEDIUM)
+                            HttpStatus.NOT_FOUND, String.format("Not found priority name %s", EPriority.MEDIUM)
                     )
             ));
         }

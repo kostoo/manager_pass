@@ -19,7 +19,6 @@ import java.util.Objects;
 @Setter
 @ToString
 @RequiredArgsConstructor
-
 @Table(name = "validate_token")
 public class ValidateTokenEntity {
 
@@ -41,10 +40,10 @@ public class ValidateTokenEntity {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private Date expiryDate;
 
-    public Date calculateExpiryDate(int expiryTimeInMinutes) {
+    public Date calculateExpiryDate() {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Timestamp(cal.getTime().getTime()));
-        cal.add(Calendar.MINUTE, expiryTimeInMinutes);
+        cal.add(Calendar.MINUTE, EXPIRATION);
         return new Date(cal.getTime().getTime());
     }
 

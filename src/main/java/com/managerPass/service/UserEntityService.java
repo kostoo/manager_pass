@@ -57,9 +57,6 @@ public class UserEntityService {
     }
 
     public UserEntity addUser(UserRequest userRequest) {
-
-
-
         UserEntity userEntity = UserEntity.builder()
                                           .username(userRequest.getUsername())
                                           .name(userRequest.getName())

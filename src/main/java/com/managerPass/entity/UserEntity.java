@@ -1,32 +1,13 @@
 package com.managerPass.entity;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.Hibernate;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -88,7 +69,6 @@ public class UserEntity {
     private Boolean isAccountNonBlock;
 
     public UserEntity( String username, @Email String email, String password) {
-
         this.username = username;
         this.email = email;
         this.password = password;
@@ -98,8 +78,8 @@ public class UserEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        UserEntity that = (UserEntity) o;
-        return idUser != null && Objects.equals(idUser, that.idUser);
+        UserEntity user = (UserEntity) o;
+        return idUser != null && Objects.equals(idUser, user.idUser);
     }
 
     @Override
