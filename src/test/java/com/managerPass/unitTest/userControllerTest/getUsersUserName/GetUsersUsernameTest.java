@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WithMockUser(username = "kosto", roles = "ADMIN")
+@Description("Получение пользователя по username")
 public class GetUsersUsernameTest extends GetUsersUsernamePrepareTest {
 
     @Test

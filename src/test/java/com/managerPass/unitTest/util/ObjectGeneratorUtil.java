@@ -16,7 +16,7 @@ import java.util.Set;
 
 public class ObjectGeneratorUtil {
 
-    public static LocalDateTime localDateTimeFinishPlus1Month = LocalDateTime.of(LocalDate.of(
+    public static final LocalDateTime localDateTimeFinishPlus1Month = LocalDateTime.of(LocalDate.of(
          LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(), LocalDateTime.now().getDayOfMonth()+1
     ), LocalTime.now());
 

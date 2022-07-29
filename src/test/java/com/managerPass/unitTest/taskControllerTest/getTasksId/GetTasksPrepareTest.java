@@ -13,11 +13,11 @@ public class GetTasksPrepareTest extends PrepareServiceTest {
     }
 
     protected TaskEntity taskAdminGenerate() {
-        return taskGenerate("test task", "message", EPriority.HIGH, ERole.ROLE_ADMIN,true);
+        return taskGenerate("test task", "message", EPriority.HIGH, ERole.ROLE_ADMIN, true);
     }
 
     @Override
     public void beforeClass() {
-        userGenerate("kosto","test@test.ru", ERole.ROLE_ADMIN, true);
+        userGenerate("kosto", "test@test.ru", ERole.ROLE_ADMIN, true);
     }
 }

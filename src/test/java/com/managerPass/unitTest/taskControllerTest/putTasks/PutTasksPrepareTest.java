@@ -8,11 +8,11 @@ import com.managerPass.unitTest.prepateTest.PrepareServiceTest;
 public class PutTasksPrepareTest extends PrepareServiceTest {
 
     protected TaskEntity taskAdminGenerate() {
-        return taskGenerate("test task", "message", EPriority.HIGH, ERole.ROLE_ADMIN,true);
+        return taskGenerate("test task", "message", EPriority.HIGH, ERole.ROLE_ADMIN, true);
     }
 
     @Override
     public void beforeClass() {
-        userGenerate("kosto","password", ERole.ROLE_ADMIN, true);
+        userGenerate("kosto", "password", ERole.ROLE_ADMIN, true);
     }
 }

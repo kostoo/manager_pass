@@ -8,8 +8,9 @@ import org.springframework.security.test.context.support.WithMockUser;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Description("Тестирование получения задачи по id")
 @WithMockUser(username = "kosto", roles = "ADMIN")
-public class GetTasksTest extends GetTasksPrepareTest{
+public class GetTasksTest extends GetTasksPrepareTest {
 
     @Test
     @Description("Получение задачи по id")

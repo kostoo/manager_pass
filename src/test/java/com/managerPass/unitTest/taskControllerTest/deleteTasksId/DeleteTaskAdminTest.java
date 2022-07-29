@@ -7,6 +7,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Description("Тестирование удаления задач")
 @WithMockUser(username = "kosto", roles = "ADMIN")
 public class DeleteTaskAdminTest extends DeleteTasksPrepareTest {
 

@@ -9,7 +9,7 @@ public class PostUsersPrepareTest extends PrepareServiceTest {
 
     @Override
     public void beforeClass() {
-        userGenerate("test","test@test.ru", ERole.ROLE_ADMIN, true);
+        userGenerate("test", "test@test.ru", ERole.ROLE_ADMIN, true);
     }
 
     protected UserEntity userGenerateDbFalse() {

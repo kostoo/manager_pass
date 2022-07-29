@@ -9,7 +9,7 @@ public class AuthPrepareTest extends PrepareServiceTest {
 
     @Override
     public void beforeClass() {
-        userGenerate("kosto","test@test.ru", ERole.ROLE_ADMIN, true);
+        userGenerate("kosto", "test@test.ru", ERole.ROLE_ADMIN, true);
     }
 
     public ResultActions sendPostLoginAndGetResultActions(LoginRequest loginRequest) throws Exception {

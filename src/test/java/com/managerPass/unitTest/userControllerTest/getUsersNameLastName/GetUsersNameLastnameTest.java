@@ -8,14 +8,15 @@ import org.springframework.security.test.context.support.WithMockUser;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Description("Получение пользователя по имени и фамилии")
 @WithMockUser(username = "kosto", roles = "ADMIN")
 public class GetUsersNameLastnameTest extends GetUsersNameLastNamePrepareTest {
 
     @Test
     @Description("Получение списка пользователей")
     public void getUsersWithAdmin_ok() throws Exception {
-        UserEntity addUser1 = userGenerate("user","test@test.ru");
-        UserEntity addUser2 = userGenerate("user1","test1@test.ru");
+        UserEntity addUser1 = userGenerate("user", "test@test.ru");
+        UserEntity addUser2 = userGenerate("user1", "test1@test.ru");
 
         getActionResult("/api/users"
         ).andExpect(jsonPath("$[0].idUser").value(addUser1.getIdUser()))

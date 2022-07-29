@@ -13,10 +13,10 @@ public class GetUsersPrepareTest extends PrepareServiceTest {
 
     @Override
     public void beforeClass() {
-        userGenerate("kosto","password", ERole.ROLE_ADMIN, true);
+        userGenerate("kosto", "password", ERole.ROLE_ADMIN, true);
     }
 
     protected UserEntity userGenerate() {
-        return userGenerate("test","test@test.ru", ERole.ROLE_ADMIN, true);
+        return userGenerate("test", "test@test.ru", ERole.ROLE_ADMIN, true);
     }
 }

@@ -8,7 +8,7 @@ public class GetUsersNameLastNamePrepareTest extends PrepareServiceTest {
 
     @Override
     public void beforeClass() {
-        userGenerate("kosto","password", ERole.ROLE_ADMIN, true);
+        userGenerate("kosto", "password", ERole.ROLE_ADMIN, true);
     }
 
     protected UserEntity userGenerate(String userName, String email) {

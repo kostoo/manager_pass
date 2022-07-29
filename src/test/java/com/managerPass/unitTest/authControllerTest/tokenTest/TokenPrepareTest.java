@@ -14,7 +14,7 @@ public class TokenPrepareTest extends PrepareServiceTest {
 
     @Override
     public void beforeClass() {
-        userGenerate("kosto","test@test.ru", ERole.ROLE_ADMIN, true);
+        userGenerate("kosto", "test@test.ru", ERole.ROLE_ADMIN, true);
     }
 
     protected SignupRequest signupRequestGenerate() {

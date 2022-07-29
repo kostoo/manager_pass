@@ -12,8 +12,6 @@ public interface UserProvider extends JpaRepository<UserEntity, Long> {
 
     Boolean existsByUsername(String username);
 
-    Boolean existsByEmail(String email);
-
     Boolean existsByUsernameAndIsAccountActiveEquals(String username, Boolean isAccountActive);
 
     UserEntity getUserEntityByUsername(@NotBlank @Size(max = 20) String username);

@@ -12,8 +12,8 @@ import java.time.Instant;
 import java.util.Date;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-public class TokenTest extends TokenPrepareTest{
+@Description("Тестирование работы с токенами регистрации")
+public class TokenTest extends TokenPrepareTest {
 
     @Test
     @Description("Регистрация с активацией токена пользователя успешная")
@@ -32,7 +32,7 @@ public class TokenTest extends TokenPrepareTest{
         sendPatchTokenAndGetResultActions(registrationResponse.getRegistrationToken()
         ).andExpect(status().is2xxSuccessful());
 
-        userProvider.existsByUsernameAndIsAccountActiveEquals(userName,true);
+        assert userProvider.existsByUsernameAndIsAccountActiveEquals(userName, true);
     }
 
     @Test

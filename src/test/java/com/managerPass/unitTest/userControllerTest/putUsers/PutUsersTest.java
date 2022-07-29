@@ -8,6 +8,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Description("Тестирование обновления пользователя")
 @WithMockUser(username = "kosto", roles = "ADMIN")
 public class PutUsersTest extends PutUsersPrepareTest {
 
@@ -30,7 +31,7 @@ public class PutUsersTest extends PutUsersPrepareTest {
     public void updateUsersWithExistsEmailWithAdmin_fail() throws Exception {
         UserEntity userAlreadyAddDb = userGenerate("userAlreadyDB", "test0@test.ru");
 
-        UserEntity updateUser = userGenerate("username","test1@test.ru");
+        UserEntity updateUser = userGenerate("username", "test1@test.ru");
         updateUser.setEmail(userAlreadyAddDb.getEmail());
 
         sendPutAndGetResultActions("/api/users", updateUser).andExpect(status().is4xxClientError());
@@ -43,7 +44,7 @@ public class PutUsersTest extends PutUsersPrepareTest {
     public void updateUsersWithExistsUserNameWithAdmin_ok() throws Exception {
         UserEntity userAlreadyAddDb = userGenerate("userAlreadyDB", "test0@test.ru");
 
-        UserEntity updateUser = userGenerate("username","test1@test.ru");
+        UserEntity updateUser = userGenerate("username", "test1@test.ru");
         updateUser.setUsername(userAlreadyAddDb.getUsername());
 
         sendPutAndGetResultActions("/api/users", updateUser).andExpect(status().is4xxClientError());
@@ -56,7 +57,7 @@ public class PutUsersTest extends PutUsersPrepareTest {
     public void updateUsersWithExistsUserNameWithAdmin_fail() throws Exception {
         UserEntity userAlreadyAddDb = userGenerate("userAlreadyDB", "test0@test.ru");
 
-        UserEntity updateUser = userGenerate("username","test1@test.ru");
+        UserEntity updateUser = userGenerate("username", "test1@test.ru");
         updateUser.setUsername(userAlreadyAddDb.getUsername());
 
         sendPutAndGetResultActions("/api/users", updateUser).andExpect(status().is4xxClientError());

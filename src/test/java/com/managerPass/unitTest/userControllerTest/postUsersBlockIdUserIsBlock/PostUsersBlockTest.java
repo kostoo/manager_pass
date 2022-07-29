@@ -8,6 +8,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Description("Тестирование блокировки пользователя")
 @WithMockUser(username = "kosto", roles = "ADMIN")
 public class PostUsersBlockTest extends PostUsersBlockIdUserIsBlockPrepareTest {
 
