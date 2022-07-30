@@ -12,6 +12,7 @@ import java.time.Instant;
 import java.util.Date;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @Description("Тестирование работы с токенами регистрации")
 public class TokenTest extends TokenPrepareTest {
 
@@ -22,9 +23,7 @@ public class TokenTest extends TokenPrepareTest {
         SignupRequest registrationUser = signupRequestGenerate();
         String userName = registrationUser.getUsername();
 
-        RegistrationResponse registrationResponse = sendSignUpRequestAndGetRegistrationResponse(
-                registrationUser
-        );
+        RegistrationResponse registrationResponse = sendSignUpRequestAndGetRegistrationResponse(registrationUser);
 
         assertRegistrationResponse(registrationResponse);
         assert userProvider.existsByUsername(userName);

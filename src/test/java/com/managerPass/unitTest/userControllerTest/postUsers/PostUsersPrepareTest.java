@@ -8,7 +8,7 @@ import org.springframework.test.web.servlet.ResultActions;
 public class PostUsersPrepareTest extends PrepareServiceTest {
 
     @Override
-    public void beforeClass() {
+    public void beforeTest() {
         userGenerate("test", "test@test.ru", ERole.ROLE_ADMIN, true);
     }
 

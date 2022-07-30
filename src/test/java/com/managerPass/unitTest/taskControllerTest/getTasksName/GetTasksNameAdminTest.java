@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Description("Тестирование получения задачи по параметру названия задачи")
 @WithMockUser(username = "kosto", roles = "ADMIN")
-public class GetTasksNameTest extends GetTasksNamePrepareTest{
+public class GetTasksNameAdminTest extends GetTasksNamePrepareTest{
 
     @Test
     @Description("Получение задач по названию ok")
@@ -26,7 +26,6 @@ public class GetTasksNameTest extends GetTasksNamePrepareTest{
     @Test
     @Description("Получение задач по названию fail")
     public void getTasksNameNullWithAdmin_fail() throws Exception {
-
         getActionsTasksName( "").andExpect(status().is4xxClientError());
     }
 

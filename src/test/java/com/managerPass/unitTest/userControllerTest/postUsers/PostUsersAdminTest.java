@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Description("Добавление пользователя")
 @WithMockUser(username = "kosto", roles = "ADMIN")
-public class PostUsersTest extends PostUsersPrepareTest {
+public class PostUsersAdminTest extends PostUsersPrepareTest {
 
     @Test
     @Description("Добавление user")

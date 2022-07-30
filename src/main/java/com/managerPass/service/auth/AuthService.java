@@ -127,12 +127,14 @@ public class AuthService {
         validateTokenEntity.setExpiryDate(expiryDateToken);
         validateTokenEntity.setUserEntity(user);
 
-        validateTokenRegisterEntityService.addToken(validateTokenEntity);
+        validateTokenEntity = validateTokenRegisterEntityService.addToken(validateTokenEntity);
+
 
         mailSender.sendEmail(signUpRequest.getEmail(), "activate user",
-                     "Please activate your account " + urlToRegister + generatedTokenRegister);
+                  String.format("Please activate your account %s %s",  urlToRegister, validateTokenEntity.getToken())
+        );
 
-        return ResponseEntity.ok(new RegistrationResponse(generatedTokenRegister));
+        return ResponseEntity.ok(new RegistrationResponse(validateTokenEntity.getToken()));
     }
 
     public ResponseEntity<MessageResponse> activateUser(String token) {

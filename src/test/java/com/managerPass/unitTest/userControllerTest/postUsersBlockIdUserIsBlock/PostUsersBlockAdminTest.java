@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Description("Тестирование блокировки пользователя")
 @WithMockUser(username = "kosto", roles = "ADMIN")
-public class PostUsersBlockTest extends PostUsersBlockIdUserIsBlockPrepareTest {
+public class PostUsersBlockAdminTest extends PostUsersBlockIdUserIsBlockPrepareTest {
 
     @Test
     @Description("Блокировка пользователя")

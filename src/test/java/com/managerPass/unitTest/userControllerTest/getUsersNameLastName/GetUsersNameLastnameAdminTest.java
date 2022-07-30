@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Description("Получение пользователя по имени и фамилии")
 @WithMockUser(username = "kosto", roles = "ADMIN")
-public class GetUsersNameLastnameTest extends GetUsersNameLastNamePrepareTest {
+public class GetUsersNameLastnameAdminTest extends GetUsersNameLastNamePrepareTest {
 
     @Test
     @Description("Получение списка пользователей")

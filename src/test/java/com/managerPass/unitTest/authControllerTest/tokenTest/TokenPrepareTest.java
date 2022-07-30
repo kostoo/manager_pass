@@ -13,7 +13,7 @@ import java.util.Set;
 public class TokenPrepareTest extends PrepareServiceTest {
 
     @Override
-    public void beforeClass() {
+    public void beforeTest() {
         userGenerate("kosto", "test@test.ru", ERole.ROLE_ADMIN, true);
     }
 

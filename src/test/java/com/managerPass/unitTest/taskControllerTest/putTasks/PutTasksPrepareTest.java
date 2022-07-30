@@ -12,7 +12,7 @@ public class PutTasksPrepareTest extends PrepareServiceTest {
     }
 
     @Override
-    public void beforeClass() {
+    public void beforeTest() {
         userGenerate("kosto", "password", ERole.ROLE_ADMIN, true);
     }
 }

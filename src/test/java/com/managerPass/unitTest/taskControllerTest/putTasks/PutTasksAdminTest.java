@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Description("Тестирование обновления задачи")
 @WithMockUser(username = "kosto", roles = "ADMIN")
-public class PutTasksTest extends PutTasksPrepareTest {
+public class PutTasksAdminTest extends PutTasksPrepareTest {
 
     @Test
     @Description("Обновление задачи")

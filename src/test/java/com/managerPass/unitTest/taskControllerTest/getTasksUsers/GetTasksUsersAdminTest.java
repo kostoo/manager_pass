@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Description("Получение задачи по определенному авторизированному пользователю с параметрами")
 @WithMockUser(username = "kosto", roles = "ADMIN")
-public class GetTasksUsersTest extends GetTasksUsersPrepareTest {
+public class GetTasksUsersAdminTest extends GetTasksUsersPrepareTest {
 
     @Test
     @Description("Получение задач по авторизированному пользователю")

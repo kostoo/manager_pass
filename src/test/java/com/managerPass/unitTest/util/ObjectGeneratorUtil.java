@@ -41,23 +41,23 @@ public class ObjectGeneratorUtil {
     public static TaskEntity taskEntityGeneration(String name , String message, PriorityEntity priority,
                                                   UserEntity userEntity) {
         return TaskEntity.builder()
-                .name(name)
-                .message(message)
-                .dateTimeStart(LocalDateTime.now())
-                .dateTimeFinish(localDateTimeFinishPlus1Month)
-                .priority(priority)
-                .userEntity(userEntity)
-                .build();
+                         .name(name)
+                         .message(message)
+                         .dateTimeStart(LocalDateTime.now())
+                         .dateTimeFinish(localDateTimeFinishPlus1Month)
+                         .priority(priority)
+                         .userEntity(userEntity)
+                         .build();
     }
 
     public static UserEntity userEntityGeneration(String username, String email, RoleEntity roleEntity) {
         return  UserEntity.builder()
-                .username(username)
-                .email(email)
-                .roles(Set.of(roleEntity))
-                .isAccountNonBlock(true)
-                .isAccountActive(true)
-                .build();
+                          .username(username)
+                          .email(email)
+                          .roles(Set.of(roleEntity))
+                          .isAccountNonBlock(true)
+                          .isAccountActive(true)
+                          .build();
     }
 
     public static PriorityEntity priorityGenerate() {

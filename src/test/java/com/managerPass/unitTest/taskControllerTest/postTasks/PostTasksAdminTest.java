@@ -10,12 +10,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Description("Тестирование добавления задачи")
 @WithMockUser(username = "kosto", roles = "ADMIN")
-public class PostTasksTest extends PostTasksPrepareTest {
+public class PostTasksAdminTest extends PostTasksPrepareTest {
 
     @Test
     @Description("Добавление задачи")
     public void addTasksWithAdmin_ok() throws Exception {
-        TaskEntity taskEntity = taskAdminDbFalseGenerate();
+        TaskEntity taskEntity = taskAdminDbFalseGenerate("test task");
+
+        sendPostTasksAndGetResultActions(taskEntity)
+        .andExpect(status().is2xxSuccessful())
+        .andExpect(jsonPath("$.name").value(taskEntity.getName()));
+    }
+
+    @Test
+    @Description("Добавление задачи c пустым названием")
+    public void addTasksNameNotBlankWithAdmin_fail() throws Exception {
+        TaskEntity taskEntity = taskAdminDbFalseGenerate("");
 
         sendPostTasksAndGetResultActions(taskEntity)
         .andExpect(status().is2xxSuccessful())

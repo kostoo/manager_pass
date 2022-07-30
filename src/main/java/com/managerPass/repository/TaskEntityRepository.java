@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -14,10 +13,6 @@ import java.util.List;
 @Repository
 public interface TaskEntityRepository extends JpaRepository<TaskEntity, Long> {
 
-    @Override
-    @EntityGraph(value = "taskEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
-    List<TaskEntity> findAll();
-
     @EntityGraph(value = "taskEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
     List<TaskEntity> findAllByName(String name);
 
@@ -25,12 +20,7 @@ public interface TaskEntityRepository extends JpaRepository<TaskEntity, Long> {
     List<TaskEntity> findAllByUserEntity_IdUser(Long idUser);
 
     @EntityGraph(value = "taskEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
-    List<TaskEntity> findAllByPriority_IdAndUserEntity_IdUser(Long idPriority,
-                                                              Long idUser,
-                                                              Pageable pageable);
-
-    @EntityGraph(value = "taskEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
-    Page<TaskEntity> findAllByUserEntity_IdUser(@Param("idUser") Long idUser, Pageable pageable);
+    List<TaskEntity> findAllByPriority_IdAndUserEntity_IdUser(Long idPriority, Long idUser, Pageable pageable);
 
     @EntityGraph(value = "taskEntityGraph", type = EntityGraph.EntityGraphType.LOAD)
     Page<TaskEntity> findAllByUserEntity_IdUserAndDateTimeStartIsAfterAndDateTimeFinishBefore(

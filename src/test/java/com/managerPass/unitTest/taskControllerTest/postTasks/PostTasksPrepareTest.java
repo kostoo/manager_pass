@@ -8,12 +8,12 @@ import org.springframework.test.web.servlet.ResultActions;
 
 public class PostTasksPrepareTest extends PrepareServiceTest {
 
-    protected TaskEntity taskAdminDbFalseGenerate() {
-        return taskGenerate("test task", "message", EPriority.HIGH, ERole.ROLE_ADMIN, false);
+    protected TaskEntity taskAdminDbFalseGenerate(String nameTask) {
+        return taskGenerate(nameTask, "message", EPriority.HIGH, ERole.ROLE_ADMIN, false);
     }
 
     @Override
-    public void beforeClass() {
+    public void beforeTest() {
         userGenerate("kosto", "test@test.ru", ERole.ROLE_ADMIN, true);
     }
 
