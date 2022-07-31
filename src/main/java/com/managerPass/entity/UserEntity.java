@@ -64,7 +64,7 @@ public class UserEntity {
     @Column(name = "isAccountNonBlock")
     private Boolean isAccountNonBlock;
 
-    public UserEntity( String username, @Email String email, String password) {
+    public UserEntity(String username, @Email String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;

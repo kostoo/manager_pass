@@ -14,7 +14,7 @@ import java.util.Set;
 public class SignupRequest {
 
     @NotBlank
-    @Size( max = 20)
+    @Size(max = 20)
     private String username;
 
     @NotBlank
@@ -25,7 +25,7 @@ public class SignupRequest {
     private Set<ERole> role;
 
     @NotBlank
-    @Size( max = 40)
+    @Size(max = 40)
     private String password;
 
 }

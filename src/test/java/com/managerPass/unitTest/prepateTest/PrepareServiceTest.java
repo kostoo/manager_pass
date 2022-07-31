@@ -1,13 +1,13 @@
 package com.managerPass.unitTest.prepateTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.managerPass.entity.Enum.EPriority;
-import com.managerPass.entity.Enum.ERole;
-import com.managerPass.entity.PriorityEntity;
-import com.managerPass.entity.RoleEntity;
-import com.managerPass.entity.TaskEntity;
-import com.managerPass.entity.UserEntity;
-import com.managerPass.repository.test.*;
+import com.managerPass.unitTest.provider.repository.PriorityProvider;
+import com.managerPass.unitTest.provider.repository.RoleProvider;
+import com.managerPass.unitTest.provider.repository.TaskProvider;
+import com.managerPass.unitTest.provider.TaskServiceProvider;
+import com.managerPass.unitTest.provider.repository.UserProvider;
+import com.managerPass.unitTest.provider.UserServiceProvider;
+import com.managerPass.unitTest.provider.repository.ValidateTokenProvider;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +21,11 @@ import org.springframework.test.context.event.annotation.BeforeTestClass;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static com.managerPass.unitTest.util.ObjectGeneratorUtil.taskEntityGeneration;
-import static com.managerPass.unitTest.util.ObjectGeneratorUtil.userEntityGeneration;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -53,6 +55,11 @@ public abstract class PrepareServiceTest {
     @Autowired
     protected ValidateTokenProvider validateTokenProvider;
 
+    @Autowired
+    protected TaskServiceProvider taskServiceProvider;
+
+    @Autowired
+    protected UserServiceProvider userServiceProvider;
 
     protected MockHttpServletResponse sendRequestAndGetMockHttpServletResponse(String urlTemplate, Object addObject)
                                                                               throws Exception {
@@ -93,37 +100,6 @@ public abstract class PrepareServiceTest {
     protected ResultActions sendPatchAndGetResultActions(String urlTemplate, Object... uriVars) throws Exception {
         return mvc.perform(patch(urlTemplate, uriVars)
                   .contentType(MediaType.APPLICATION_JSON));
-    }
-
-    protected UserEntity userGenerate(String userName, String email, ERole eRole, Boolean addInDb) {
-        RoleEntity roleEntity = new RoleEntity();
-        roleEntity.setName(eRole);
-        roleEntity = roleProvider.save(roleEntity);
-
-        UserEntity user = userEntityGeneration(userName, email, roleEntity);
-        if (addInDb) {
-           return userProvider.save(user);
-        } else {
-           return user;
-        }
-    }
-
-    protected TaskEntity taskGenerate(String name , String message, EPriority ePriority,
-                                      ERole eRole, Boolean addInDb) {
-
-        PriorityEntity priorityEntity = new PriorityEntity();
-        priorityEntity.setName(ePriority);
-
-        priorityEntity = priorityProvider.save(priorityEntity);
-
-        TaskEntity task = taskEntityGeneration(
-                name, message, priorityEntity, userGenerate("test", "test@test.ru", eRole, true)
-        );
-        if (addInDb) {
-          return taskProvider.save(task);
-        } else {
-           return task;
-        }
     }
 
     @BeforeTestClass

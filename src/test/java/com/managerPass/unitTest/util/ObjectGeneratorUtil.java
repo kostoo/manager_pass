@@ -60,9 +60,9 @@ public class ObjectGeneratorUtil {
                           .build();
     }
 
-    public static PriorityEntity priorityGenerate() {
+    public static PriorityEntity priorityGenerate(EPriority ePriority) {
         PriorityEntity priority = new PriorityEntity();
-        priority.setName(EPriority.MEDIUM);
+        priority.setName(ePriority);
 
         return priority;
     }

@@ -13,7 +13,7 @@ import com.managerPass.payload.response.MessageResponse;
 import com.managerPass.payload.response.RegistrationResponse;
 import com.managerPass.repository.RoleRepository;
 import com.managerPass.repository.UserEntityRepository;
-import com.managerPass.security.JwtUtils;
+import com.managerPass.config.security.JwtUtils;
 import com.managerPass.service.ValidateTokenRegisterEntityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -95,7 +95,7 @@ public class AuthService {
 
             roles.add(userRole);
         } else {
-            strRoles.forEach( role -> {
+            strRoles.forEach(role -> {
                 switch (role) {
                     case ROLE_ADMIN:
                         RoleEntity adminRole = roleRepository.findByName(ERole.ROLE_ADMIN).orElseThrow(() ->

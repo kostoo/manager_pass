@@ -1,7 +1,7 @@
 package com.managerPass.config;
 
-import com.managerPass.security.AuthEntryPointJwt;
-import com.managerPass.security.AuthTokenFilter;
+import com.managerPass.config.security.AuthEntryPointJwt;
+import com.managerPass.config.security.AuthTokenFilter;
 import com.managerPass.service.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
