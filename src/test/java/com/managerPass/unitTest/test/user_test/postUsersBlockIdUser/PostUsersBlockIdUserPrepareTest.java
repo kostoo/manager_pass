@@ -1,10 +1,10 @@
-package com.managerPass.unitTest.test.user_test.postUsersBlockIdUserIsBlock;
+package com.managerPass.unitTest.test.user_test.postUsersBlockIdUser;
 
 import com.managerPass.entity.Enum.ERole;
 import com.managerPass.entity.UserEntity;
 import com.managerPass.unitTest.prepateTest.PrepareServiceTest;
 
-public class PostUsersBlockIdUserIsBlockPrepareTest extends PrepareServiceTest {
+public class PostUsersBlockIdUserPrepareTest extends PrepareServiceTest {
 
     @Override
     public void beforeTest() {

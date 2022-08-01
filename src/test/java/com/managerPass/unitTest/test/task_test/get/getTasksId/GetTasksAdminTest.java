@@ -17,11 +17,10 @@ public class GetTasksAdminTest extends GetTasksPrepareTest {
     public void getTasksIdTaskWithAdmin_ok() throws Exception {
         TaskEntity taskEntity = taskAdminGenerate();
 
-        getTasksActionResult(taskEntity.getIdTask()
-        ).andExpect(jsonPath("$.idTask").value(taskEntity.getIdTask()))
-        .andExpect(jsonPath("$.name").value(taskEntity.getName()))
-        .andExpect(jsonPath("$.message").value(taskEntity.getMessage()))
-        .andExpect(status().is2xxSuccessful());
+        getTasksActionResult(taskEntity.getIdTask()).andExpect(jsonPath("$.idTask").value(taskEntity.getIdTask()))
+                                                    .andExpect(jsonPath("$.name").value(taskEntity.getName()))
+                                                    .andExpect(jsonPath("$.message").value(taskEntity.getMessage()))
+                                                    .andExpect(status().is2xxSuccessful());
     }
 
     @Test

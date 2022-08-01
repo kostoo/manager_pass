@@ -17,12 +17,11 @@ public class GetUsersAdminTest extends GetUsersPrepareTest {
     public void getUsersIdUserWithAdmin_ok() throws Exception {
         UserEntity user = userGenerate();
 
-        getActionResultIdUser(user.getIdUser()
-        ).andExpect(jsonPath("$.name").value(user.getName()))
-        .andExpect(jsonPath("$.lastName").value(user.getLastName()))
-        .andExpect(jsonPath("$.username").value(user.getUsername()))
-        .andExpect(jsonPath("$.idUser").value(user.getIdUser()))
-        .andExpect(status().isOk());
+        getActionResultIdUser(user.getIdUser()).andExpect(jsonPath("$.name").value(user.getName()))
+                                               .andExpect(jsonPath("$.lastName").value(user.getLastName()))
+                                               .andExpect(jsonPath("$.username").value(user.getUsername()))
+                                               .andExpect(jsonPath("$.idUser").value(user.getIdUser()))
+                                               .andExpect(status().isOk());
 
         assert userProvider.existsById(user.getIdUser());
     }

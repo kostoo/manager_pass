@@ -19,9 +19,10 @@ public class PutUsersAdminTest extends PutUsersPrepareTest {
         UserEntity user = userGenerate();
         user.setUsername("updateUserName");
 
-        sendPutAndGetResultActions("/api/users", user
+        sendPutAndGetResultActions(
+                "/api/users", user
         ).andExpect(jsonPath("$.username").value(user.getUsername()))
-        .andExpect(status().is2xxSuccessful());
+         .andExpect(status().is2xxSuccessful());
 
         assert userProvider.existsByUsername(user.getUsername());
     }

@@ -17,10 +17,9 @@ public class GetTasksUsersAdminTest extends GetTasksUsersPrepareTest {
     public void getTasksUsersAdmin_ok() throws Exception {
         TaskEntity taskEntity = taskAdminGenerate();
 
-        getActionResult("/api/tasks/users"
-        ).andExpect(status().is2xxSuccessful())
-        .andExpect(jsonPath("$[0].idTask").value(taskEntity.getIdTask()))
-        .andExpect(jsonPath("$[0].name").value(taskEntity.getName()));
+        getActionResult("/api/tasks/users").andExpect(status().is2xxSuccessful())
+                                                     .andExpect(jsonPath("$[0].idTask").value(taskEntity.getIdTask()))
+                                                     .andExpect(jsonPath("$[0].name").value(taskEntity.getName()));
     }
 
     @Test
@@ -28,10 +27,11 @@ public class GetTasksUsersAdminTest extends GetTasksUsersPrepareTest {
     public void getTasksByIdPriorityWithAdmin_ok() throws Exception {
         TaskEntity taskEntity = taskAdminGenerate();
 
-        getActionResult("/api/tasks?idPriority={idPriority}", taskEntity.getPriority().getId()
+        getActionResult(
+                "/api/tasks?idPriority={idPriority}", taskEntity.getPriority().getId()
         ).andExpect(status().is2xxSuccessful())
-        .andExpect(jsonPath("$[0].idTask").value(taskEntity.getIdTask()))
-        .andExpect(jsonPath("$[0].name").value(taskEntity.getName()));
+         .andExpect(jsonPath("$[0].idTask").value(taskEntity.getIdTask()))
+         .andExpect(jsonPath("$[0].name").value(taskEntity.getName()));
     }
 
     @Test
@@ -42,8 +42,8 @@ public class GetTasksUsersAdminTest extends GetTasksUsersPrepareTest {
         getActionResult("/api/tasks?startDateTime={startDateTime}&dateTimeFinish={dateTimeFinish}",
                 taskEntity.getDateTimeStart().minusMinutes(1), taskEntity.getDateTimeFinish().plusMinutes(1)
         ).andExpect(status().is2xxSuccessful())
-        .andExpect(jsonPath("$[0].idTask").value(taskEntity.getIdTask()))
-        .andExpect(jsonPath("$[0].name").value(taskEntity.getName()));
+         .andExpect(jsonPath("$[0].idTask").value(taskEntity.getIdTask()))
+         .andExpect(jsonPath("$[0].name").value(taskEntity.getName()));
     }
 
     @Test
@@ -51,8 +51,7 @@ public class GetTasksUsersAdminTest extends GetTasksUsersPrepareTest {
     public void getTasksByIdPriorityWithAdmin_fail() throws Exception {
         taskAdminGenerate();
 
-        getActionResult("/api/tasks?idPriority={idPriority}", 0
-        ).andExpect(status().is4xxClientError());
+        getActionResult("/api/tasks?idPriority={idPriority}", 0).andExpect(status().is4xxClientError());
     }
 
     @Test

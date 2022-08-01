@@ -17,9 +17,8 @@ public class GetUsersUsernameAdminTest extends GetUsersUsernamePrepareTest {
     public void getUsersUserNameWithAdmin_ok() throws Exception {
         UserEntity user = userGenerate();
 
-        getActionResultUserName(user.getUsername()
-        ).andExpect(jsonPath("$.idUser").value(user.getIdUser()))
-        .andExpect(jsonPath("$.username").value(user.getUsername()))
-        .andExpect(status().isOk());
+        getActionResultUserName(user.getUsername()).andExpect(jsonPath("$.idUser").value(user.getIdUser()))
+                                                   .andExpect(jsonPath("$.username").value(user.getUsername()))
+                                                   .andExpect(status().isOk());
     }
 }

@@ -1,4 +1,4 @@
-package com.managerPass.unitTest.test.user_test.postUsersBlockIdUserIsBlock;
+package com.managerPass.unitTest.test.user_test.postUsersBlockIdUser;
 
 import com.managerPass.entity.UserEntity;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Description("Тестирование блокировки пользователя")
 @WithMockUser(username = "kosto", roles = "ADMIN")
-public class PostUsersBlockAdminTest extends PostUsersBlockIdUserIsBlockPrepareTest {
+public class PostUsersBlockAdminTest extends PostUsersBlockIdUserPrepareTest {
 
     @Test
     @Description("Блокировка пользователя")
@@ -18,10 +18,10 @@ public class PostUsersBlockAdminTest extends PostUsersBlockIdUserIsBlockPrepareT
     UserEntity user = userGenerate();
 
         sendPatchAndGetResultActions(
-                "/api/users/block?idUser={idUser}&isBlock={isBlock}", user.getIdUser(), false
+                "/api/users/block?idUser={idUser}", user.getIdUser()
         ).andExpect(jsonPath("$.isAccountNonBlock").value(false))
-        .andExpect(jsonPath("$.idUser").value(user.getIdUser()))
-        .andExpect(status().isOk());
+         .andExpect(jsonPath("$.idUser").value(user.getIdUser()))
+         .andExpect(status().isOk());
     }
 
     @Test
@@ -29,7 +29,8 @@ public class PostUsersBlockAdminTest extends PostUsersBlockIdUserIsBlockPrepareT
     public void patchBlockUserWithAdmin_fail() throws Exception {
         UserEntity user = userGenerate();
 
-        sendPatchAndGetResultActions("/api/users/block?idUser={idUser}", user.getIdUser()
+        sendPatchAndGetResultActions(
+                "/api/users/block?idUser={idUser}", user.getIdUser()
         ).andExpect(status().is4xxClientError());
 
         assert userProvider.existsByUsername(user.getUsername());

@@ -18,10 +18,9 @@ public class GetUsersNameLastnameAdminTest extends GetUsersNameLastNamePrepareTe
         UserEntity addUser1 = userGenerate("user", "test@test.ru");
         UserEntity addUser2 = userGenerate("user1", "test1@test.ru");
 
-        getActionResult("/api/users"
-        ).andExpect(jsonPath("$[0].idUser").value(addUser1.getIdUser()))
-        .andExpect(jsonPath("$[1].idUser").value(addUser2.getIdUser()))
-        .andExpect(status().isOk());
+        getActionResult("/api/users").andExpect(jsonPath("$[0].idUser").value(addUser1.getIdUser()))
+                                               .andExpect(jsonPath("$[1].idUser").value(addUser2.getIdUser()))
+                                               .andExpect(status().isOk());
     }
 
     @Test
@@ -29,11 +28,12 @@ public class GetUsersNameLastnameAdminTest extends GetUsersNameLastNamePrepareTe
     public void getUsersNameLastNameWithAdmin_ok() throws Exception {
         UserEntity user = userGenerate();
 
-        getActionResult("/api/users?name={name}&lastName={lastName}", user.getName(), user.getLastName()
+        getActionResult(
+                "/api/users?name={name}&lastName={lastName}", user.getName(), user.getLastName()
         ).andExpect(jsonPath("$[0].idUser").value(user.getIdUser()))
-        .andExpect(jsonPath("$[0].name").value(user.getName()))
-        .andExpect(jsonPath("$[0].lastName").value(user.getLastName()))
-        .andExpect(status().isOk());
+         .andExpect(jsonPath("$[0].name").value(user.getName()))
+         .andExpect(jsonPath("$[0].lastName").value(user.getLastName()))
+         .andExpect(status().isOk());
     }
 
     @Test
@@ -41,11 +41,12 @@ public class GetUsersNameLastnameAdminTest extends GetUsersNameLastNamePrepareTe
     public void getUsersNameWithAdmin_ok() throws Exception {
         UserEntity user = userGenerate();
 
-        getActionResult("/api/users?name={name}", user.getName()
+        getActionResult(
+                "/api/users?name={name}", user.getName()
         ).andExpect(jsonPath("$[0].idUser").value(user.getIdUser()))
-        .andExpect(jsonPath("$[0].name").value(user.getName()))
-        .andExpect(jsonPath("$[0].lastName").value(user.getLastName()))
-        .andExpect(status().isOk());
+         .andExpect(jsonPath("$[0].name").value(user.getName()))
+         .andExpect(jsonPath("$[0].lastName").value(user.getLastName()))
+         .andExpect(status().isOk());
     }
 
     @Test
@@ -53,10 +54,11 @@ public class GetUsersNameLastnameAdminTest extends GetUsersNameLastNamePrepareTe
     public void getUsersLastNameWithAdmin_ok() throws Exception {
         UserEntity user = userGenerate();
 
-        getActionResult("/api/users?lastName={lastName}", user.getLastName()
+        getActionResult(
+                "/api/users?lastName={lastName}", user.getLastName()
         ).andExpect(jsonPath("$[0].idUser").value(user.getIdUser()))
-        .andExpect(jsonPath("$[0].name").value(user.getName()))
-        .andExpect(jsonPath("$[0].lastName").value(user.getLastName()))
-        .andExpect(status().isOk());
+         .andExpect(jsonPath("$[0].name").value(user.getName()))
+         .andExpect(jsonPath("$[0].lastName").value(user.getLastName()))
+         .andExpect(status().isOk());
     }
 }

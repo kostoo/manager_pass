@@ -17,9 +17,8 @@ public class PostTasksAdminTest extends PostTasksPrepareTest {
     public void addTasksWithAdmin_ok() throws Exception {
         TaskEntity taskEntity = taskAdminDbFalseGenerate("test task");
 
-        sendPostTasksAndGetResultActions(taskEntity)
-        .andExpect(status().is2xxSuccessful())
-        .andExpect(jsonPath("$.name").value(taskEntity.getName()));
+        sendPostTasksAndGetResultActions(taskEntity).andExpect(status().is2xxSuccessful())
+                                                    .andExpect(jsonPath("$.name").value(taskEntity.getName()));
     }
 
     @Test
@@ -27,8 +26,7 @@ public class PostTasksAdminTest extends PostTasksPrepareTest {
     public void addTasksNameNotBlankWithAdmin_fail() throws Exception {
         TaskEntity taskEntity = taskAdminDbFalseGenerate("");
 
-        sendPostTasksAndGetResultActions(taskEntity)
-        .andExpect(status().is2xxSuccessful())
-        .andExpect(jsonPath("$.name").value(taskEntity.getName()));
+        sendPostTasksAndGetResultActions(taskEntity).andExpect(status().is2xxSuccessful())
+                                                    .andExpect(jsonPath("$.name").value(taskEntity.getName()));
     }
 }

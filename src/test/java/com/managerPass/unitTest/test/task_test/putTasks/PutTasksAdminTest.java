@@ -18,9 +18,10 @@ public class PutTasksAdminTest extends PutTasksPrepareTest {
         TaskEntity taskEntity = taskAdminGenerate();
         taskEntity.setMessage("updateMessage");
 
-        sendPutAndGetResultActions("/api/tasks", taskEntity
+        sendPutAndGetResultActions(
+                "/api/tasks", taskEntity
         ).andExpect(status().is2xxSuccessful())
-        .andExpect(jsonPath("$.idTask").value(taskEntity.getIdTask()))
-        .andExpect(jsonPath("$.name").value(taskEntity.getName()));
+         .andExpect(jsonPath("$.idTask").value(taskEntity.getIdTask()))
+         .andExpect(jsonPath("$.name").value(taskEntity.getName()));
     }
 }
