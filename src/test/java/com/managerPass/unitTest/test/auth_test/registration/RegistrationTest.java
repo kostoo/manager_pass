@@ -24,7 +24,6 @@ public class RegistrationTest extends RegistrationPrepareTest {
         assert sendSignUpRequestAndGetErrorMessage(registrationUser).getMessage().equals(
                  String.format("Email %s is already in use!", registrationUser.getEmail())
         );
-
     }
 
     @Test
@@ -41,7 +40,6 @@ public class RegistrationTest extends RegistrationPrepareTest {
         assert sendSignUpRequestAndGetErrorMessage(registrationUser).getMessage().equals(
                 String.format("Username %s is already taken!", userName)
         );
-
     }
 
     @Test

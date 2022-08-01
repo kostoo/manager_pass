@@ -7,16 +7,18 @@ import org.springframework.test.web.servlet.ResultActions;
 
 public class GetUsersUsernamePrepareTest extends PrepareServiceTest {
 
-    protected ResultActions getActionResultUserName(String param) throws Exception {
-        return getActionResult("/api/users/userName/{userName}", param);
+    protected ResultActions getActionResultUserName(String username) throws Exception {
+        return getActionResult("/api/users/username?username={username}", username);
     }
 
     @Override
     public void beforeTest() {
-        userServiceProvider.userGenerate("test", "test@test.ru", ERole.ROLE_ADMIN, true);
+        userServiceProvider.userGenerate("test", "test@test.ru", ERole.ROLE_ADMIN,
+                "name", "lastName",true);
     }
 
     protected UserEntity userGenerate() {
-        return userServiceProvider.userGenerate("userName", "email@test.ru", ERole.ROLE_ADMIN, true);
+        return userServiceProvider.userGenerate("userName", "email@test.ru", ERole.ROLE_ADMIN,
+                "name", "lastName",true);
     }
 }

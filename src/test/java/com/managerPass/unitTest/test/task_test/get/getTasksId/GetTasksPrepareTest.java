@@ -18,6 +18,7 @@ public class GetTasksPrepareTest extends PrepareServiceTest {
 
     @Override
     public void beforeTest() {
-        userServiceProvider.userGenerate("kosto", "test@test.ru", ERole.ROLE_ADMIN, true);
+        userServiceProvider.userGenerate("kosto", "test@test.ru", ERole.ROLE_ADMIN, "nikita",
+                "lastname", true);
     }
 }

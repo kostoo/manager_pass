@@ -13,19 +13,17 @@ import java.util.Set;
 @Setter
 public class SignupRequest {
 
-    @NotBlank
-    @Size(max = 20)
+    @Size(min = 5, max = 20)
     private String username;
 
-    @NotBlank
-    @Size(max = 50)
+    @Size(min = 5, max = 50)
     @Email
     private String email;
 
     private Set<ERole> role;
 
     @NotBlank
-    @Size(max = 40)
+    @Size(min = 5, max = 40)
     private String password;
 
 }

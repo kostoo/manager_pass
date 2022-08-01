@@ -9,26 +9,29 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Description("Тестирование обновления пользователя")
-@WithMockUser(username = "kosto", roles = "ADMIN")
-public class PutUsersAdminTest extends PutUsersPrepareTest {
+
+public class PutUsersTest extends PutUsersPrepareTest {
 
     @Test
+    @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Обновление user")
-    public void updateUsersWithAdmin_ok() throws Exception {
+    public void updateUsers_Admin_ok() throws Exception {
 
         UserEntity user = userGenerate();
         user.setUsername("updateUserName");
 
-        sendPutAndGetResultActions("/api/users", user
+        sendPutAndGetResultActions(
+                "/api/users", user
         ).andExpect(jsonPath("$.username").value(user.getUsername()))
-        .andExpect(status().is2xxSuccessful());
+         .andExpect(status().is2xxSuccessful());
 
         assert userProvider.existsByUsername(user.getUsername());
     }
 
     @Test
+    @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Обновление user на существующиющий email")
-    public void updateUsersWithExistsEmailWithAdmin_fail() throws Exception {
+    public void updateUsersWithExistsEmail_Admin_fail() throws Exception {
         UserEntity userAlreadyAddDb = userGenerate("userAlreadyDB", "test0@test.ru");
 
         UserEntity updateUser = userGenerate("username", "test1@test.ru");
@@ -40,8 +43,9 @@ public class PutUsersAdminTest extends PutUsersPrepareTest {
     }
 
     @Test
+    @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Обновление user")
-    public void updateUsersWithExistsUserNameWithAdmin_ok() throws Exception {
+    public void updateUsersWithExistsUserName_Admin_ok() throws Exception {
         UserEntity userAlreadyAddDb = userGenerate("userAlreadyDB", "test0@test.ru");
 
         UserEntity updateUser = userGenerate("username", "test1@test.ru");
@@ -53,8 +57,9 @@ public class PutUsersAdminTest extends PutUsersPrepareTest {
     }
 
     @Test
+    @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Обновление user на существующиющий username")
-    public void updateUsersWithExistsUserNameWithAdmin_fail() throws Exception {
+    public void updateUsersWithExistsUserName_Admin_fail() throws Exception {
         UserEntity userAlreadyAddDb = userGenerate("userAlreadyDB", "test0@test.ru");
 
         UserEntity updateUser = userGenerate("username", "test1@test.ru");

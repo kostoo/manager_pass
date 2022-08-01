@@ -50,8 +50,11 @@ public class ObjectGeneratorUtil {
                          .build();
     }
 
-    public static UserEntity userEntityGeneration(String username, String email, RoleEntity roleEntity) {
+    public static UserEntity userEntityGeneration(String username, String email, RoleEntity roleEntity, String name,
+                                                  String lastName) {
         return  UserEntity.builder()
+                          .name(name)
+                          .lastName(lastName)
                           .username(username)
                           .email(email)
                           .roles(Set.of(roleEntity))

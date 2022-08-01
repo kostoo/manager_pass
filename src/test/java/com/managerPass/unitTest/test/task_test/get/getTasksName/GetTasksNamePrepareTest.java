@@ -16,7 +16,8 @@ public class GetTasksNamePrepareTest extends PrepareServiceTest {
 
     @Override
     public void beforeTest() {
-        userServiceProvider.userGenerate("kosto", "test@test.ru", ERole.ROLE_ADMIN, true);
+        userServiceProvider.userGenerate("kosto", "test@test.ru", ERole.ROLE_ADMIN, "nikita",
+                "lastname", true);
     }
 
     protected ResultActions getActionsTasksName(Object... uriVars) throws Exception {

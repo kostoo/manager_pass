@@ -8,14 +8,20 @@ public class PutUsersPrepareTest extends PrepareServiceTest {
 
     @Override
     public void beforeTest() {
-        userServiceProvider.userGenerate("kosto", "test@test.ru", ERole.ROLE_ADMIN, true);
+        userServiceProvider.userGenerate(
+                "kosto", "test@test.ru", ERole.ROLE_ADMIN, "nikita","nest",true
+        );
     }
 
     protected UserEntity userGenerate() {
-        return userServiceProvider.userGenerate("userName", "email@test.ru", ERole.ROLE_ADMIN, true);
+        return userServiceProvider.userGenerate(
+                "userName", "email@test.ru", ERole.ROLE_ADMIN,"nikita","nest", true
+        );
     }
 
     protected UserEntity userGenerate(String username, String email) {
-        return userServiceProvider.userGenerate(username, email, ERole.ROLE_ADMIN, true);
+        return userServiceProvider.userGenerate(
+                username, email, ERole.ROLE_ADMIN, "nikita","nest",true
+        );
     }
 }

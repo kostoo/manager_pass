@@ -9,7 +9,8 @@ public class AuthPrepareTest extends PrepareServiceTest {
 
     @Override
     public void beforeTest() {
-        userServiceProvider.userGenerate("kosto", "test@test.ru", ERole.ROLE_ADMIN, true);
+        userServiceProvider.userGenerate("kosto", "test@test.ru", ERole.ROLE_ADMIN, "nikita",
+                                 "lastname", true);
     }
 
     public ResultActions sendPostLoginAndGetResultActions(LoginRequest loginRequest) throws Exception {

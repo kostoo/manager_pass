@@ -1,4 +1,4 @@
-package com.managerPass.payload.request;
+package com.managerPass.payload.response;
 
 import com.managerPass.entity.PriorityEntity;
 import com.managerPass.entity.UserEntity;
@@ -9,29 +9,34 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
-public class TaskRequest {
+public class TaskResponse {
 
     @NotNull
+    private Long idTask;
+
+    @Size(min = 5)
     private String name;
 
-    @NotNull
+    @Size(min = 3)
     private String message;
 
     @NotNull
     private UserEntity userEntity;
 
+    @NotNull
     private PriorityEntity priority;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime dateTimeStart;
+    LocalDateTime dateTimeStart;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime dateTimeFinish;
+    LocalDateTime dateTimeFinish;
 
 }

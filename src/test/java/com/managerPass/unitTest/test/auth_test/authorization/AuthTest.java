@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AuthTest extends AuthPrepareTest {
 
     @Test
-    @Description("Авторизация пользователя success")
+    @Description("Успешная авторизация пользователя")
     public void authAdmin_success() throws Exception {
         LoginRequest loginRequest = new LoginRequest("kosto", "password");
 
@@ -18,7 +18,7 @@ public class AuthTest extends AuthPrepareTest {
     }
 
     @Test
-    @Description("Авторизация пользователя fail")
+    @Description("Недуачная авторизация пользователя при ошибочном логине/пароле")
     public void authInvalidUserName_fail() throws Exception {
         LoginRequest loginRequest = new LoginRequest("invalidUser", "password");
 

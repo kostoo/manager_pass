@@ -28,7 +28,8 @@ public class TokenTest extends TokenPrepareTest {
         assertRegistrationResponse(registrationResponse);
         assert userProvider.existsByUsername(userName);
 
-        sendPatchTokenAndGetResultActions(registrationResponse.getRegistrationToken()
+        sendPatchTokenAndGetResultActions(
+                registrationResponse.getRegistrationToken()
         ).andExpect(status().is2xxSuccessful());
 
         assert userProvider.existsByUsernameAndIsAccountActiveEquals(userName, true);

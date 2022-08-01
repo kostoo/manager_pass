@@ -1,6 +1,5 @@
 package com.managerPass.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,7 +20,6 @@ public class UserSecurity implements UserDetails {
 
     private String email;
 
-    @JsonIgnore
     private String password;
 
     private boolean isAccountNonLocked;

@@ -1,7 +1,8 @@
 package com.managerPass.controller;
 
-import com.managerPass.entity.TaskEntity;
+import com.managerPass.entity.Enum.EPriority;
 import com.managerPass.payload.request.TaskRequest;
+import com.managerPass.payload.response.TaskResponse;
 import com.managerPass.service.TaskEntityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -33,55 +34,55 @@ public class TaskController {
 
    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
    @PreAuthorize(value = "hasRole('ADMIN')")
-   public ResponseEntity<List<TaskEntity>> getTasksName(@RequestParam(required = false) String name) {
+   public ResponseEntity<List<TaskResponse>> getTasks(@RequestParam(required = false) String name) {
       return ResponseEntity.ok(taskService.getAllWithParam(name));
    }
 
    @GetMapping(path = "/{idTask}", produces = MediaType.APPLICATION_JSON_VALUE)
    @PreAuthorize(value = "hasRole('USER') or hasRole('ADMIN')")
-   public ResponseEntity<TaskEntity> getTasksIdTask(@PathVariable Long idTask) {
+   public ResponseEntity<TaskResponse> getTasksIdTask(@PathVariable Long idTask) {
      return ResponseEntity.ok(taskService.getByIdTask(idTask));
    }
 
    @DeleteMapping(path = "/{idTask}")
    @PreAuthorize(value = "hasRole('USER') or hasRole('ADMIN')")
-   public ResponseEntity<TaskEntity> deleteTasksIdTask(@PathVariable(value = "idTask") Long idTask) {
+   public ResponseEntity<?> deleteTasksIdTask(@PathVariable(value = "idTask") Long idTask) {
       taskService.deleteByIdTask(idTask);
       return ResponseEntity.ok().build();
    }
 
-   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
-                produces = MediaType.APPLICATION_JSON_VALUE)
+   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
    @PreAuthorize(value = "hasRole('USER') or hasRole('ADMIN')")
-   public ResponseEntity<TaskEntity> postTasks(@Valid @RequestBody TaskRequest taskRequest) {
+   public ResponseEntity<TaskResponse> postTasks(@Valid @RequestBody TaskRequest taskRequest) {
       return ResponseEntity.ok(taskService.addTask(taskRequest));
    }
 
-   @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
+   @PutMapping(path = "/{idTask}", consumes = MediaType.APPLICATION_JSON_VALUE,
                produces = MediaType.APPLICATION_JSON_VALUE)
    @PreAuthorize(value = "hasRole('USER') or hasRole('ADMIN')")
-   public ResponseEntity<TaskEntity> putTasks(@Valid @RequestBody TaskEntity taskEntity) {
-      return ResponseEntity.ok(taskService.updateTask(taskEntity));
+   public ResponseEntity<TaskResponse> putTasks(@Valid @RequestBody TaskRequest taskRequest,@PathVariable Long idTask) {
+      return ResponseEntity.ok(taskService.updateTask(taskRequest, idTask));
    }
 
    @GetMapping(path = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
    @PreAuthorize(value = "hasRole('USER') or hasRole('ADMIN')")
-   public ResponseEntity<List<TaskEntity>> getTasksUsers(@RequestParam(defaultValue = "0") int page,
+   public ResponseEntity<List<TaskResponse>> getTasksUsers(@RequestParam(defaultValue = "0") int page,
                                                          @RequestParam(defaultValue = "10") int sizePage,
-                                                         @RequestParam(required = false) Long idPriority,
+
+                                                         @RequestParam(required = false) EPriority namePriority,
 
                                                          @RequestParam(required = false)
-                                                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME
-                                                         ) LocalDateTime startDateTime,
+                                                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                                    LocalDateTime startDateTime,
 
                                                          @RequestParam(required = false)
-                                                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME
-                                                         ) LocalDateTime dateTimeFinish) {
+                                                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                                    LocalDateTime finishDateTime) {
 
       Pageable pageable = PageRequest.of(page, sizePage);
 
       return ResponseEntity.ok().body(taskService.getAllByAuthUserWithParam(
-              idPriority, pageable, startDateTime, dateTimeFinish
+              namePriority, pageable, startDateTime, finishDateTime
       ));
    }
 }

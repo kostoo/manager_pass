@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface PriorityEntityRepository extends JpaRepository<PriorityEntity, Long> {
 
     Optional<PriorityEntity> findByName(EPriority name);
+
+    Optional<PriorityEntity> findByName();
 }

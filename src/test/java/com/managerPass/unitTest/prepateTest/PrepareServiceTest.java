@@ -83,6 +83,13 @@ public abstract class PrepareServiceTest {
         );
     }
 
+    protected ResultActions sendPutAndGetResultActions(String urlTemplate, Object addObject, Object... uriVars) throws Exception {
+        return mvc.perform(put(urlTemplate, uriVars)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(addObject))
+        );
+    }
+
     protected ResultActions getActionResult(String urlTemplate) throws Exception {
         return mvc.perform(get(urlTemplate)
                   .contentType(MediaType.APPLICATION_JSON));

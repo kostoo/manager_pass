@@ -1,6 +1,6 @@
 package com.managerPass.entity.Enum;
 
-public enum EPriority {
+public enum  EPriority {
     LOW,
     MEDIUM,
     HIGH

@@ -31,4 +31,6 @@ public interface TaskEntityRepository extends JpaRepository<TaskEntity, Long> {
     Page<TaskEntity> findAllByPriority_IdAndUserEntity_IdUserAndDateTimeStartIsAfterAndDateTimeFinishBefore(
             Long idPriority, Long idUser, LocalDateTime dateTimeStart, LocalDateTime dateTimeFinish, Pageable pageable
     );
+
+
 }
