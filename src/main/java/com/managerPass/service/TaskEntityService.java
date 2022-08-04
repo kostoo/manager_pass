@@ -61,6 +61,7 @@ public class TaskEntityService {
         }
         return taskEntities;
     }
+
     public TaskResponse getByIdTask(Long id) {
         return TaskEntityConverter.taskResponseGenerate(taskEntityRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Task not found by Id : %x", id))
@@ -123,18 +124,17 @@ public class TaskEntityService {
         }
     }
 
-    public List<TaskResponse> getAllByAuthUserWithParam(EPriority namePriority,
-                                                      Pageable pageable,
-                                                      LocalDateTime dateTimeStart,
-                                                      LocalDateTime dateTimeFinish) {
+    public List<TaskResponse> getAllByAuthUserWithParam(EPriority namePriority, Pageable pageable,
+                                                        LocalDateTime dateTimeStart,
+                                                        LocalDateTime dateTimeFinish) {
 
         PriorityEntity priority = priorityEntityRepository.findByName(namePriority).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User %s not found ", namePriority))
+            new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User %s not found ", namePriority.name()))
         );
 
         List<TaskEntity> taskEntities;
 
-        if (namePriority != null && dateTimeStart == null && dateTimeFinish == null ) {
+        if (namePriority != null && dateTimeStart == null && dateTimeFinish == null) {
             taskEntities = getAllByAuthUserAndPriority(priority.getId(), pageable);
         }
         else if (namePriority == null && dateTimeStart != null && dateTimeFinish != null) {
@@ -142,7 +142,7 @@ public class TaskEntityService {
                                         dateTimeStart, dateTimeFinish, pageable
                            ).getContent();
         }
-        else if (namePriority != null && dateTimeStart != null && dateTimeFinish != null ) {
+        else if (namePriority != null && dateTimeStart != null && dateTimeFinish != null) {
             taskEntities = getAllByPriorityIdAndUserEntityIdUserAndDateTimeStartIsAfterAndDateTimeFinishBefore(
                     priority.getId(), dateTimeStart, dateTimeFinish, pageable
             );
