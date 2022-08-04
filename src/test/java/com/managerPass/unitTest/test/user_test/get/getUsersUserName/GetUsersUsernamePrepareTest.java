@@ -1,4 +1,4 @@
-package com.managerPass.unitTest.test.user_test.getUsersUserName;
+package com.managerPass.unitTest.test.user_test.get.getUsersUserName;
 
 import com.managerPass.entity.Enum.ERole;
 import com.managerPass.entity.UserEntity;

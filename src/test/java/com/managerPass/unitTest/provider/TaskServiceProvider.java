@@ -33,8 +33,7 @@ public class TaskServiceProvider {
         TaskEntity task = taskEntityGeneration(
            name, message, priorityEntity, userServiceProvider.userGenerate(
                    "test", "test@test.ru", eRole, "nikita","lastname", true
-                )
-        );
+        ));
         if (addInDb) {
             return taskProvider.save(task);
         } else {

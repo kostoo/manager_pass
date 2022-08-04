@@ -1,10 +1,10 @@
-package com.managerPass.unitTest.test.user_test.postUsersBlockIdUser;
+package com.managerPass.unitTest.test.user_test.patchUsersBlockIdUser;
 
 import com.managerPass.entity.Enum.ERole;
 import com.managerPass.entity.UserEntity;
 import com.managerPass.unitTest.prepateTest.PrepareServiceTest;
 
-public class PostUsersBlockIdUserPrepareTest extends PrepareServiceTest {
+public class PatchUsersBlockIdUserPrepareTest extends PrepareServiceTest {
 
     @Override
     public void beforeTest() {
@@ -14,6 +14,8 @@ public class PostUsersBlockIdUserPrepareTest extends PrepareServiceTest {
     }
 
     protected UserEntity userGenerate() {
-        return userServiceProvider.userGenerate("userName", "email@test.ru", ERole.ROLE_ADMIN,"nik","nest", true);
+        return userServiceProvider.userGenerate(
+                "userName", "email@test.ru", ERole.ROLE_ADMIN,"nik","nest", true
+        );
     }
 }

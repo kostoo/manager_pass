@@ -28,7 +28,7 @@ public class TokenPrepareTest extends PrepareServiceTest {
     protected RegistrationResponse sendSignUpRequestAndGetRegistrationResponse(SignupRequest signupRequest)
                                                                               throws Exception {
         return new ObjectMapper().readValue(
-                sendRequestAndGetMockHttpServletResponse("/api/register", signupRequest).getContentAsString(),
+                sendRequestAndGetMockHttpServletResponse(signupRequest).getContentAsString(),
                 RegistrationResponse.class
         );
     }

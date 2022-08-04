@@ -12,7 +12,7 @@ public class PostUsersTest extends PostUsersPrepareTest {
 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
-    @Description("Добавление user")
+    @Description("Добавление пользователя с обязательными параметрами")
     public void addUsers_Admin_ok() throws Exception {
         UserEntity user = userGenerate(
                 "name","lastname","username", "email@email", false
@@ -25,7 +25,7 @@ public class PostUsersTest extends PostUsersPrepareTest {
 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
-    @Description("Добавление юзера с повторяющимся username")
+    @Description("Неудачное Добавление пользователя с существующим username")
     public void addUsersExistsUserName_Admin_fail() throws Exception {
         userGenerate("name","lastname","username", "email@email", true);
         UserEntity userAlreadyExists = userGenerate(
@@ -37,7 +37,7 @@ public class PostUsersTest extends PostUsersPrepareTest {
 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
-    @Description("Добавление юзера с повторяющимся email")
+    @Description("Неудачное добавление пользователя с существующим email")
     public void addUsersExistsEmail_Admin_fail() throws Exception {
         userGenerate("name","lastname","username", "email@email", true);
         UserEntity userAlreadyExists = userGenerate(
@@ -48,7 +48,7 @@ public class PostUsersTest extends PostUsersPrepareTest {
     }
 
     @Test
-    @Description("Добавление user")
+    @Description("Неудачное Добавление пользователя")
     public void addUsers_unAuthorized_fail() throws Exception {
         UserEntity user = userGenerate(
                 "name","lastname","username", "email@email", false

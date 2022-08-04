@@ -24,7 +24,7 @@ public class RegistrationPrepareTest extends PrepareServiceTest {
     protected RegistrationResponse sendSignUpRequestAndGetRegistrationResponse(SignupRequest signupRequest)
                                                                               throws Exception {
         return new ObjectMapper().readValue(
-                sendRequestAndGetMockHttpServletResponse("/api/register", signupRequest).getContentAsString(),
+                sendRequestAndGetMockHttpServletResponse(signupRequest).getContentAsString(),
                 RegistrationResponse.class
         );
     }
@@ -32,7 +32,7 @@ public class RegistrationPrepareTest extends PrepareServiceTest {
     protected MessageResponse sendSignUpRequestAndGetErrorMessage(SignupRequest signupRequest)
                                                                   throws Exception {
         return new ObjectMapper().readValue(
-                sendRequestAndGetMockHttpServletResponse("/api/register", signupRequest).getContentAsString(),
+                sendRequestAndGetMockHttpServletResponse(signupRequest).getContentAsString(),
                 MessageResponse.class
         );
     }

@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Description("Тестирование обновления пользователя")
-
 public class PutUsersTest extends PutUsersPrepareTest {
 
     @Test
@@ -21,7 +20,7 @@ public class PutUsersTest extends PutUsersPrepareTest {
         user.setUsername("updateUserName");
 
         sendPutAndGetResultActions(
-                "/api/users", user
+                user
         ).andExpect(jsonPath("$.username").value(user.getUsername()))
          .andExpect(status().is2xxSuccessful());
 
@@ -37,7 +36,7 @@ public class PutUsersTest extends PutUsersPrepareTest {
         UserEntity updateUser = userGenerate("username", "test1@test.ru");
         updateUser.setEmail(userAlreadyAddDb.getEmail());
 
-        sendPutAndGetResultActions("/api/users", updateUser).andExpect(status().is4xxClientError());
+        sendPutAndGetResultActions(updateUser).andExpect(status().is4xxClientError());
 
         assert userProvider.existsByUsername(updateUser.getUsername());
     }
@@ -51,7 +50,7 @@ public class PutUsersTest extends PutUsersPrepareTest {
         UserEntity updateUser = userGenerate("username", "test1@test.ru");
         updateUser.setUsername(userAlreadyAddDb.getUsername());
 
-        sendPutAndGetResultActions("/api/users", updateUser).andExpect(status().is4xxClientError());
+        sendPutAndGetResultActions(updateUser).andExpect(status().is4xxClientError());
 
         assert userProvider.existsByUsername(updateUser.getUsername());
     }
@@ -65,7 +64,7 @@ public class PutUsersTest extends PutUsersPrepareTest {
         UserEntity updateUser = userGenerate("username", "test1@test.ru");
         updateUser.setUsername(userAlreadyAddDb.getUsername());
 
-        sendPutAndGetResultActions("/api/users", updateUser).andExpect(status().is4xxClientError());
+        sendPutAndGetResultActions(updateUser).andExpect(status().is4xxClientError());
 
         assert userProvider.existsByUsername(updateUser.getUsername());
     }

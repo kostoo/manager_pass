@@ -17,7 +17,7 @@ public class PutTasksPrepareTest extends PrepareServiceTest {
     }
 
     protected ResultActions sendPutTaskResponseAndGetResultActions(Object updateObject, Long idTask) throws Exception {
-        return  sendPutAndGetResultActions("/api/tasks/{idTask}", updateObject, idTask);
+        return  sendPutAndGetResultActions(updateObject, idTask);
     }
 
     protected TaskEntity taskAddGenerate() {
@@ -27,6 +27,8 @@ public class PutTasksPrepareTest extends PrepareServiceTest {
     }
     @Override
     public void beforeTest() {
-        userServiceProvider.userGenerate("kosto", "password", ERole.ROLE_ADMIN, true);
+        userServiceProvider.userGenerate(
+                "kosto", "password", ERole.ROLE_ADMIN,"nik", "nest", true
+        );
     }
 }

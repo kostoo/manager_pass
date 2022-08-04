@@ -61,9 +61,9 @@ public abstract class PrepareServiceTest {
     @Autowired
     protected UserServiceProvider userServiceProvider;
 
-    protected MockHttpServletResponse sendRequestAndGetMockHttpServletResponse(String urlTemplate, Object addObject)
+    protected MockHttpServletResponse sendRequestAndGetMockHttpServletResponse(Object addObject)
                                                                               throws Exception {
-        return mvc.perform(post(urlTemplate)
+        return mvc.perform(post("/api/register")
                   .contentType(MediaType.APPLICATION_JSON)
                   .content(objectMapper.writeValueAsBytes(addObject)))
                   .andReturn().getResponse();
@@ -76,17 +76,17 @@ public abstract class PrepareServiceTest {
         );
     }
 
-    protected ResultActions sendPutAndGetResultActions(String urlTemplate, Object addObject) throws Exception {
-        return mvc.perform(put(urlTemplate)
+    protected ResultActions sendPutAndGetResultActions(Object addObject) throws Exception {
+        return mvc.perform(put("/api/users")
                   .contentType(MediaType.APPLICATION_JSON)
                   .content(objectMapper.writeValueAsBytes(addObject))
         );
     }
 
-    protected ResultActions sendPutAndGetResultActions(String urlTemplate, Object addObject, Object... uriVars) throws Exception {
-        return mvc.perform(put(urlTemplate, uriVars)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(addObject))
+    protected ResultActions sendPutAndGetResultActions(Object addObject, Object... uriVars) throws Exception {
+        return mvc.perform(put("/api/tasks/{idTask}", uriVars)
+                  .contentType(MediaType.APPLICATION_JSON)
+                  .content(objectMapper.writeValueAsBytes(addObject))
         );
     }
 

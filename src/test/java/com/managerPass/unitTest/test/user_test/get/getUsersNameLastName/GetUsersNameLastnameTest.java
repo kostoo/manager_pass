@@ -1,4 +1,4 @@
-package com.managerPass.unitTest.test.user_test.getUsersNameLastName;
+package com.managerPass.unitTest.test.user_test.get.getUsersNameLastName;
 
 import com.managerPass.entity.UserEntity;
 import org.junit.jupiter.api.Test;

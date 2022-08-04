@@ -1,4 +1,4 @@
-package com.managerPass.unitTest.test.user_test.getUserId;
+package com.managerPass.unitTest.test.user_test.get.getUserId;
 
 import com.managerPass.entity.UserEntity;
 import org.junit.jupiter.api.Test;

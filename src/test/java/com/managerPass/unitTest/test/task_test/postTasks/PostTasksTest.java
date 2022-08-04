@@ -27,7 +27,7 @@ public class PostTasksTest extends PostTasksPrepareTest {
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Успешное добавление задачи со всеми параметрами")
     public void addTasksAllParam_Admin_ok() throws Exception {
-        TaskResponse taskResponse = taskDbFalseGenerate("task","m", EPriority.LOW, ERole.ROLE_USER );
+        TaskResponse taskResponse = taskDbFalseGenerate("task","m", EPriority.LOW, ERole.ROLE_USER);
 
         sendPostTasksAndGetResultActions(taskResponse).andExpect(status().is2xxSuccessful());
     }
@@ -36,7 +36,7 @@ public class PostTasksTest extends PostTasksPrepareTest {
     @WithMockUser(username = "kosto", roles = "USER")
     @Description("Успешное добавление задачи")
     public void addTasks_user_fail() throws Exception {
-        TaskResponse taskResponse = taskDbFalseGenerate("task","m", EPriority.LOW, ERole.ROLE_USER );
+        TaskResponse taskResponse = taskDbFalseGenerate("task","m", EPriority.LOW, ERole.ROLE_USER);
 
         sendPostTasksAndGetResultActions(taskResponse).andExpect(status().is4xxClientError());
     }
@@ -44,7 +44,7 @@ public class PostTasksTest extends PostTasksPrepareTest {
     @Test
     @Description("Добавление задачи c неавторизированным пользователем")
     public void addTasks_unAuthorized_fail() throws Exception {
-        TaskResponse taskResponse = taskDbFalseGenerate("task","m", EPriority.LOW, ERole.ROLE_USER );
+        TaskResponse taskResponse = taskDbFalseGenerate("task","m", EPriority.LOW, ERole.ROLE_USER);
 
         sendPostTasksAndGetResultActions(taskResponse).andExpect(status().isUnauthorized());
     }

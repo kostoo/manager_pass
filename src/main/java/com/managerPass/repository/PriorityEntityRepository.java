@@ -12,5 +12,4 @@ public interface PriorityEntityRepository extends JpaRepository<PriorityEntity, 
 
     Optional<PriorityEntity> findByName(EPriority name);
 
-    Optional<PriorityEntity> findByName();
 }

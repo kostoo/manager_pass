@@ -1,4 +1,4 @@
-package com.managerPass.unitTest.test.user_test.postUsersBlockIdUser;
+package com.managerPass.unitTest.test.user_test.patchUsersBlockIdUser;
 
 import com.managerPass.entity.UserEntity;
 import org.junit.jupiter.api.Test;
@@ -9,12 +9,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Description("Тестирование блокировки пользователя")
-@WithMockUser(username = "kosto", roles = "ADMIN")
-public class PostUsersBlockAdminTest extends PostUsersBlockIdUserPrepareTest {
+public class PatchUsersBlockTest extends PatchUsersBlockIdUserPrepareTest {
 
     @Test
+    @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Блокировка пользователя")
-    public void patchBlockUserWithAdmin_ok() throws Exception {
+    public void patchBlockUser_Admin_ok() throws Exception {
     UserEntity user = userGenerate();
 
         sendPatchAndGetResultActions(
@@ -25,14 +25,12 @@ public class PostUsersBlockAdminTest extends PostUsersBlockIdUserPrepareTest {
     }
 
     @Test
-    @Description("Блокировка пользователя без параметра isBlock")
-    public void patchBlockUserWithAdmin_fail() throws Exception {
+    @Description("Блокировка пользователя")
+    public void patchBlockUser_UnAuthorized_fail() throws Exception {
         UserEntity user = userGenerate();
 
         sendPatchAndGetResultActions(
-                "/api/users/block?idUser={idUser}", user.getIdUser()
-        ).andExpect(status().is4xxClientError());
-
-        assert userProvider.existsByUsername(user.getUsername());
+                "/api/users/block?idUser={idUser}", user.getIdUser()).andExpect(status().isUnauthorized()
+        );
     }
 }
