@@ -13,8 +13,8 @@ public class DeleteUserTest extends DeletePrepareTest {
 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
-    @Description("удаление добавленного пользователя")
-    public void deleteUsers_Admin_ok() throws Exception {
+    @Description("Успешное удаление пользователя c использованием роли администратора")
+    public void givenUser_whenDeleteUsersById_thenDeleteUser_admin_ok() throws Exception {
         //given
         UserEntity user = userGenerate();
 
@@ -27,8 +27,8 @@ public class DeleteUserTest extends DeletePrepareTest {
 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
-    @Description("удаление несуществующего пользователя")
-    public void deleteUsers_Admin_fail() throws Exception {
+    @Description("удаление несуществующего пользователя c использованием роли администратора")
+    public void givenUser_whenDeleteUsersById_thenIdUserNotExists_admin_fail() throws Exception {
         //given
         userGenerate();
 
@@ -41,8 +41,8 @@ public class DeleteUserTest extends DeletePrepareTest {
 
     @Test
     @WithMockUser(username = "kosto", roles = "USER")
-    @Description("Удаление пользователя")
-    public void deleteUsers_user_fail() throws Exception {
+    @Description("Неудачная попытка удаления пользователя c помощью роли пользователя")
+    public void givenUser_whenDeleteUsersById_then_user_fail() throws Exception {
         //given
         UserEntity user = userGenerate();
 
@@ -54,8 +54,8 @@ public class DeleteUserTest extends DeletePrepareTest {
     }
 
     @Test
-    @Description("удаление неавторизованного пользователя")
-    public void deleteUsers_unAuthorized_fail() throws Exception {
+    @Description("Неудачная попытка удаления с помощью неавторизованного пользователя")
+    public void givenUser_whenDeleteUsersById_thenUnAuthorized_fail() throws Exception {
         //given
         userGenerate();
 

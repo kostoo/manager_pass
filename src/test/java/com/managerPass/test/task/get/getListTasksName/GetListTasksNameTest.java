@@ -1,4 +1,4 @@
-package com.managerPass.test.task.get.getTasksName;
+package com.managerPass.test.task.get.getListTasksName;
 
 import com.managerPass.entity.TaskEntity;
 import org.junit.jupiter.api.Test;
@@ -10,12 +10,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Description("Тестирование получения задачи по названию задачи")
-public class GetTasksNameTest extends GetTasksNamePrepareTest{
+public class GetListTasksNameTest extends GetTasksNamePrepareTest{
 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
-    @Description("Успешное получение задач по названию администратором")
-    public void getTasksName_Admin_ok() throws Exception {
+    @Description("Успешное получение задач по названию c и использованием роли администратором")
+    public void givenTaskEntity_whenGetTasksName_thenGetTasks_admin_ok() throws Exception {
         //given
         TaskEntity taskEntity = taskAdminGenerate();
 
@@ -30,8 +30,8 @@ public class GetTasksNameTest extends GetTasksNamePrepareTest{
 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
-    @Description("Получение задач по названию")
-    public void getTasksNameNull_Admin_fail() throws Exception {
+    @Description("Неудачная попытка получения задач по пустому названию")
+    public void givenTaskEntity_whenGetTasksName_thenNull_Admin_fail() throws Exception {
         //when
         ResultActions resultActions = getActionsTasksName((Object) null);
 
@@ -40,8 +40,8 @@ public class GetTasksNameTest extends GetTasksNamePrepareTest{
     }
 
     @Test
-    @Description("Получение задач по названию")
-    public void getTasksName_UnAuthorized_fail() throws Exception {
+    @Description("Неудачная попытка получения задач по названию с помощью неавторизированного пользователя")
+    public void givenTaskEntity_whenGetTasksName_thenUnAuthorized_fail() throws Exception {
         //given
         TaskEntity taskEntity = taskAdminGenerate();
 

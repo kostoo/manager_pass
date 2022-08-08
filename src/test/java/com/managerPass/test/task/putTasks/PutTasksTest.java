@@ -17,8 +17,8 @@ public class PutTasksTest extends PutTasksPrepareTest {
 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
-    @Description("Успешное обновление задачи c ролью администратора")
-    public void updateTasks_Admin_ok() throws Exception {
+    @Description("Успешное обновление задачи c использованием роли администратора")
+    public void givenTaskEntityAndUpdateTask_whenUpdateTasksById_thenUpdateTask_Admin_ok() throws Exception {
         //given
         TaskEntity taskEntity = taskAddGenerate();
         TaskResponse updateTask = taskUpdateGenerate(
@@ -36,8 +36,8 @@ public class PutTasksTest extends PutTasksPrepareTest {
 
     @Test
     @WithMockUser(username = "kosto", roles = "USER")
-    @Description("Обновление задачи c ролью пользователя")
-    public void updateTasks_user_ok() throws Exception {
+    @Description("Успешное обновление задачи c использованием роли пользователя")
+    public void givenTaskEntityAndUpdateTask_whenUpdateTasksById_thenUpdateTask_user_ok() throws Exception {
         //given
         TaskEntity taskEntity = taskAddGenerate();
         TaskResponse updateTask = taskUpdateGenerate(
@@ -55,7 +55,7 @@ public class PutTasksTest extends PutTasksPrepareTest {
 
     @Test
     @Description("Обновление задачи без авторизации")
-    public void updateTasks_unAuthorized_fail() throws Exception {
+    public void givenTaskEntityAndUpdateTask_whenUpdateTasksById_thenUnAuthorized_fail() throws Exception {
         //given
         TaskEntity taskEntity = taskAddGenerate();
         TaskResponse updateTask = taskUpdateGenerate(

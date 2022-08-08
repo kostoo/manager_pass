@@ -15,7 +15,7 @@ public class GetUsersUsernameTest extends GetUsersUsernamePrepareTest {
 
     @Test
     @Description("Получение пользователя по username")
-    public void getUsersUserName_Admin_ok() throws Exception {
+    public void givenUser_whenGetUsersUserName_then_Admin_ok() throws Exception {
         //given
         UserEntity user = userGenerate();
 
@@ -31,7 +31,7 @@ public class GetUsersUsernameTest extends GetUsersUsernamePrepareTest {
 
     @Test
     @Description("Получение пользователя по username")
-    public void getUsersUserName_unAuthorized_fail() throws Exception {
+    public void givenUser_whenGetUsersUserName_thenUnAuthorized_fail() throws Exception {
         //given
         UserEntity user = userGenerate();
 

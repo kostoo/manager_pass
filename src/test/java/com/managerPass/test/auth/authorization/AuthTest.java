@@ -7,12 +7,12 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Description("тестирование авторизации пользователя")
+@Description("Тестирование авторизации пользователя")
 public class AuthTest extends AuthPrepareTest {
 
     @Test
     @Description("Успешная авторизация пользователя")
-    public void auth_Admin_success() throws Exception {
+    public void givenLoginRequest_whenAuth_thenLogin_ok() throws Exception {
         //given
         LoginRequest loginRequest = new LoginRequest("kosto", "password");
 
@@ -26,8 +26,8 @@ public class AuthTest extends AuthPrepareTest {
     }
 
     @Test
-    @Description("Недуачная авторизация пользователя при ошибочном логине")
-    public void auth_InvalidUserName_fail() throws Exception {
+    @Description("Неудачная авторизация пользователя при ошибочном логине")
+    public void givenLoginRequest_whenAuth_thenInvalidUserName_fail() throws Exception {
         //given
         LoginRequest loginRequest = new LoginRequest("kosto", "password");
 
@@ -39,8 +39,8 @@ public class AuthTest extends AuthPrepareTest {
     }
 
     @Test
-    @Description("Недуачная попытка авторизации пользователя при ошибочном пароле")
-    public void auth_InvalidPassword_fail() throws Exception {
+    @Description("Неудачная попытка авторизации пользователя при ошибочном пароле")
+    public void givenLoginRequest_whenAuth_thenInvalidPassword_fail() throws Exception {
         //given
         LoginRequest loginRequest = new LoginRequest("invalidUser", "password");
 
@@ -49,6 +49,5 @@ public class AuthTest extends AuthPrepareTest {
 
         //then
         resultActions.andExpect(status().is4xxClientError());
-
     }
 }

@@ -1,4 +1,4 @@
-package com.managerPass.test.task.get.getTasksName;
+package com.managerPass.test.task.get.getListTasksName;
 
 import com.managerPass.entity.Enum.EPriority;
 import com.managerPass.entity.Enum.ERole;

@@ -14,8 +14,8 @@ public class GetTasksTest extends GetTasksPrepareTest {
 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
-    @Description("Получение задачи по id")
-     public void getTasksIdTask_Admin_ok() throws Exception {
+    @Description("Успешное получение задачи по id с использованием роли администратора")
+     public void givenTaskEntity_whenGetTasksById_thenGetTasks_admin_ok() throws Exception {
         //given
         TaskEntity taskEntity = taskAdminGenerate();
 
@@ -33,8 +33,8 @@ public class GetTasksTest extends GetTasksPrepareTest {
 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
-    @Description("Получение задачи по несуществующему id")
-    public void getTasksIdTask_Admin_fail() throws Exception {
+    @Description("Неудачное получение задачи по несуществующему id")
+    public void givenTaskEntity_whenGetTasksIdTask_thenIdTasksNotExists_admin_fail() throws Exception {
         //given
         taskAdminGenerate();
 
@@ -48,7 +48,7 @@ public class GetTasksTest extends GetTasksPrepareTest {
 
     @Test
     @Description("Получение задачи по id")
-    public void getTasksIdTask_UnAuthorized_ok() throws Exception {
+    public void givenTaskEntity_whenGetTasksIdTask_thenUnAuthorized_fail() throws Exception {
         //given
         TaskEntity taskEntity = taskAdminGenerate();
 

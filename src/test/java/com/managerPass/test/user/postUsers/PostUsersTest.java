@@ -13,8 +13,8 @@ public class PostUsersTest extends PostUsersPrepareTest {
 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
-    @Description("Добавление пользователя с обязательными параметрами")
-    public void addUsers_Admin_ok() throws Exception {
+    @Description("Успешное добавление пользователя с обязательными параметрами")
+    public void givenUser_whenPostUsers_thenAddUsers_admin_ok() throws Exception {
         //given
         UserEntity user = userGenerate(
                 "name","lastname","username", "email@email", false
@@ -30,12 +30,13 @@ public class PostUsersTest extends PostUsersPrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Неудачное Добавление пользователя с существующим username")
-    public void addUsersExistsUserName_Admin_fail() throws Exception {
+    public void givenUser_whenAddUsers_whenExistsUserName_fail() throws Exception {
         //given
         userGenerate("name","lastname","username", "email@email", true);
         UserEntity userAlreadyExists = userGenerate(
                 "name","lastname","username", "email1@email", false
         );
+
         //when
         ResultActions resultActions = sendPostUsersAndGetResultActions(userAlreadyExists);
 
@@ -46,7 +47,7 @@ public class PostUsersTest extends PostUsersPrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Неудачное добавление пользователя с существующим email")
-    public void addUsersExistsEmail_Admin_fail() throws Exception {
+    public void givenUser_whenAddUsers_thenExistsEmail_fail() throws Exception {
         //given
         userGenerate("name","lastname","username", "email@email", true);
         UserEntity userAlreadyExists = userGenerate(
@@ -63,7 +64,7 @@ public class PostUsersTest extends PostUsersPrepareTest {
 
     @Test
     @Description("Неудачное Добавление пользователя")
-    public void addUsers_unAuthorized_fail() throws Exception {
+    public void givenUser_whenAddUsers_thenUnAuthorized_fail() throws Exception {
         //given
         UserEntity user = userGenerate(
                 "name","lastname","username", "email@email", false

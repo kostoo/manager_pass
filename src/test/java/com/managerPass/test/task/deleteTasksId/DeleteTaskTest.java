@@ -7,13 +7,13 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Description("Удаления задач")
+@Description("Тестирование удаления задач")
 public class DeleteTaskTest extends DeleteTasksPrepareTest {
 
     @Test
-    @Description("Успешное удаление задачи по id задачи с ролью админа")
+    @Description("Успешное удаление задачи по id")
     @WithMockUser(username = "kosto", roles = "ADMIN")
-    public void deleteTasksIdTasks_Admin_ok() throws Exception {
+    public void givenTaskEntity_whenDeleteTaskById_thenDeleteTask_admin_ok() throws Exception {
         //given
         TaskEntity taskEntity = taskAdminGenerate();
 
@@ -25,9 +25,9 @@ public class DeleteTaskTest extends DeleteTasksPrepareTest {
     }
 
     @Test
-    @Description("Неудачное удаление несуществующей задачи с ролью администратора")
+    @Description("Неудачная попытка удаления несуществующей задачи с использованием роли администратора")
     @WithMockUser(username = "kosto", roles = "ADMIN")
-    public void deleteTasks_Admin_fail() throws Exception {
+    public void givenTaskEntity_whenDeleteTaskById_thenIdTaskNotExists_admin_fail() throws Exception {
         //given
         TaskEntity taskEntity = taskAdminGenerate();
 
@@ -39,8 +39,8 @@ public class DeleteTaskTest extends DeleteTasksPrepareTest {
     }
 
     @Test
-    @Description("Неудачное удаление задачи по id неавторизированного")
-    public void deleteTasks_UnAuthorized_fail() throws Exception {
+    @Description("Неудачная попытка удаления задачи с использованием неавторизированного пользователя")
+    public void givenTaskEntity_whenDeleteTaskById_thenUnAuthorized_fail() throws Exception {
         //given
         TaskEntity taskEntity = taskAdminGenerate();
 

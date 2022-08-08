@@ -19,7 +19,7 @@ public class TokenTest extends TokenPrepareTest {
 
     @Test
     @Description("Регистрация с активацией токена пользователя успешная")
-    public void registrationAndActivate_WithUnAuthorized_success() throws Exception {
+    public void givenSignUpRequest_whenRegistrationActivateTokenReg_thenRegistrationActivateUser_ok() throws Exception {
         //given
         SignupRequest registrationUser = signupRequestGenerate();
         String userName = registrationUser.getUsername();
@@ -39,7 +39,8 @@ public class TokenTest extends TokenPrepareTest {
 
     @Test
     @Description("Регистрация с активацией токена пользователя fail")
-    public void registrationAndActivateWithBadToken_WithUnAuthorized_fail() throws Exception {
+    public void givenRegistrationUser_whenRegistrationAndActivateTokenReg_thenRegistrationBadTokenActivate_fail()
+                                                                                               throws Exception {
         //given
         SignupRequest registrationUser = signupRequestGenerate();
         String userName = registrationUser.getUsername();
@@ -60,7 +61,8 @@ public class TokenTest extends TokenPrepareTest {
 
     @Test
     @Description("Регистрация с активацией истекшего срока токена пользователя  fail")
-    public void registrationAndActivateExpiredToken_fail() throws Exception {
+    public void givenRegistationUser_whenRegistrationAndActivateToken_thenTokenActivateExpiredToken_fail()
+                                                                                        throws Exception {
         //given
         SignupRequest registrationUser = signupRequestGenerate();
         String userName = registrationUser.getUsername();

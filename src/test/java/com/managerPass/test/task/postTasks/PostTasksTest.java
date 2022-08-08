@@ -16,8 +16,8 @@ public class PostTasksTest extends PostTasksPrepareTest {
 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
-    @Description("Успешное добавление задачи c обязательными полями с правами администратора")
-    public void addTasksRequiredParameters_Admin_ok() throws Exception {
+    @Description("Успешное добавление задачи c обязательными полями с использованием роли администратора")
+    public void givenTaskResponse_whenAddTasksRequiredParameters_thenAddTask_admin_ok() throws Exception {
         //given
         TaskResponse taskResponse = taskDbFalseGenerate("test task", "m", null, ERole.ROLE_ADMIN);
 
@@ -31,8 +31,8 @@ public class PostTasksTest extends PostTasksPrepareTest {
 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
-    @Description("Успешное добавление задачи со всеми параметрами")
-    public void addTasksAllParam_Admin_ok() throws Exception {
+    @Description("Успешное добавление задачи со всеми параметрами с использованием роли администратора")
+    public void givenTaskResponse_whenAddTasksAllParam_thenAddTask_Admin_ok() throws Exception {
         //given
         TaskResponse taskResponse = taskDbFalseGenerate("task","m", EPriority.LOW, ERole.ROLE_USER);
 
@@ -45,8 +45,8 @@ public class PostTasksTest extends PostTasksPrepareTest {
 
     @Test
     @WithMockUser(username = "kosto", roles = "USER")
-    @Description("Успешное добавление задачи")
-    public void addTasks_user_fail() throws Exception {
+    @Description("Успешное добавление задачи c использованием роли пользователя")
+    public void givenTaskResponse_whenAddTasks_thenAddTask_user_ok() throws Exception {
         //given
         TaskResponse taskResponse = taskDbFalseGenerate("task","m", EPriority.LOW, ERole.ROLE_USER);
 
@@ -59,7 +59,7 @@ public class PostTasksTest extends PostTasksPrepareTest {
 
     @Test
     @Description("Добавление задачи c неавторизированным пользователем")
-    public void addTasks_unAuthorized_fail() throws Exception {
+    public void givenTaskResponse_whenAddTasks_thenUnAuthorized_fail() throws Exception {
         //given
         TaskResponse taskResponse = taskDbFalseGenerate("task","m", EPriority.LOW, ERole.ROLE_USER);
 

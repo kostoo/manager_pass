@@ -1,4 +1,4 @@
-package com.managerPass.test.task.get.getTasksUsers;
+package com.managerPass.test.task.get.getListTasksUsers;
 
 import com.managerPass.entity.Enum.EPriority;
 import com.managerPass.entity.TaskEntity;
@@ -13,12 +13,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Description("Получение задачи по определенному авторизированному пользователю с параметрами")
-public class GetTasksUsersTest extends GetTasksUsersPrepareTest {
+public class GetListTasksUsersTest extends GetTasksUsersPrepareTest {
 
     @Test
     @WithMockUser(username = "nikita", roles = "USER")
     @Description("Успешное получение задач по авторизированному пользователю")
-    public void getTasksUsers_Admin_ok() throws Exception {
+    public void givenUserEntityAndUserEntity_whenGetTasksUsers_thenListTasks_Admin_ok() throws Exception {
         //given
         UserEntity user = userGenerate("username", "test@email.ru");
         UserEntity anotherUser = userGenerate("test","test@email");
@@ -41,8 +41,8 @@ public class GetTasksUsersTest extends GetTasksUsersPrepareTest {
 
     @Test
     @WithMockUser(username = "nikita", roles = "USER")
-    @Description("Успешное получение задач по определенному приоритету")
-    public void getTasksByIdPriority_Admin_ok() throws Exception {
+    @Description("Успешное получение задач по определенному приоритету с использованием роли администратора")
+    public void givenTaskEntityAndUser_whenGetTasksByIdPriority_thenListTasks_Admin_ok() throws Exception {
         //given
         UserEntity user = userGenerate("username", "test@email.ru");
 
@@ -63,8 +63,8 @@ public class GetTasksUsersTest extends GetTasksUsersPrepareTest {
 
     @Test
     @WithMockUser(username = "kosto", roles = "USER")
-    @Description("Получение задач по промежутку дат")
-    public void getTasksByDateAfterBefore_Admin_ok() throws Exception {
+    @Description("Успешное получение задач по промежутку дат от и до с использованием роли администратора")
+    public void givenTaskEntityAndUser_whenGetTasksByDateAfterBefore_thenListTaskEntity_admin_ok() throws Exception {
         //given
         UserEntity user = userGenerate("username", "test@email.ru");
 
@@ -89,7 +89,7 @@ public class GetTasksUsersTest extends GetTasksUsersPrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Получение задач по несуществующему id приоритета")
-    public void getTasksByIdPriority_Admin_fail() throws Exception {
+    public void whenGetTasksByIdPriority_thenIdPriorityNotExists_admin_fail() throws Exception {
         //when
         ResultActions resultActions = getActionResult("/api/tasks/users?idPriority={idPriority}", 0);
 
@@ -99,8 +99,8 @@ public class GetTasksUsersTest extends GetTasksUsersPrepareTest {
 
     @Test
     @WithMockUser(username = "nikita", roles = "USER")
-    @Description("Получение задач по дате старта")
-    public void getTasksByDateAfter_Admin_fail() throws Exception {
+    @Description("Неудачная попытка получения задач по дате старта")
+    public void givenUserAndTask_whenGetTasksByDateAfter_thenDateAfterIsInvalidParam_admin_fail() throws Exception {
         //given
         UserEntity user = userGenerate("username", "test@email.ru");
 
@@ -117,8 +117,8 @@ public class GetTasksUsersTest extends GetTasksUsersPrepareTest {
 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
-    @Description("Получение задач по определенному приоритету")
-    public void getTasksByDate_Admin_fail() throws Exception {
+    @Description("Неудачная попытка получения задач по дате финиша")
+    public void givenUserAndTask_whenGetTasksByDateFinish_thenDateFinishIsInvalidParam_admin_fail() throws Exception {
         //given
         UserEntity user = userGenerate("username", "test@email.ru");
 
@@ -126,7 +126,7 @@ public class GetTasksUsersTest extends GetTasksUsersPrepareTest {
 
         //when
         ResultActions resultActions =  getActionResult(
-              "/api/tasks/users?startDateTime={startDateTime}", addEntity.getDateTimeFinish().plusMinutes(1)
+              "/api/tasks/users?finishDateTime={finishDateTime}", addEntity.getDateTimeFinish().plusMinutes(1)
         );
 
         //then

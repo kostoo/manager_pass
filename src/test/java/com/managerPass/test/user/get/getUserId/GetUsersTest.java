@@ -15,7 +15,7 @@ public class GetUsersTest extends GetUsersPrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Успешное получение пользователя по id")
-    public void getUsersIdUser_Admin_ok() throws Exception {
+    public void givenUser_whenGetUsersIdUser_thenGetUser_admin_ok() throws Exception {
         //given
         UserEntity user = userGenerate();
 
@@ -35,7 +35,7 @@ public class GetUsersTest extends GetUsersPrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Неудачное получение пользователя по id не существующего пользователя")
-    public void getUsersIdUser_Admin_fail() throws Exception {
+    public void whenGetUsersIdUser_thenIdUserIsNotExists_admin_fail() throws Exception {
         //when
         ResultActions resultActions = getActionResultIdUser(0L);
 
@@ -46,7 +46,7 @@ public class GetUsersTest extends GetUsersPrepareTest {
 
     @Test
     @Description("Получение пользователя по id")
-    public void getUsersIdUser_unAuthorized_fail() throws Exception {
+    public void whenGetUsersIdUser_thenUnAuthorized_fail() throws Exception {
         //when
         ResultActions resultActions = getActionResultIdUser(0L);
 
