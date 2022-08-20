@@ -1,6 +1,5 @@
 package com.managerPass.exception;
 
-
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
@@ -15,8 +14,7 @@ public class ApiError {
     private String message;
     private List<String> errors;
 
-    public ApiError(final HttpStatus status, final String message, List<String> errors) {
-        super();
+    public ApiError(HttpStatus status, String message, List<String> errors) {
         this.status = status;
         this.message = message;
         this.errors = errors;

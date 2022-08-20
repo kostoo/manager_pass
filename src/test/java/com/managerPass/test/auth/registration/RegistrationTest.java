@@ -10,7 +10,7 @@ import org.springframework.data.rest.core.annotation.Description;
 public class RegistrationTest extends RegistrationPrepareTest {
 
     @Test
-    @Description("Регистрация пользователя успешная")
+    @Description("Успешная регистрация пользователя")
     public void givenRegistrationUser_whenRegistration_thenRegistration_ok() throws Exception {
         //given
         SignupRequest registrationUser = signupRequestGenerate();
@@ -26,7 +26,7 @@ public class RegistrationTest extends RegistrationPrepareTest {
     }
 
     @Test
-    @Description("Повторная регистрация пользователя с одинаковым email неудачная")
+    @Description("Неудачная попытка регистрации пользователя с существующим email")
     public void givenRegistrationUser_whenRegistration_thenRegistrationAlreadyEmailInUse_fail() throws Exception {
         //given
         SignupRequest registrationUser = signupRequestGenerate();
@@ -45,7 +45,7 @@ public class RegistrationTest extends RegistrationPrepareTest {
     }
 
     @Test
-    @Description("Попытка регистрации пользователя с cуществующим username")
+    @Description("Неудачная попытка регистрации пользователя с существующим username")
     public void givenRegistrationUser_whenRegistration_thenRegistrationAlreadyUserName_fail() throws Exception {
         //given
         SignupRequest registrationUser = signupRequestGenerate();

@@ -89,8 +89,8 @@ public class TaskEntityService {
                 taskEntity.setPriority(priorityEntityRepository.findByName(priorityName).orElseThrow(() ->
                         new ResponseStatusException(
                                 HttpStatus.NOT_FOUND, String.format("Not found priority name %s ", priorityName)
-                        ))
-                );
+                        )
+                ));
             } else {
                 taskEntity.setPriority(priorityEntityRepository.findByName(EPriority.MEDIUM).orElseThrow(() ->
                         new ResponseStatusException(
@@ -103,7 +103,7 @@ public class TaskEntityService {
         } catch (ConstraintViolationException e) {
             log.warn(e.getClass().getName(), CustomRestExceptionHandler.handleConstraintViolation(e));
 
-            throw  new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
@@ -114,6 +114,7 @@ public class TaskEntityService {
                         TaskEntityConverter.taskEntityGenerate(taskRequest,idTask))
                 );
             } else {
+
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Task %s not found ", idTask));
             }
 
@@ -164,8 +165,10 @@ public class TaskEntityService {
     }
 
     public List<TaskEntity> getAllByPriorityIdAndUserEntityIdUserAndDateTimeStartIsAfterAndDateTimeFinishBefore(
-            Long idPriority, LocalDateTime dateTimeStart, LocalDateTime dateTimeFinish, Pageable pageable
-    ) {
+                                                                                           Long idPriority,
+                                                                                           LocalDateTime dateTimeStart,
+                                                                                           LocalDateTime dateTimeFinish,
+                                                                                           Pageable pageable) {
 
         String username = getAuthentication().getUsername();
         Long idUser = userEntityRepository.findByUsername(username).orElseThrow(() ->
@@ -173,7 +176,7 @@ public class TaskEntityService {
         ).getIdUser();
 
         return
-         taskEntityRepository.findAllByPriority_IdAndUserEntity_IdUserAndDateTimeStartIsAfterAndDateTimeFinishBefore(
+          taskEntityRepository.findAllByPriority_IdAndUserEntity_IdUserAndDateTimeStartIsAfterAndDateTimeFinishBefore(
             idPriority, idUser, dateTimeStart, dateTimeFinish, pageable
          ).getContent();
     }

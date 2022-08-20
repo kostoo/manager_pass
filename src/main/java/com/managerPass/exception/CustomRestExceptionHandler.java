@@ -9,7 +9,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 
-
 public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 
     public static ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex) {

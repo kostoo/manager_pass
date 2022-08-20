@@ -38,6 +38,6 @@ public class TokenPrepareTest extends PrepareServiceTest {
     }
 
     protected ResultActions sendPatchTokenAndGetResultActions(Object... uriVars) throws Exception {
-       return sendPatchAndGetResultActions("/api/register/activate/{token}", uriVars);
+       return sendPatchAndGetResultActions(uriVars);
     }
 }

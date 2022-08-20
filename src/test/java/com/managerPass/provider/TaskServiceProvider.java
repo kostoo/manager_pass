@@ -24,7 +24,7 @@ public class TaskServiceProvider {
     private UserServiceProvider userServiceProvider;
 
     public TaskEntity taskGenerate(String name , String message, EPriority ePriority,
-                                      ERole eRole, Boolean addInDb) {
+                                   ERole eRole, Boolean addInDb) {
 
         PriorityEntity priorityEntity = priorityProvider.save(ObjectGeneratorUtil.priorityGenerate(ePriority));
 
@@ -39,7 +39,8 @@ public class TaskServiceProvider {
         }
     }
 
-    public TaskEntity taskGenerate(String name , String message, EPriority ePriority, UserEntity user, Boolean addInDb) {
+    public TaskEntity taskGenerate(String name , String message, EPriority ePriority, UserEntity user,
+                                   Boolean addInDb) {
 
         PriorityEntity priorityEntity = priorityProvider.save(ObjectGeneratorUtil.priorityGenerate(ePriority));
 

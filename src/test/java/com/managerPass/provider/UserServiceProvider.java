@@ -24,6 +24,7 @@ public class UserServiceProvider {
         RoleEntity roleEntity = roleProvider.save(ObjectGeneratorUtil.roleGenerate(eRole));
 
         UserEntity user = ObjectGeneratorUtil.userEntityGeneration(userName, email, roleEntity, name, lastName);
+
         if (addInDb) {
             return userProvider.save(user);
         } else {

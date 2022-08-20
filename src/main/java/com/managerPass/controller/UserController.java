@@ -33,11 +33,11 @@ public class UserController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = " hasRole('ADMIN')")
     public ResponseEntity<List<UserResponse>> getUsersNameLastName(@RequestParam(defaultValue = "0") int page,
-                                                                 @RequestParam(defaultValue = "10") int sizePage,
+                                                                   @RequestParam(defaultValue = "10") int sizePage,
 
-                                                                 @RequestParam(required = false) String name,
+                                                                   @RequestParam(required = false) String name,
 
-                                                                 @RequestParam(required = false) String lastName) {
+                                                                   @RequestParam(required = false) String lastName) {
         Pageable pageable = PageRequest.of(page, sizePage);
 
         return ResponseEntity.ok(userService.getUsersNameLastName(name, lastName , pageable));

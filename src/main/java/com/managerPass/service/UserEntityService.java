@@ -64,6 +64,7 @@ public class UserEntityService {
 
     public UserResponse addUser(UserRequest userRequest) {
         try {
+
             UserEntity userEntity = UserEntityConverter.userEntityGenerate(userRequest);
 
             userEntity.setIsAccountActive(false);
@@ -79,7 +80,6 @@ public class UserEntityService {
     }
 
     public UserResponse updateUser(UserRequest userRequest, Long idUser) throws ResponseStatusException {
-
         return UserEntityConverter.UserResponseGenerate(
                 userEntityRepository.save(UserEntityConverter.UserEntityGenerate(userRequest, idUser))
         );

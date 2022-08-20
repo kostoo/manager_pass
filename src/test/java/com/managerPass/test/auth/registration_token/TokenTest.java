@@ -38,7 +38,7 @@ public class TokenTest extends TokenPrepareTest {
     }
 
     @Test
-    @Description("Регистрация с активацией токена пользователя fail")
+    @Description("Неудачная попытка регистрации с активацией неверного токена пользователя")
     public void givenRegistrationUser_whenRegistrationAndActivateTokenReg_thenRegistrationBadTokenActivate_fail()
                                                                                                throws Exception {
         //given
@@ -60,9 +60,9 @@ public class TokenTest extends TokenPrepareTest {
     }
 
     @Test
-    @Description("Регистрация с активацией истекшего срока токена пользователя  fail")
-    public void givenRegistationUser_whenRegistrationAndActivateToken_thenTokenActivateExpiredToken_fail()
-                                                                                        throws Exception {
+    @Description("Неудачная попытка регистрации с активацией истекшего срока токена пользователя" )
+    public void givenRegistrationUser_whenRegistrationAndActivateToken_thenTokenActivateExpiredToken_fail()
+                                                                                         throws Exception {
         //given
         SignupRequest registrationUser = signupRequestGenerate();
         String userName = registrationUser.getUsername();

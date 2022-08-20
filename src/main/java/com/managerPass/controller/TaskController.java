@@ -60,24 +60,26 @@ public class TaskController {
    @PutMapping(path = "/{idTask}", consumes = MediaType.APPLICATION_JSON_VALUE,
                produces = MediaType.APPLICATION_JSON_VALUE)
    @PreAuthorize(value = "hasRole('USER') or hasRole('ADMIN')")
-   public ResponseEntity<TaskResponse> putTasks(@Valid @RequestBody TaskRequest taskRequest,@PathVariable Long idTask) {
+   public ResponseEntity<TaskResponse> putTasks(@Valid @RequestBody TaskRequest taskRequest,
+                                                @PathVariable Long idTask) {
+
       return ResponseEntity.ok(taskService.updateTask(taskRequest, idTask));
    }
 
    @GetMapping(path = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
    @PreAuthorize(value = "hasRole('USER') or hasRole('ADMIN')")
    public ResponseEntity<List<TaskResponse>> getTasksUsers(@RequestParam(defaultValue = "0") int page,
-                                                         @RequestParam(defaultValue = "10") int sizePage,
+                                                           @RequestParam(defaultValue = "10") int sizePage,
 
-                                                         @RequestParam(required = false) EPriority namePriority,
+                                                           @RequestParam(required = false) EPriority namePriority,
 
-                                                         @RequestParam(required = false)
-                                                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                                                                    LocalDateTime startDateTime,
+                                                           @RequestParam(required = false)
+                                                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                           LocalDateTime startDateTime,
 
-                                                         @RequestParam(required = false)
-                                                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-                                                                    LocalDateTime finishDateTime) {
+                                                           @RequestParam(required = false)
+                                                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                           LocalDateTime finishDateTime) {
 
       Pageable pageable = PageRequest.of(page, sizePage);
 

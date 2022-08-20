@@ -104,8 +104,8 @@ public abstract class PrepareServiceTest {
         return mvc.perform(delete(urlTemplate, param));
     }
 
-    protected ResultActions sendPatchAndGetResultActions(String urlTemplate, Object... uriVars) throws Exception {
-        return mvc.perform(patch(urlTemplate, uriVars)
+    protected ResultActions sendPatchAndGetResultActions(Object... uriVars) throws Exception {
+        return mvc.perform(patch("/api/register/activate/{token}", uriVars)
                   .contentType(MediaType.APPLICATION_JSON));
     }
 
