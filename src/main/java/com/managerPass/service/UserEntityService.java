@@ -3,9 +3,8 @@ package com.managerPass.service;
 import com.managerPass.entity.UserEntity;
 import com.managerPass.exception.CustomRestExceptionHandler;
 import com.managerPass.payload.request.UserRequest;
-import com.managerPass.payload.response.UserResponse;
 import com.managerPass.repository.UserEntityRepository;
-import com.managerPass.util.UserEntityConverter;
+import com.managerPass.util.UserConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +26,7 @@ public class UserEntityService {
         return userEntityRepository.findAll();
     }
 
-    public List<UserResponse> getUsersNameLastName(String name, String lastName, Pageable pageable) {
+    public List<UserEntity> getUsersNameLastName(String name, String lastName, Pageable pageable) {
 
         List<UserEntity> listUsers;
 
@@ -40,37 +39,49 @@ public class UserEntityService {
         } else {
            listUsers = userEntityRepository.findAll(pageable).getContent();
         }
-        return UserEntityConverter.convertUserEntityToUserResponse(listUsers);
+        return listUsers;
     }
 
-    public void deleteUsersIdUser(Long IdUser) throws ResponseStatusException {
-       userEntityRepository.findById(IdUser).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User not found Id : %x", IdUser))
-       );
-       userEntityRepository.deleteById(IdUser);
-    }
-
-    public UserResponse getUsersIdUser(Long idUser) {
-        return UserEntityConverter.UserResponseGenerate(userEntityRepository.findById(idUser).orElseThrow(() ->
+    private UserEntity getUserEntityById(Long idUser) {
+        return userEntityRepository.findById(idUser).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User not found Id : %x", idUser))
-        ));
+        );
     }
 
-    public UserResponse getUsersUserName(String userName) {
-        return UserEntityConverter.UserResponseGenerate(userEntityRepository.findByUsername(userName).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User not found : %s", userName))
-        ));
+    private void existByIdUser(Long idUser) {
+        if (!userEntityRepository.existsByIdUser(idUser)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User not found Id : %x", idUser));
+        }
     }
 
-    public UserResponse addUser(UserRequest userRequest) {
+    public UserEntity getUserEntityByUsername(String username) {
+        return userEntityRepository.findByUsername(username).orElseThrow(() ->
+             new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User %s not found ", username))
+        );
+    }
+
+    public void deleteUsersIdUser(Long idUser) throws ResponseStatusException {
+       existByIdUser(idUser);
+       userEntityRepository.deleteById(idUser);
+    }
+
+    public UserEntity getUsersIdUser(Long idUser) {
+        return getUserEntityById(idUser);
+    }
+
+    public UserEntity getUsersUserName(String userName) {
+        return getUserEntityByUsername(userName);
+    }
+
+    public UserEntity addUser(UserRequest userRequest) {
         try {
 
-            UserEntity userEntity = UserEntityConverter.userEntityGenerate(userRequest);
+            UserEntity userEntity = UserConverter.userEntityGenerate(userRequest);
 
             userEntity.setIsAccountActive(false);
             userEntity.setIsAccountNonBlock(true);
 
-            return UserEntityConverter.UserResponseGenerate(userEntityRepository.save(userEntity));
+            return userEntityRepository.save(userEntity);
 
         } catch (ConstraintViolationException e) {
             log.warn(e.getClass().getName(), CustomRestExceptionHandler.handleConstraintViolation(e));
@@ -79,18 +90,14 @@ public class UserEntityService {
         }
     }
 
-    public UserResponse updateUser(UserRequest userRequest, Long idUser) throws ResponseStatusException {
-        return UserEntityConverter.UserResponseGenerate(
-                userEntityRepository.save(UserEntityConverter.UserEntityGenerate(userRequest, idUser))
-        );
+    public UserEntity updateUser(UserRequest userRequest, Long idUser) throws ResponseStatusException {
+        return userEntityRepository.save(UserConverter.UserEntityGenerate(userRequest, idUser));
     }
 
-    public UserResponse postIsUserBlock(Long idUser, Boolean isAccountNonBlock) {
-        UserEntity userEntity = userEntityRepository.findById(idUser).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User not found Id : %x", idUser))
-        );
+    public UserEntity postIsUserBlock(Long idUser, Boolean isAccountNonBlock) {
+        UserEntity userEntity = getUserEntityById(idUser);
         userEntity.setIsAccountNonBlock(isAccountNonBlock);
 
-        return UserEntityConverter.UserResponseGenerate(userEntityRepository.save(userEntity));
+        return userEntityRepository.save(userEntity);
     }
 }

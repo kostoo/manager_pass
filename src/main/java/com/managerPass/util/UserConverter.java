@@ -7,7 +7,7 @@ import com.managerPass.payload.response.UserResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class UserEntityConverter {
+public class UserConverter {
 
     public static UserEntity UserEntityGenerate(UserRequest userRequest, Long idUser) {
         return UserEntity.builder().idUser(idUser)
@@ -39,6 +39,6 @@ public class UserEntityConverter {
     }
 
     public static List<UserResponse> convertUserEntityToUserResponse(List<UserEntity> userEntities) {
-        return userEntities.stream().map(UserEntityConverter::UserResponseGenerate).collect(Collectors.toList());
+        return userEntities.stream().map(UserConverter::UserResponseGenerate).collect(Collectors.toList());
     }
 }

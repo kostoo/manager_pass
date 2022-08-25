@@ -7,7 +7,7 @@ import com.managerPass.payload.response.TaskResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TaskEntityConverter {
+public class TaskConverter {
 
     public static TaskEntity taskEntityGenerate(TaskRequest taskRequest, Long idTask) {
         return TaskEntity.builder().idTask(idTask)
@@ -50,6 +50,6 @@ public class TaskEntityConverter {
     }
 
     public static List<TaskResponse> convertListTaskEntityToTaskResponse(List<TaskEntity> taskEntities) {
-        return taskEntities.stream().map(TaskEntityConverter::taskResponseGenerate).collect(Collectors.toList());
+        return taskEntities.stream().map(TaskConverter::taskResponseGenerate).collect(Collectors.toList());
     }
 }

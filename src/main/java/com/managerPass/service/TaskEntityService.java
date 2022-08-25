@@ -5,11 +5,8 @@ import com.managerPass.entity.PriorityEntity;
 import com.managerPass.entity.TaskEntity;
 import com.managerPass.exception.CustomRestExceptionHandler;
 import com.managerPass.payload.request.TaskRequest;
-import com.managerPass.payload.response.TaskResponse;
-import com.managerPass.repository.PriorityEntityRepository;
 import com.managerPass.repository.TaskEntityRepository;
-import com.managerPass.repository.UserEntityRepository;
-import com.managerPass.util.TaskEntityConverter;
+import com.managerPass.util.TaskConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -32,28 +29,28 @@ import java.util.List;
 public class TaskEntityService {
 
     private final TaskEntityRepository taskEntityRepository;
-    private final UserEntityRepository userEntityRepository;
-    private final PriorityEntityRepository priorityEntityRepository;
+    private final UserEntityService userEntityService;
+    private final PriorityEntityService priorityEntityService;
 
     public UserDetails getAuthentication() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             return (UserDetails) authentication.getPrincipal();
         } else {
-            throw new RuntimeException();
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is UnAuthorized");
         }
     }
 
-    public List<TaskResponse> getAll() {
-        return TaskEntityConverter.convertListTaskEntityToTaskResponse(taskEntityRepository.findAll());
+    public List<TaskEntity> getAll() {
+        return taskEntityRepository.findAll();
     }
 
-    public List<TaskResponse> getAllByName(String name) {
-        return TaskEntityConverter.convertListTaskEntityToTaskResponse(taskEntityRepository.findAllByName(name));
+    public List<TaskEntity> getAllByName(String name) {
+        return taskEntityRepository.findAllByName(name);
     }
 
-    public List<TaskResponse> getAllWithParam(String name) {
-        List<TaskResponse> taskEntities;
+    public List<TaskEntity> getAllName(String name) {
+        List<TaskEntity> taskEntities;
         if (name != null) {
             taskEntities = getAllByName(name);
         } else {
@@ -62,43 +59,36 @@ public class TaskEntityService {
         return taskEntities;
     }
 
-    public TaskResponse getByIdTask(Long id) {
-        return TaskEntityConverter.taskResponseGenerate(taskEntityRepository.findById(id).orElseThrow(() ->
+    private TaskEntity getTaskEntityById(Long id) {
+        return taskEntityRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Task not found by Id : %x", id))
-        ));
+        );
+    }
+
+    public TaskEntity getByIdTask(Long id) {
+        return getTaskEntityById(id);
     }
 
     public void deleteByIdTask(Long id) {
-        taskEntityRepository.findById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Task not found by Id : %x", id))
-        );
+        getTaskEntityById(id);
         taskEntityRepository.deleteById(id);
     }
 
-    public TaskResponse addTask(TaskRequest taskRequest) {
+    public TaskEntity addTask(TaskRequest taskRequest) {
         try {
-            TaskEntity taskEntity = TaskEntityConverter.taskEntityGenerate(taskRequest);
+            TaskEntity taskEntity = TaskConverter.taskEntityGenerate(taskRequest);
 
             String username = getAuthentication().getUsername();
-            taskEntity.setUserEntity(userEntityRepository.findByUsername(username).orElseThrow(() ->
-                    new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User %s not found ", username))
-            ));
+            taskEntity.setUserEntity(userEntityService.getUserEntityByUsername(username));
 
             if (taskEntity.getPriority() != null) {
                 EPriority priorityName = taskEntity.getPriority().getName();
-                taskEntity.setPriority(priorityEntityRepository.findByName(priorityName).orElseThrow(() ->
-                        new ResponseStatusException(
-                                HttpStatus.NOT_FOUND, String.format("Not found priority name %s ", priorityName)
-                        )
-                ));
+                taskEntity.setPriority(priorityEntityService.getPriorityByName(priorityName));
             } else {
-                taskEntity.setPriority(priorityEntityRepository.findByName(EPriority.MEDIUM).orElseThrow(() ->
-                        new ResponseStatusException(
-                                HttpStatus.NOT_FOUND, String.format("Not found priority name %s", EPriority.MEDIUM)
-                        )
-                ));
+                taskEntity.setPriority(priorityEntityService.getPriorityByName(EPriority.MEDIUM));
             }
-            return TaskEntityConverter.taskResponseGenerate(taskEntityRepository.save(taskEntity));
+
+            return taskEntityRepository.save(taskEntity);
 
         } catch (ConstraintViolationException e) {
             log.warn(e.getClass().getName(), CustomRestExceptionHandler.handleConstraintViolation(e));
@@ -107,15 +97,13 @@ public class TaskEntityService {
         }
     }
 
-    public TaskResponse updateTask(TaskRequest taskRequest, Long idTask) {
+    public TaskEntity updateTask(TaskRequest taskRequest, Long idTask) {
         try {
             if (taskEntityRepository.existsById(idTask)) {
-               return TaskEntityConverter.taskResponseGenerate(taskEntityRepository.save(
-                        TaskEntityConverter.taskEntityGenerate(taskRequest,idTask))
-                );
+               return taskEntityRepository.save(TaskConverter.taskEntityGenerate(taskRequest,idTask));
             } else {
 
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Task %s not found ", idTask));
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Task %s not found", idTask));
             }
 
         } catch (ConstraintViolationException e) {
@@ -125,13 +113,12 @@ public class TaskEntityService {
         }
     }
 
-    public List<TaskResponse> getAllByAuthUserWithParam(EPriority namePriority, Pageable pageable,
-                                                        LocalDateTime dateTimeStart,
-                                                        LocalDateTime dateTimeFinish) {
+    public List<TaskEntity> getAllByAuthUserWithEPriorityPageableDateTimeStartDateTimeFinish(
+                                                                              EPriority namePriority, Pageable pageable,
+                                                                              LocalDateTime dateTimeStart,
+                                                                              LocalDateTime dateTimeFinish) {
 
-        PriorityEntity priority = priorityEntityRepository.findByName(namePriority).orElseThrow(() ->
-            new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User %s not found ", namePriority.name()))
-        );
+        PriorityEntity priority = priorityEntityService.getPriorityByName(namePriority);
 
         List<TaskEntity> taskEntities;
 
@@ -152,14 +139,12 @@ public class TaskEntityService {
             taskEntities = getAllByAuthUser();
         }
 
-        return TaskEntityConverter.convertListTaskEntityToTaskResponse(taskEntities);
+        return taskEntities;
     }
 
     public List<TaskEntity> getAllByAuthUser() {
         String username = getAuthentication().getUsername();
-        Long idUser = userEntityRepository.findByUsername(username).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User %s not found ", username))
-        ).getIdUser();
+        Long idUser = userEntityService.getUsersUserName(username).getIdUser();
 
         return taskEntityRepository.findAllByUserEntity_IdUser(idUser);
     }
@@ -171,21 +156,17 @@ public class TaskEntityService {
                                                                                            Pageable pageable) {
 
         String username = getAuthentication().getUsername();
-        Long idUser = userEntityRepository.findByUsername(username).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User %s not found ", username))
-        ).getIdUser();
+        Long idUser = userEntityService.getUsersUserName(username).getIdUser();
 
-        return
-          taskEntityRepository.findAllByPriority_IdAndUserEntity_IdUserAndDateTimeStartIsAfterAndDateTimeFinishBefore(
+     return taskEntityRepository.findAllByPriority_IdAndUserEntity_IdUserAndDateTimeStartIsAfterAndDateTimeFinishBefore(
             idPriority, idUser, dateTimeStart, dateTimeFinish, pageable
-         ).getContent();
+        ).getContent();
+
     }
 
     public List<TaskEntity> getAllByAuthUserAndPriority(Long idPriority, Pageable pageable) {
         String username = getAuthentication().getUsername();
-        Long idUser = userEntityRepository.findByUsername(username).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User %s not found ", username))
-        ).getIdUser();
+        Long idUser = userEntityService.getUsersUserName(username).getIdUser();
 
         return taskEntityRepository.findAllByPriority_IdAndUserEntity_IdUser(idPriority, idUser, pageable);
     }
@@ -194,9 +175,7 @@ public class TaskEntityService {
                                                                                     LocalDateTime dateTimeFinish,
                                                                                     Pageable pageable) {
         String username = getAuthentication().getUsername();
-        Long idUser = userEntityRepository.findByUsername(username).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User %s not found ", username))
-        ).getIdUser();
+        Long idUser = userEntityService.getUsersUserName(username).getIdUser();
 
         return taskEntityRepository.findAllByUserEntity_IdUserAndDateTimeStartIsAfterAndDateTimeFinishBefore(
               idUser,  dateTimeStart, dateTimeFinish, pageable

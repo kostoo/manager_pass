@@ -4,6 +4,7 @@ import com.managerPass.entity.Enum.EPriority;
 import com.managerPass.payload.request.TaskRequest;
 import com.managerPass.payload.response.TaskResponse;
 import com.managerPass.service.TaskEntityService;
+import com.managerPass.service.TaskResponseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,32 +30,33 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/tasks")
 public class TaskController {
-
-   private final TaskEntityService taskService;
-
+   
+   private final TaskResponseService taskResponseService;
+   private final TaskEntityService taskEntityService;
+   
    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
    @PreAuthorize(value = "hasRole('ADMIN')")
    public ResponseEntity<List<TaskResponse>> getTasks(@RequestParam(required = false) String name) {
-      return ResponseEntity.ok(taskService.getAllWithParam(name));
+      return ResponseEntity.ok(taskResponseService.getAllName(name));
    }
 
    @GetMapping(path = "/{idTask}", produces = MediaType.APPLICATION_JSON_VALUE)
    @PreAuthorize(value = "hasRole('USER') or hasRole('ADMIN')")
    public ResponseEntity<TaskResponse> getTasksIdTask(@PathVariable Long idTask) {
-     return ResponseEntity.ok(taskService.getByIdTask(idTask));
+     return ResponseEntity.ok(taskResponseService.getByIdTask(idTask));
    }
 
    @DeleteMapping(path = "/{idTask}")
    @PreAuthorize(value = "hasRole('USER') or hasRole('ADMIN')")
    public ResponseEntity<?> deleteTasksIdTask(@PathVariable(value = "idTask") Long idTask) {
-      taskService.deleteByIdTask(idTask);
+      taskEntityService.deleteByIdTask(idTask);
       return ResponseEntity.ok().build();
    }
 
    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
    @PreAuthorize(value = "hasRole('USER') or hasRole('ADMIN')")
    public ResponseEntity<TaskResponse> postTasks(@Valid @RequestBody TaskRequest taskRequest) {
-      return ResponseEntity.ok(taskService.addTask(taskRequest));
+      return ResponseEntity.ok(taskResponseService.addTask(taskRequest));
    }
 
    @PutMapping(path = "/{idTask}", consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -63,7 +65,7 @@ public class TaskController {
    public ResponseEntity<TaskResponse> putTasks(@Valid @RequestBody TaskRequest taskRequest,
                                                 @PathVariable Long idTask) {
 
-      return ResponseEntity.ok(taskService.updateTask(taskRequest, idTask));
+      return ResponseEntity.ok(taskResponseService.updateTask(taskRequest, idTask));
    }
 
    @GetMapping(path = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -83,9 +85,11 @@ public class TaskController {
 
       Pageable pageable = PageRequest.of(page, sizePage);
 
-      return ResponseEntity.ok().body(taskService.getAllByAuthUserWithParam(
-              namePriority, pageable, startDateTime, finishDateTime
-      ));
+      return ResponseEntity.ok().body(
+              taskResponseService.getAllByAuthUserWithNamePriorityPageableDateTimeStartDateTimeFinish(
+                                    namePriority, pageable, startDateTime, finishDateTime
+              )
+      );
    }
 }
 

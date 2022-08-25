@@ -55,9 +55,11 @@ public class TaskEntity {
     private String message;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
     private UserEntity userEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
     private PriorityEntity priority;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
