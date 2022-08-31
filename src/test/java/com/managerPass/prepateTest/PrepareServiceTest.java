@@ -1,13 +1,16 @@
 package com.managerPass.prepateTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.managerPass.provider.repository.PriorityProvider;
-import com.managerPass.provider.repository.RoleProvider;
-import com.managerPass.provider.repository.TaskProvider;
-import com.managerPass.provider.TaskServiceProvider;
-import com.managerPass.provider.repository.UserProvider;
-import com.managerPass.provider.UserServiceProvider;
-import com.managerPass.provider.repository.ValidateTokenProvider;
+import com.managerPass.provider.PriorityProvider;
+import com.managerPass.provider.RoleProvider;
+import com.managerPass.provider.ValidateTokenProvider;
+import com.managerPass.provider.repository.PriorityRepositoryTest;
+import com.managerPass.provider.repository.RoleRepositoryTest;
+import com.managerPass.provider.repository.TaskRepositoryTest;
+import com.managerPass.provider.TaskProvider;
+import com.managerPass.provider.repository.UserRepositoryTest;
+import com.managerPass.provider.UserProvider;
+import com.managerPass.provider.repository.ValidateTokenRepositoryTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,10 +44,28 @@ public abstract class PrepareServiceTest {
     protected MockMvc mvc;
 
     @Autowired
-    protected PriorityProvider priorityProvider;
+    protected PriorityRepositoryTest priorityRepositoryTest;
+
+    @Autowired
+    protected RoleRepositoryTest roleRepositoryTest;
+
+    @Autowired
+    protected TaskRepositoryTest taskRepositoryTest;
+
+    @Autowired
+    protected UserRepositoryTest userRepositoryTest;
+
+    @Autowired
+    protected ValidateTokenProvider validateTokenProvider;
 
     @Autowired
     protected RoleProvider roleProvider;
+
+    @Autowired
+    protected PriorityProvider priorityProvider;
+
+    @Autowired
+    protected ValidateTokenRepositoryTest validateTokenRepositoryTest;
 
     @Autowired
     protected TaskProvider taskProvider;
@@ -52,17 +73,7 @@ public abstract class PrepareServiceTest {
     @Autowired
     protected UserProvider userProvider;
 
-    @Autowired
-    protected ValidateTokenProvider validateTokenProvider;
-
-    @Autowired
-    protected TaskServiceProvider taskServiceProvider;
-
-    @Autowired
-    protected UserServiceProvider userServiceProvider;
-
-    protected MockHttpServletResponse sendRequestAndGetMockHttpServletResponse(Object addObject)
-                                                                              throws Exception {
+    protected MockHttpServletResponse sendRequestAndGetMockHttpServletResponse(Object addObject) throws Exception {
         return mvc.perform(post("/api/register")
                   .contentType(MediaType.APPLICATION_JSON)
                   .content(objectMapper.writeValueAsBytes(addObject)))
@@ -115,10 +126,10 @@ public abstract class PrepareServiceTest {
 
     @AfterEach
     public void deleteAllAfterTest() {
-        validateTokenProvider.deleteAllInBatch();
-        taskProvider.deleteAllInBatch();
-        userProvider.deleteAllInBatch();
-        priorityProvider.deleteAllInBatch();
-        roleProvider.deleteAllInBatch();
+        validateTokenRepositoryTest.deleteAllInBatch();
+        taskRepositoryTest.deleteAllInBatch();
+        userRepositoryTest.deleteAllInBatch();
+        priorityRepositoryTest.deleteAllInBatch();
+        roleRepositoryTest.deleteAllInBatch();
     }
 }

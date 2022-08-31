@@ -1,6 +1,8 @@
 package com.managerPass.test.user.put;
 
+import com.managerPass.entity.Enum.ERole;
 import com.managerPass.entity.UserEntity;
+import com.managerPass.payload.request.UserRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.rest.core.annotation.Description;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -15,25 +17,27 @@ public class PutUsersTest extends PutUsersPrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Успешное обновление пользователя")
-    public void givenUser_whenUpdateUsers_thenUpdateUser_admin_ok() throws Exception {
+    public void givenUser_whenUpdateUsers_thenUpdateUser_roleAdmin_ok() throws Exception {
         //given
         UserEntity user = userGenerate();
-        user.setUsername("updateUserName");
 
+        UserRequest updateUser = userUpdateGenerate(
+                "update", "update@email", ERole.ROLE_USER, "nik","nest"
+        );
         //when
-        ResultActions resultActions = sendPutAndGetResultActions(user);
+        ResultActions resultActions = sendPutUserRequestAndGetResultActions(updateUser, user.getIdUser());
 
         //then
         resultActions.andExpect(jsonPath("$.username").value(user.getUsername()))
                      .andExpect(status().is2xxSuccessful());
 
-        assert userProvider.existsByUsername(user.getUsername());
+        assert userRepositoryTest.existsByUsername(updateUser.getUsername());
     }
 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
-    @Description("Обновление user на существующиющий email")
-    public void givenUser_whenUpdateUsers_thenExistsEmail_admin_fail() throws Exception {
+    @Description("Неудачное обновление пользователя существующиющий email")
+    public void givenUser_whenUpdateUsers_thenUpdateEntityHasExistsEmail_roleAdmin_fail() throws Exception {
         //given
         UserEntity userAlreadyAddDb = userGenerate("userAlreadyDB", "test0@test.ru");
 
@@ -41,16 +45,18 @@ public class PutUsersTest extends PutUsersPrepareTest {
         updateUser.setEmail(userAlreadyAddDb.getEmail());
 
         //when
-        sendPutAndGetResultActions(updateUser).andExpect(status().is4xxClientError());
+        ResultActions resultActions = sendPutAndGetResultActions(updateUser);
 
         //then
-        assert userProvider.existsByUsername(updateUser.getUsername());
+
+        resultActions.andExpect(status().is4xxClientError());
+        assert userRepositoryTest.existsByUsername(updateUser.getUsername());
     }
 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Обновление user на существующиющий username")
-    public void givenUser_whenUpdateUsers_thenExistsUserName_admin_fail() throws Exception {
+    public void givenUser_whenUpdateUsers_thenUpdateEntityHasExistsUsername_roleAdmin_fail() throws Exception {
         //given
         UserEntity userAlreadyAddDb = userGenerate("userAlreadyDB", "test0@test.ru");
 
@@ -61,6 +67,6 @@ public class PutUsersTest extends PutUsersPrepareTest {
         sendPutAndGetResultActions(updateUser).andExpect(status().is4xxClientError());
 
         //then
-        assert userProvider.existsByUsername(updateUser.getUsername());
+        assert userRepositoryTest.existsByUsername(updateUser.getUsername());
     }
 }

@@ -1,4 +1,4 @@
-package com.managerPass.test.user.get.usersUsername;
+package com.managerPass.test.user.get.userUsername;
 
 import com.managerPass.entity.Enum.ERole;
 import com.managerPass.entity.UserEntity;
@@ -13,14 +13,14 @@ public class GetUsersUsernamePrepareTest extends PrepareServiceTest {
 
     @Override
     public void beforeTest() {
-        userServiceProvider.userGenerate(
-                "test", "test@test.ru", ERole.ROLE_ADMIN, "name", "lastName",true
+        userProvider.userGenerate(
+                "test", "test@test.ru", ERole.ROLE_ADMIN, "name", "lastName", true
         );
     }
 
     protected UserEntity userGenerate() {
-        return userServiceProvider.userGenerate(
-             "userName", "email@test.ru", ERole.ROLE_ADMIN, "name", "lastName",true
+        return userProvider.userGenerate(
+             "userName", "email@test.ru", ERole.ROLE_ADMIN, "name", "lastName", true
         );
     }
 }

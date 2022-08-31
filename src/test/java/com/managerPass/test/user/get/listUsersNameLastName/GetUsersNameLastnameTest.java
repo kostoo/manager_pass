@@ -16,7 +16,7 @@ public class GetUsersNameLastnameTest extends GetUsersNameLastNamePrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Успешное получение списка пользователей")
-    public void getUsers_Admin_ok() throws Exception {
+    public void givenUsers_whenGetUsers_thenGetListOfUser_roleAdmin_ok() throws Exception {
         //given
         UserEntity addUser1 = userGenerate("user", "test@test.ru");
         UserEntity addUser2 = userGenerate("user1", "test1@test.ru");
@@ -33,8 +33,8 @@ public class GetUsersNameLastnameTest extends GetUsersNameLastNamePrepareTest {
 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
-    @Description("Успешное получение пользователя по имени и фамилии")
-    public void givenUsers_whenGetUsersNameLastName_thenUsers_ok() throws Exception {
+    @Description("Успешное получение списка пользователя по имени и фамилии")
+    public void givenUsers_whenGetUsersNameLastName_thenGetListOfUser_roleAdmin_ok() throws Exception {
         //given
         UserEntity addUser1 = userGenerate("user", "test@test.ru", "name", "last name");
         UserEntity addUser2 = userGenerate("user1", "test1@test.ru", "name", "last name");
@@ -48,11 +48,7 @@ public class GetUsersNameLastnameTest extends GetUsersNameLastNamePrepareTest {
         //then
         resultActions.andExpect(jsonPath("$.*", hasSize(2)))
                      .andExpect(jsonPath("$[0].idUser").value(addUser1.getIdUser()))
-                     .andExpect(jsonPath("$[0].name").value(addUser1.getName()))
-                     .andExpect(jsonPath("$[0].lastName").value(addUser1.getLastName()))
                      .andExpect(jsonPath("$[1].idUser").value(addUser2.getIdUser()))
-                     .andExpect(jsonPath("$[1].name").value(addUser2.getName()))
-                     .andExpect(jsonPath("$[1].lastName").value(addUser2.getLastName()))
                      .andExpect(status().isOk());
 
     }
@@ -60,7 +56,7 @@ public class GetUsersNameLastnameTest extends GetUsersNameLastNamePrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Успешное получение пользователя по имени")
-    public void givenUser_whenGetUsersName_thenUsers_Admin_ok() throws Exception {
+    public void givenUser_whenGetUsersName_thenGetListOfUser_roleAdmin_ok() throws Exception {
         //given
         UserEntity user = userGenerate();
 
@@ -78,8 +74,8 @@ public class GetUsersNameLastnameTest extends GetUsersNameLastNamePrepareTest {
 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
-    @Description("Получение пользователя по фамилии")
-    public void givenUser_whenGetUsersLastName_thenUsers_Admin_ok() throws Exception {
+    @Description("Успешное получение списка пользователей по фамилии")
+    public void givenUser_whenGetUsersLastName_thenGetListOfUser_roleAdmin_ok() throws Exception {
         //given
         UserEntity user = userGenerate();
 
@@ -96,7 +92,7 @@ public class GetUsersNameLastnameTest extends GetUsersNameLastNamePrepareTest {
     }
 
     @Test
-    @Description("Получение списка пользователей")
+    @Description("Неудачное получение списка пользователей неавторизованным пользователем")
     public void whenGetUsers_thenUnAuthorized_fail() throws Exception {
         //when
         ResultActions resultActions = getActionResult("/api/users");

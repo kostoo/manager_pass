@@ -8,13 +8,13 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Description("Добавление пользователя")
+@Description("Тестирование добавления пользователя")
 public class PostUsersTest extends PostUsersPrepareTest {
 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Успешное добавление пользователя с обязательными параметрами")
-    public void givenUser_whenPostUsers_thenAddUsers_admin_ok() throws Exception {
+    public void givenUser_whenPostUsers_thenAddUsers_roleAdmin_ok() throws Exception {
         //given
         UserEntity user = userGenerate(
                 "name","lastname","username", "email@email", false
@@ -24,12 +24,12 @@ public class PostUsersTest extends PostUsersPrepareTest {
         sendPostUsersAndGetResultActions(user).andExpect(status().is2xxSuccessful());
 
         //then
-        assert userProvider.existsByUsername(user.getUsername());
+        assert userProvider.isUserExistByUsername(user.getUsername());
     }
 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
-    @Description("Неудачное Добавление пользователя с существующим username")
+    @Description("Неудачное добавление пользователя с существующим username")
     public void givenUser_whenAddUsers_whenExistsUserName_fail() throws Exception {
         //given
         userGenerate("name","lastname","username", "email@email", true);
@@ -47,7 +47,7 @@ public class PostUsersTest extends PostUsersPrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Неудачное добавление пользователя с существующим email")
-    public void givenUser_whenAddUsers_thenExistsEmail_fail() throws Exception {
+    public void givenUser_whenAddUsers_thenEmailExists_fail() throws Exception {
         //given
         userGenerate("name","lastname","username", "email@email", true);
         UserEntity userAlreadyExists = userGenerate(
@@ -63,7 +63,7 @@ public class PostUsersTest extends PostUsersPrepareTest {
     }
 
     @Test
-    @Description("Неудачное Добавление пользователя")
+    @Description("Неудачное добавление пользователя, из-за неавторизированного пользователя")
     public void givenUser_whenAddUsers_thenUnAuthorized_fail() throws Exception {
         //given
         UserEntity user = userGenerate(
@@ -74,7 +74,7 @@ public class PostUsersTest extends PostUsersPrepareTest {
         sendPostUsersAndGetResultActions(user).andExpect(status().is2xxSuccessful());
 
         //then
-        assert userProvider.existsByUsername(user.getUsername());
+        assert userRepositoryTest.existsByUsername(user.getUsername());
     }
 
 }

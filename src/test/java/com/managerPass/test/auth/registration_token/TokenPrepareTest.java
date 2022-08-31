@@ -14,13 +14,13 @@ public class TokenPrepareTest extends PrepareServiceTest {
 
     @Override
     public void beforeTest() {
-        userServiceProvider.userGenerate(
+        userProvider.userGenerate(
             "kosto", "test@test.ru", ERole.ROLE_ADMIN, "nikita", "lastname", true
         );
     }
 
     protected SignupRequest signupRequestGenerate() {
-        roleProvider.save(ObjectGeneratorUtil.roleGenerate(ERole.ROLE_USER));
+        roleProvider.roleGenerate(ERole.ROLE_USER);
 
         return ObjectGeneratorUtil.signupRequestGenerate(Set.of(ERole.ROLE_USER));
     }
@@ -28,8 +28,7 @@ public class TokenPrepareTest extends PrepareServiceTest {
     protected RegistrationResponse sendSignUpRequestAndGetRegistrationResponse(SignupRequest signupRequest)
                                                                               throws Exception {
         return new ObjectMapper().readValue(
-                sendRequestAndGetMockHttpServletResponse(signupRequest).getContentAsString(),
-                RegistrationResponse.class
+           sendRequestAndGetMockHttpServletResponse(signupRequest).getContentAsString(), RegistrationResponse.class
         );
     }
 

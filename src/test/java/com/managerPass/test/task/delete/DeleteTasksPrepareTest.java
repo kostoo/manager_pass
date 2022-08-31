@@ -13,14 +13,14 @@ public class DeleteTasksPrepareTest extends PrepareServiceTest {
     }
 
     protected TaskEntity taskAdminGenerate() {
-        return taskServiceProvider.taskGenerate(
+        return taskProvider.taskGenerate(
                 "test task", "message", EPriority.HIGH, ERole.ROLE_ADMIN, true
         );
     }
 
     @Override
     public void beforeTest() {
-        userServiceProvider.userGenerate(
+        userProvider.userGenerate(
              "kosto", "test@test.ru", ERole.ROLE_ADMIN, "nikita", "lastname", true
         );
     }

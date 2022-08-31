@@ -3,7 +3,7 @@ package com.managerPass.test.task.put;
 import com.managerPass.entity.Enum.EPriority;
 import com.managerPass.entity.Enum.ERole;
 import com.managerPass.entity.TaskEntity;
-import com.managerPass.payload.response.TaskResponse;
+import com.managerPass.payload.request.TaskRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.rest.core.annotation.Description;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -17,11 +17,11 @@ public class PutTasksTest extends PutTasksPrepareTest {
 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
-    @Description("Успешное обновление задачи c использованием роли администратора")
-    public void givenTaskEntityAndUpdateTask_whenUpdateTasksById_thenUpdateTask_Admin_ok() throws Exception {
+    @Description("Успешное обновление задачи c ролью администратора")
+    public void givenTask_whenUpdateTasksById_thenUpdateTask_roleAdmin_ok() throws Exception {
         //given
         TaskEntity taskEntity = taskAddGenerate();
-        TaskResponse updateTask = taskUpdateGenerate(
+        TaskRequest updateTask = taskUpdateGenerate(
                 "updateTaskAdmin", "update message", EPriority.LOW, ERole.ROLE_ADMIN
         );
 
@@ -36,12 +36,12 @@ public class PutTasksTest extends PutTasksPrepareTest {
 
     @Test
     @WithMockUser(username = "kosto", roles = "USER")
-    @Description("Успешное обновление задачи c использованием роли пользователя")
-    public void givenTaskEntityAndUpdateTask_whenUpdateTasksById_thenUpdateTask_user_ok() throws Exception {
+    @Description("Успешное обновление задачи c ролью пользователя")
+    public void givenTask_whenUpdateTasksById_thenUpdateTask_roleUser_ok() throws Exception {
         //given
         TaskEntity taskEntity = taskAddGenerate();
-        TaskResponse updateTask = taskUpdateGenerate(
-                "updateTaskUser", "update message", EPriority.LOW, ERole.ROLE_USER
+        TaskRequest updateTask = taskUpdateGenerate(
+                "updateTaskUser", "update", EPriority.HIGH, ERole.ROLE_USER
         );
 
         //when
@@ -54,11 +54,11 @@ public class PutTasksTest extends PutTasksPrepareTest {
     }
 
     @Test
-    @Description("Обновление задачи без авторизации")
-    public void givenTaskEntityAndUpdateTask_whenUpdateTasksById_thenUnAuthorized_fail() throws Exception {
+    @Description("Неудачная поптыка обновления задачи неавторизированным пользователем")
+    public void givenTask_whenUpdateTasksById_thenUnAuthorized_fail() throws Exception {
         //given
         TaskEntity taskEntity = taskAddGenerate();
-        TaskResponse updateTask = taskUpdateGenerate(
+        TaskRequest updateTask = taskUpdateGenerate(
                 "updateTaskUser", "update message", EPriority.LOW, ERole.ROLE_USER
         );
 

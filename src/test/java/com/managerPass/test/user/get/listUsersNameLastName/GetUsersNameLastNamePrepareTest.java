@@ -8,23 +8,23 @@ public class GetUsersNameLastNamePrepareTest extends PrepareServiceTest {
 
     @Override
     public void beforeTest() {
-        userServiceProvider.userGenerate("kosto", "password", ERole.ROLE_ADMIN, "name",
-                "lastName",true);
+        userProvider.userGenerate("kosto", "password", ERole.ROLE_ADMIN, "name",
+                "lastName", true);
     }
 
     protected UserEntity userGenerate(String userName, String email) {
-        return userServiceProvider.userGenerate(
+        return userProvider.userGenerate(
                 userName, email, ERole.ROLE_ADMIN,"name", "lastName", true
         );
     }
 
     protected UserEntity userGenerate(String userName, String email, String name, String lastName) {
-        return userServiceProvider.userGenerate(userName, email, ERole.ROLE_ADMIN, name, lastName,true);
+        return userProvider.userGenerate(userName, email, ERole.ROLE_ADMIN, name, lastName, true);
     }
 
     protected UserEntity userGenerate() {
-        return userServiceProvider.userGenerate(
-             "userName", "email@test.ru", ERole.ROLE_ADMIN, "name", "lastName",true
+        return userProvider.userGenerate(
+             "userName", "email@test.ru", ERole.ROLE_ADMIN, "name", "lastName", true
         );
     }
 }

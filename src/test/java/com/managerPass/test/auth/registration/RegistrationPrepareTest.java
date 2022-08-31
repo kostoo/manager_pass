@@ -14,7 +14,7 @@ import java.util.Set;
 public class RegistrationPrepareTest extends PrepareServiceTest {
 
     protected SignupRequest signupRequestGenerate() {
-        roleProvider.save(ObjectGeneratorUtil.roleGenerate(ERole.ROLE_USER));
+        roleProvider.roleGenerate(ERole.ROLE_USER);
 
         return ObjectGeneratorUtil.signupRequestGenerate(Set.of(ERole.ROLE_USER));
     }

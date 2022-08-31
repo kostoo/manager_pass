@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class TokenTest extends TokenPrepareTest {
 
     @Test
-    @Description("Регистрация с активацией токена пользователя успешная")
+    @Description("Регистрация и успешная активация токена регистрации пользователя ")
     public void givenSignUpRequest_whenRegistrationActivateTokenReg_thenRegistrationActivateUser_ok() throws Exception {
         //given
         SignupRequest registrationUser = signupRequestGenerate();
@@ -30,16 +30,16 @@ public class TokenTest extends TokenPrepareTest {
 
         //then
         assertRegistrationResponse(registrationResponse);
-        assert userProvider.existsByUsername(userName);
+        assert userRepositoryTest.existsByUsername(userName);
 
         resultActions.andExpect(status().is2xxSuccessful());
 
-        assert userProvider.existsByUsernameAndIsAccountActiveEquals(userName, true);
+        assert userRepositoryTest.existsByUsernameAndIsAccountActiveEquals(userName, true);
     }
 
     @Test
-    @Description("Неудачная попытка регистрации с активацией неверного токена пользователя")
-    public void givenRegistrationUser_whenRegistrationAndActivateTokenReg_thenRegistrationBadTokenActivate_fail()
+    @Description("Регистрация с неудачной активацией пользователя из-за неправильного токена регистрации пользователя")
+    public void givenRegistrationUser_whenRegistrationAndActivateTokenReg_thenRegistrationUnValidTokenActivate_fail()
                                                                                                throws Exception {
         //given
         SignupRequest registrationUser = signupRequestGenerate();
@@ -55,12 +55,12 @@ public class TokenTest extends TokenPrepareTest {
         //then
         assertRegistrationResponse(registrationResponse);
 
-        assert userProvider.existsByUsername(userName);
+        assert userRepositoryTest.existsByUsername(userName);
 
     }
 
     @Test
-    @Description("Неудачная попытка регистрации с активацией истекшего срока токена пользователя" )
+    @Description("Регистрация с неудачной активацией истекшего срока жизни токена регистрации пользователя")
     public void givenRegistrationUser_whenRegistrationAndActivateToken_thenTokenActivateExpiredToken_fail()
                                                                                          throws Exception {
         //given
@@ -71,13 +71,14 @@ public class TokenTest extends TokenPrepareTest {
         Instant before = now.minus(Duration.ofDays(20));
         Date dateBefore = Date.from(before);
 
-        UserEntity user = userProvider.getUserEntityByUsername(userName);
+        UserEntity user = userRepositoryTest.getUserEntityByUsername(userName);
 
-        ValidateTokenEntity validateToken = validateTokenProvider.getValidateTokenEntityByUserEntity_IdUser(
+        ValidateTokenEntity validateToken = validateTokenProvider.getValidateTokenEntityByUserEntityIdUser(
                 user.getIdUser()
         );
+
         validateToken.setExpiryDate(dateBefore);
-        validateTokenProvider.save(validateToken);
+        validateTokenRepositoryTest.save(validateToken);
 
         //when
         RegistrationResponse registrationResponse = sendSignUpRequestAndGetRegistrationResponse(registrationUser);
@@ -87,7 +88,7 @@ public class TokenTest extends TokenPrepareTest {
         //then
         assertRegistrationResponse(registrationResponse);
 
-        assert userProvider.existsByUsername(userName);
+        assert userRepositoryTest.existsByUsername(userName);
 
         resultActions.andExpect(status().is4xxClientError());
 
