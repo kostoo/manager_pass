@@ -42,7 +42,6 @@ public class ValidateTokenEntity {
 
     @OneToOne(targetEntity = UserEntity.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id")
-    @ToString.Exclude
     private UserEntity userEntity;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

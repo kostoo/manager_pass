@@ -6,16 +6,12 @@ import com.managerPass.entity.TaskEntity;
 import com.managerPass.exception.CustomRestExceptionHandler;
 import com.managerPass.payload.request.TaskRequest;
 import com.managerPass.repository.TaskEntityRepository;
-import com.managerPass.util.TaskConverter;
+import com.managerPass.util.AuthenticationUserUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -32,20 +28,11 @@ public class TaskEntityService {
     private final UserEntityService userEntityService;
     private final PriorityEntityService priorityEntityService;
 
-    public UserDetails getAuthentication() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            return (UserDetails) authentication.getPrincipal();
-        } else {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User is UnAuthorized");
-        }
-    }
-
-    public List<TaskEntity> getAll() {
+    private List<TaskEntity> getAll() {
         return taskEntityRepository.findAll();
     }
 
-    public List<TaskEntity> getAllByName(String name) {
+    private List<TaskEntity> getAllByName(String name) {
         return taskEntityRepository.findAllByName(name);
     }
 
@@ -76,9 +63,15 @@ public class TaskEntityService {
 
     public TaskEntity addTask(TaskRequest taskRequest) {
         try {
-            TaskEntity taskEntity = TaskConverter.taskEntityGenerate(taskRequest);
+            TaskEntity taskEntity = TaskEntity.builder().name(taskRequest.getName())
+                                                        .message(taskRequest.getMessage())
+                                                        .userEntity(taskRequest.getUserEntity())
+                                                        .priority(taskRequest.getPriority())
+                                                        .dateTimeFinish(taskRequest.getDateTimeFinish())
+                                                        .dateTimeStart(taskRequest.getDateTimeStart())
+                                                        .build();
 
-            String username = getAuthentication().getUsername();
+            String username = AuthenticationUserUtil.getAuthentication().getUsername();
             taskEntity.setUserEntity(userEntityService.getUserEntityByUsername(username));
 
             if (taskEntity.getPriority() != null) {
@@ -100,7 +93,15 @@ public class TaskEntityService {
     public TaskEntity updateTask(TaskRequest taskRequest, Long idTask) {
         try {
             if (taskEntityRepository.existsById(idTask)) {
-               return taskEntityRepository.save(TaskConverter.taskEntityGenerate(taskRequest,idTask));
+               return taskEntityRepository.save(
+                       TaskEntity.builder().idTask(idTask)
+                               .name(taskRequest.getName())
+                               .message(taskRequest.getMessage())
+                               .userEntity(taskRequest.getUserEntity())
+                               .priority(taskRequest.getPriority())
+                               .dateTimeStart(taskRequest.getDateTimeStart())
+                               .dateTimeFinish(taskRequest.getDateTimeFinish()).build()
+               );
             } else {
 
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Task %s not found", idTask));
@@ -143,7 +144,7 @@ public class TaskEntityService {
     }
 
     public List<TaskEntity> getAllByAuthUser() {
-        String username = getAuthentication().getUsername();
+        String username = AuthenticationUserUtil.getAuthentication().getUsername();
         Long idUser = userEntityService.getUsersUserName(username).getIdUser();
 
         return taskEntityRepository.findAllByUserEntity_IdUser(idUser);
@@ -155,17 +156,16 @@ public class TaskEntityService {
                                                                                            LocalDateTime dateTimeFinish,
                                                                                            Pageable pageable) {
 
-        String username = getAuthentication().getUsername();
+        String username = AuthenticationUserUtil.getAuthentication().getUsername();
         Long idUser = userEntityService.getUsersUserName(username).getIdUser();
 
      return taskEntityRepository.findAllByPriority_IdAndUserEntity_IdUserAndDateTimeStartIsAfterAndDateTimeFinishBefore(
             idPriority, idUser, dateTimeStart, dateTimeFinish, pageable
         ).getContent();
-
     }
 
     public List<TaskEntity> getAllByAuthUserAndPriority(Long idPriority, Pageable pageable) {
-        String username = getAuthentication().getUsername();
+        String username = AuthenticationUserUtil.getAuthentication().getUsername();
         Long idUser = userEntityService.getUsersUserName(username).getIdUser();
 
         return taskEntityRepository.findAllByPriority_IdAndUserEntity_IdUser(idPriority, idUser, pageable);
@@ -174,7 +174,7 @@ public class TaskEntityService {
     public Page<TaskEntity> getAllByUserIdDateTimeStartAfterAndDateTimeFinishBefore(LocalDateTime dateTimeStart,
                                                                                     LocalDateTime dateTimeFinish,
                                                                                     Pageable pageable) {
-        String username = getAuthentication().getUsername();
+        String username = AuthenticationUserUtil.getAuthentication().getUsername();
         Long idUser = userEntityService.getUsersUserName(username).getIdUser();
 
         return taskEntityRepository.findAllByUserEntity_IdUserAndDateTimeStartIsAfterAndDateTimeFinishBefore(

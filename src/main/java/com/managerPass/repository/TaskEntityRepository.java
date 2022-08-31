@@ -32,5 +32,4 @@ public interface TaskEntityRepository extends JpaRepository<TaskEntity, Long> {
             Long idPriority, Long idUser, LocalDateTime dateTimeStart, LocalDateTime dateTimeFinish, Pageable pageable
     );
 
-
 }

@@ -41,7 +41,7 @@ import java.util.Set;
 @Table(name = "users",
        uniqueConstraints = { @UniqueConstraint(columnNames = "username"), @UniqueConstraint(columnNames = "email")}
 )
-@NamedEntityGraph(name = "userEntityGraph", attributeNodes = {@NamedAttributeNode("roles")})
+@NamedEntityGraph(name = "userEntityGraph", attributeNodes = { @NamedAttributeNode("roles")})
 public class UserEntity {
 
     @Id

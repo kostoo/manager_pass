@@ -64,15 +64,13 @@ public class UserController {
         return ResponseEntity.ok().body(userResponseService.getUsersIdUser(idUser));
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
-                 produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = " hasRole('ADMIN')")
     public ResponseEntity<UserResponse> postUsers(@Valid @RequestBody UserRequest userRequest) {
         return ResponseEntity.ok(userResponseService.addUser(userRequest));
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
-                produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = " hasRole('ADMIN')")
     public ResponseEntity<UserResponse> putUsers(@Valid @RequestBody UserRequest userRequest, Long idUser) {
        return ResponseEntity.ok().body(userResponseService.updateUser(userRequest, idUser));
