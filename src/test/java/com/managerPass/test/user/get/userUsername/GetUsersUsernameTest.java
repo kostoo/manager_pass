@@ -1,4 +1,4 @@
-package com.managerPass.test.user.get.usersUsername;
+package com.managerPass.test.user.get.userUsername;
 
 import com.managerPass.entity.UserEntity;
 import org.junit.jupiter.api.Test;
@@ -9,13 +9,13 @@ import org.springframework.test.web.servlet.ResultActions;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WithMockUser(username = "kosto", roles = "ADMIN")
 @Description("Получение пользователя по username")
 public class GetUsersUsernameTest extends GetUsersUsernamePrepareTest {
 
     @Test
-    @Description("Получение пользователя по username")
-    public void givenUser_whenGetUsersUserName_then_Admin_ok() throws Exception {
+    @WithMockUser(username = "kosto", roles = "ADMIN")
+    @Description("Успешное получение пользователя по username")
+    public void givenUser_whenGetUsersUserName_thenGetListOfUser_roleAdmin_ok() throws Exception {
         //given
         UserEntity user = userGenerate();
 
@@ -30,7 +30,7 @@ public class GetUsersUsernameTest extends GetUsersUsernamePrepareTest {
     }
 
     @Test
-    @Description("Получение пользователя по username")
+    @Description("Неудачное получение пользователя по username неавторизованным пользователем")
     public void givenUser_whenGetUsersUserName_thenUnAuthorized_fail() throws Exception {
         //given
         UserEntity user = userGenerate();
@@ -39,8 +39,6 @@ public class GetUsersUsernameTest extends GetUsersUsernamePrepareTest {
         ResultActions resultActions = getActionResultUserName(user.getUsername());
 
         //then
-        resultActions.andExpect(jsonPath("$.idUser").value(user.getIdUser()))
-                     .andExpect(jsonPath("$.username").value(user.getUsername()))
-                     .andExpect(status().isOk());
+        resultActions.andExpect(status().isUnauthorized());
     }
 }

@@ -13,13 +13,13 @@ public class DeleteUserIdUserPrepareTest extends PrepareServiceTest {
 
     @Override
     public void beforeTest() {
-        userServiceProvider.userGenerate(
+        userProvider.userGenerate(
              "kosto", "test@test.ru", ERole.ROLE_ADMIN, "nikita", "lastname", true
         );
     }
 
     protected UserEntity userGenerate() {
-        return userServiceProvider.userGenerate(
+        return userProvider.userGenerate(
                 "test", "test@test.ru", ERole.ROLE_ADMIN, "nik", "nest", true
         );
     }

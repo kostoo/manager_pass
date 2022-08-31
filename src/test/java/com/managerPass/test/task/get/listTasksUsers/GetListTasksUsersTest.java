@@ -17,8 +17,8 @@ public class GetListTasksUsersTest extends GetListTasksUsersPrepareTest {
 
     @Test
     @WithMockUser(username = "username", roles = "USER")
-    @Description("Успешное получение задач по авторизированному пользователю")
-    public void givenUserEntityAndUserEntity_whenGetTasksUsers_thenListTasks_Admin_ok() throws Exception {
+    @Description("Успешное получение списка задач определенного пользователя")
+    public void givenTasksOfUsers_whenGetTasksUsers_thenGetListTasksOfUser_roleAdmin_ok() throws Exception {
         //given
         UserEntity user = userGenerate("username", "test@email.ru");
         UserEntity anotherUser = userGenerate("test","test@email");
@@ -41,8 +41,8 @@ public class GetListTasksUsersTest extends GetListTasksUsersPrepareTest {
 
     @Test
     @WithMockUser(username = "username", roles = "USER")
-    @Description("Успешное получение задач по определенному приоритету с использованием роли администратора")
-    public void givenTaskEntityAndUser_whenGetTasksByIdPriority_thenListTasks_Admin_ok() throws Exception {
+    @Description("Успешное получение задач пользователя по названию приоритета")
+    public void givenTasksOfUser_whenGetTasksByNamePriority_thenGetListTasksOfUser_roleUser_ok() throws Exception {
         //given
         UserEntity user = userGenerate("username", "test@email.ru");
 
@@ -63,8 +63,9 @@ public class GetListTasksUsersTest extends GetListTasksUsersPrepareTest {
 
     @Test
     @WithMockUser(username = "username", roles = "USER")
-    @Description("Успешное получение задач по промежутку дат от и до с использованием роли администратора")
-    public void givenTaskEntityAndUser_whenGetTasksByDateAfterBefore_thenListTaskEntity_admin_ok() throws Exception {
+    @Description("Успешное получение задач по промежутку дат от начал и до конца")
+    public void givenTasksOfUser_whenGetTasksByDateStartFinish_thenGetListTasksOfUserByDate_roleUser_ok()
+                                                                                    throws Exception {
         //given
         UserEntity user = userGenerate("username", "test@email.ru");
 
@@ -88,8 +89,8 @@ public class GetListTasksUsersTest extends GetListTasksUsersPrepareTest {
 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
-    @Description("Получение задач по несуществующему id приоритета")
-    public void whenGetTasksByIdPriority_thenIdPriorityNotExists_admin_fail() throws Exception {
+    @Description("Неудачная попытка получения задач по несуществующему названию приоритета")
+    public void whenGetTasksByIdPriority_thenIdPriorityNotExists_roleAdmin_fail() throws Exception {
         //when
         ResultActions resultActions = getActionResult(
                 "/api/tasks/users?idPriority={idPriority}", EPriority.MEDIUM
@@ -101,8 +102,9 @@ public class GetListTasksUsersTest extends GetListTasksUsersPrepareTest {
 
     @Test
     @WithMockUser(username = "kosto", roles = "USER")
-    @Description("Неудачная попытка получения задач по дате старта")
-    public void givenUserAndTask_whenGetTasksByDateAfter_thenDateAfterIsInvalidParam_admin_fail() throws Exception {
+    @Description("Неудачная попытка получения задач по дате старта, необходим параметр даты конца")
+    public void givenTasksOfUser_whenGetTasksByDateAfter_thenOnlyStartDateTimeIsInvalidParam_roleUser_fail()
+                                                                                          throws Exception {
         //given
         UserEntity user = userGenerate("username", "test@email.ru");
 
@@ -118,9 +120,10 @@ public class GetListTasksUsersTest extends GetListTasksUsersPrepareTest {
     }
 
     @Test
-    @WithMockUser(username = "kosto", roles = "ADMIN")
-    @Description("Неудачная попытка получения задач по дате финиша")
-    public void givenUserAndTask_whenGetTasksByDateFinish_thenDateFinishIsInvalidParam_admin_fail() throws Exception {
+    @WithMockUser(username = "kosto", roles = "USER")
+    @Description("Неудачная попытка получения задач по дате финиша, , необходим параметр даты начала")
+    public void givenTasksOfUser_whenGetTasksByDateFinish_thenOnlyDateFinishIsInvalidParam_roleAdmin_fail()
+                                                                                     throws Exception {
         //given
         UserEntity user = userGenerate("username", "test@email.ru");
 

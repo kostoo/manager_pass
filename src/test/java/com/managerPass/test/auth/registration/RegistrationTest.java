@@ -22,7 +22,7 @@ public class RegistrationTest extends RegistrationPrepareTest {
         //then
         assert !registrationResponse.getRegistrationToken().isEmpty();
 
-        assert userProvider.existsByUsername(userName);
+        assert userRepositoryTest.existsByUsername(userName);
     }
 
     @Test

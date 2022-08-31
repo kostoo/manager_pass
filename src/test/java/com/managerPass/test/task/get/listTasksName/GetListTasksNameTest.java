@@ -14,8 +14,8 @@ public class GetListTasksNameTest extends GetListTasksNamePrepareTest {
 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
-    @Description("Успешное получение задач по названию c и использованием роли администратором")
-    public void givenTaskEntity_whenGetTasksName_thenGetTasks_admin_ok() throws Exception {
+    @Description("Успешное получение задач по названию c использованием роли администратором")
+    public void givenTask_whenGetTasksName_thenGetListOfTasks_roleAdmin_ok() throws Exception {
         //given
         TaskEntity taskEntity = taskAdminGenerate();
 
@@ -29,19 +29,8 @@ public class GetListTasksNameTest extends GetListTasksNamePrepareTest {
     }
 
     @Test
-    @WithMockUser(username = "kosto", roles = "ADMIN")
-    @Description("Неудачная попытка получения задач по пустому названию")
-    public void givenTaskEntity_whenGetTasksName_thenNull_Admin_fail() throws Exception {
-        //when
-        ResultActions resultActions = getActionsTasksName((Object) null);
-
-        //then
-        resultActions.andExpect(status().is4xxClientError());
-    }
-
-    @Test
     @Description("Неудачная попытка получения задач по названию с помощью неавторизированного пользователя")
-    public void givenTaskEntity_whenGetTasksName_thenUnAuthorized_fail() throws Exception {
+    public void givenTask_whenGetTasksName_thenUnAuthorized_fail() throws Exception {
         //given
         TaskEntity taskEntity = taskAdminGenerate();
 

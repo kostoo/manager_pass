@@ -9,14 +9,14 @@ import org.springframework.test.web.servlet.ResultActions;
 public class GetListTasksNamePrepareTest extends PrepareServiceTest {
 
     protected TaskEntity taskAdminGenerate() {
-        return taskServiceProvider.taskGenerate(
+        return taskProvider.taskGenerate(
                 "getTasksName", "taskNameMessage", EPriority.HIGH, ERole.ROLE_ADMIN, true
         );
     }
 
     @Override
     public void beforeTest() {
-        userServiceProvider.userGenerate(
+        userProvider.userGenerate(
          "kosto", "test@test.ru", ERole.ROLE_ADMIN, "nikita", "lastname", true
         );
     }

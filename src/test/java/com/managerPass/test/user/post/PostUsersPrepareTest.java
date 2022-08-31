@@ -9,13 +9,13 @@ public class PostUsersPrepareTest extends PrepareServiceTest {
 
     @Override
     public void beforeTest() {
-        userServiceProvider.userGenerate(
+        userProvider.userGenerate(
                 "kosto", "test@test.ru", ERole.ROLE_ADMIN, "name", "lastName",true
         );
     }
 
     protected UserEntity userGenerate(String name, String lastname, String username, String email, Boolean addInDb) {
-        return userServiceProvider.userGenerate(username, email, ERole.ROLE_ADMIN, name, lastname, addInDb);
+        return userProvider.userGenerate(username, email, ERole.ROLE_ADMIN, name, lastname, addInDb);
     }
 
     protected ResultActions sendPostUsersAndGetResultActions(Object addObject) throws Exception {

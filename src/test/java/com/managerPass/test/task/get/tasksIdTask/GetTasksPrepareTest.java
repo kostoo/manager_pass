@@ -13,12 +13,12 @@ public class GetTasksPrepareTest extends PrepareServiceTest {
     }
 
     protected TaskEntity taskAdminGenerate() {
-        return taskServiceProvider.taskGenerate("test task", "message", EPriority.HIGH, ERole.ROLE_ADMIN, true);
+        return taskProvider.taskGenerate("test task", "message", EPriority.HIGH, ERole.ROLE_ADMIN, true);
     }
 
     @Override
     public void beforeTest() {
-        userServiceProvider.userGenerate(
+        userProvider.userGenerate(
              "kosto", "test@test.ru", ERole.ROLE_ADMIN, "nikita", "lastname", true
         );
     }

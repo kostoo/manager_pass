@@ -13,8 +13,8 @@ public class DeleteUserIdUserUserIdUserTest extends DeleteUserIdUserPrepareTest 
 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
-    @Description("Успешное удаление пользователя c использованием роли администратора")
-    public void givenUser_whenDeleteUsersById_thenDeleteUser_admin_ok() throws Exception {
+    @Description("Успешное удаление пользователя ")
+    public void givenUser_whenDeleteUsersById_thenDeleteUser_roleAdmin_ok() throws Exception {
         //given
         UserEntity user = userGenerate();
 
@@ -22,13 +22,13 @@ public class DeleteUserIdUserUserIdUserTest extends DeleteUserIdUserPrepareTest 
         deleteByIdUsers(user.getIdUser()).andExpect(status().is2xxSuccessful());
 
         //then
-        assert !userProvider.existsById(user.getIdUser());
+        assert !userRepositoryTest.existsById(user.getIdUser());
     }
 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
-    @Description("удаление несуществующего пользователя c использованием роли администратора")
-    public void whenDeleteUsersById_thenIdUserNotExists_admin_fail() throws Exception {
+    @Description("Неудачная попытка удаления несуществующего пользователя")
+    public void whenDeleteUsersById_thenIdUserNotExists_roleAdmin_fail() throws Exception {
         //when
         ResultActions resultActions = deleteByIdUsers(0L);
 
@@ -37,21 +37,7 @@ public class DeleteUserIdUserUserIdUserTest extends DeleteUserIdUserPrepareTest 
     }
 
     @Test
-    @WithMockUser(username = "kosto", roles = "USER")
-    @Description("Неудачная попытка удаления пользователя c помощью роли пользователя")
-    public void givenUser_whenDeleteUsersById_then_user_fail() throws Exception {
-        //given
-        UserEntity user = userGenerate();
-
-        //when
-        deleteByIdUsers(user.getIdUser()).andExpect(status().is4xxClientError());
-
-        //then
-        assert !userProvider.existsById(user.getIdUser());
-    }
-
-    @Test
-    @Description("Неудачная попытка удаления с помощью неавторизованного пользователя")
+    @Description("Неудачная попытка удаления неавторизованным пользователем")
     public void givenUser_whenDeleteUsersById_thenUnAuthorized_fail() throws Exception {
         //given
         userGenerate();
