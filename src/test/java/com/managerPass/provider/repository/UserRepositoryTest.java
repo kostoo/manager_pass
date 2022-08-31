@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Repository
-public interface UserProvider extends JpaRepository<UserEntity, Long> {
+public interface UserRepositoryTest extends JpaRepository<UserEntity, Long> {
 
     Boolean existsByUsername(String username);
 
