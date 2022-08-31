@@ -38,7 +38,16 @@ public class UserConverter {
                                     .build();
     }
 
-    public static List<UserResponse> convertUserEntityToUserResponse(List<UserEntity> userEntities) {
+    public static UserRequest userRequestGenerate(UserEntity user) {
+        return UserRequest.builder()
+                          .username(user.getUsername())
+                          .name(user.getName())
+                          .roles(user.getRoles())
+                          .email(user.getEmail())
+                          .build();
+    }
+
+    public static List<UserResponse> convertListUserEntityToUserResponse(List<UserEntity> userEntities) {
         return userEntities.stream().map(UserConverter::UserResponseGenerate).collect(Collectors.toList());
     }
 }

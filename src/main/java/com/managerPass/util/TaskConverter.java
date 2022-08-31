@@ -9,16 +9,6 @@ import java.util.stream.Collectors;
 
 public class TaskConverter {
 
-    public static TaskEntity taskEntityGenerate(TaskRequest taskRequest, Long idTask) {
-        return TaskEntity.builder().idTask(idTask)
-                                   .name(taskRequest.getName())
-                                   .message(taskRequest.getMessage())
-                                   .userEntity(taskRequest.getUserEntity())
-                                   .priority(taskRequest.getPriority())
-                                   .dateTimeStart(taskRequest.getDateTimeStart())
-                                   .dateTimeFinish(taskRequest.getDateTimeFinish()).build();
-    }
-
     public static TaskResponse taskResponseGenerate(TaskEntity taskEntity) {
         return TaskResponse.builder().idTask(taskEntity.getIdTask())
                                      .name(taskEntity.getName())
@@ -27,16 +17,6 @@ public class TaskConverter {
                                      .userEntity(taskEntity.getUserEntity())
                                      .dateTimeStart(taskEntity.getDateTimeStart())
                                      .dateTimeFinish(taskEntity.getDateTimeFinish()).build();
-    }
-
-    public static TaskEntity taskEntityGenerate(TaskRequest taskRequest) {
-        return TaskEntity.builder().name(taskRequest.getName())
-                                   .message(taskRequest.getMessage())
-                                   .userEntity(taskRequest.getUserEntity())
-                                   .priority(taskRequest.getPriority())
-                                   .dateTimeFinish(taskRequest.getDateTimeFinish())
-                                   .dateTimeStart(taskRequest.getDateTimeStart())
-                                   .build();
     }
 
     public static TaskRequest taskRequestGenerate(TaskEntity taskEntity) {

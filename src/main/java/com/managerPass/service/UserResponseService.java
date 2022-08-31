@@ -10,7 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 import static com.managerPass.util.UserConverter.UserResponseGenerate;
-import static com.managerPass.util.UserConverter.convertUserEntityToUserResponse;
+import static com.managerPass.util.UserConverter.convertListUserEntityToUserResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +19,7 @@ public class UserResponseService {
     private final UserEntityService userEntityService;
 
     public List<UserResponse> getUsersNameLastName(String name, String lastName, Pageable pageable) {
-        return convertUserEntityToUserResponse(userEntityService.getUsersNameLastName(name, lastName, pageable));
+        return convertListUserEntityToUserResponse(userEntityService.getUsersNameLastName(name, lastName, pageable));
     }
 
     public UserResponse getUsersIdUser(Long idUser) {
