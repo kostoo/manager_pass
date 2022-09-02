@@ -1,6 +1,6 @@
 package com.managerPass.test.task.get.tasksIdTask;
 
-import com.managerPass.entity.TaskEntity;
+import com.managerPass.jpa.entity.TaskEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.rest.core.annotation.Description;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -15,7 +15,7 @@ public class GetTasksTest extends GetTasksPrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Успешное получение задачи по id")
-     public void givenTaskEntity_whenGetTasksById_thenGetTasks_roleAdmin_ok() throws Exception {
+     public void givenTaskEntity_whenGetTasksById_thenGetTasks_roleAdmin_ok() {
         //given
         TaskEntity taskEntity = taskAdminGenerate();
 
@@ -34,7 +34,7 @@ public class GetTasksTest extends GetTasksPrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Неудачное получение задачи по несуществующему id")
-    public void givenTaskEntity_whenGetTasksIdTask_thenIdTasksNotExists_roleAdmin_fail() throws Exception {
+    public void givenTaskEntity_whenGetTasksIdTask_thenIdTasksNotExists_roleAdmin_fail() {
         //given
         taskAdminGenerate();
 
@@ -48,7 +48,7 @@ public class GetTasksTest extends GetTasksPrepareTest {
 
     @Test
     @Description("Неудачное получение задачи по id")
-    public void givenTaskEntity_whenGetTasksIdTask_thenUnAuthorized_fail() throws Exception {
+    public void givenTaskEntity_whenGetTasksIdTask_thenUnAuthorized_fail() {
         //given
         TaskEntity taskEntity = taskAdminGenerate();
 

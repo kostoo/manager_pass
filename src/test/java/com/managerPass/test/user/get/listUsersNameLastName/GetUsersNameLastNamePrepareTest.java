@@ -1,7 +1,7 @@
 package com.managerPass.test.user.get.listUsersNameLastName;
 
-import com.managerPass.entity.Enum.ERole;
-import com.managerPass.entity.UserEntity;
+import com.managerPass.jpa.entity.Enum.ERole;
+import com.managerPass.jpa.entity.UserEntity;
 import com.managerPass.prepateTest.PrepareServiceTest;
 
 public class GetUsersNameLastNamePrepareTest extends PrepareServiceTest {

@@ -12,7 +12,7 @@ public class AuthTest extends AuthPrepareTest {
 
     @Test
     @Description("Успешная авторизация пользователя")
-    public void givenLoginRequest_whenAuth_thenLogin_ok() throws Exception {
+    public void givenLoginRequest_whenAuth_thenLogin_ok() {
         //given
         LoginRequest loginRequest = new LoginRequest("kosto", "password");
 
@@ -26,8 +26,8 @@ public class AuthTest extends AuthPrepareTest {
     }
 
     @Test
-    @Description("Неудачная авторизация пользователя c неправильным логином")
-    public void givenLoginRequest_whenAuth_thenInvalidUserName_fail() throws Exception {
+    @Description("Неудачная авторизация пользователя, пользователь с указанным логином не существует")
+    public void givenLoginRequestWithInvalidLogin_whenAuth_thenInvalidUserName_fail() {
         //given
         LoginRequest loginRequest = new LoginRequest("kosto", "password");
 
@@ -39,8 +39,8 @@ public class AuthTest extends AuthPrepareTest {
     }
 
     @Test
-    @Description("Неудачная попытка авторизации пользователя с неправильным паролем")
-    public void givenLoginRequest_whenAuth_thenInvalidPassword_fail() throws Exception {
+    @Description("Неудачная попытка авторизации пользователя, у пользователя введен неправильный паролем")
+    public void givenLoginRequestWithInvalidPassword_whenAuth_thenInvalidPassword_fail() {
         //given
         LoginRequest loginRequest = new LoginRequest("invalidUser", "password");
 

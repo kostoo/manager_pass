@@ -73,51 +73,91 @@ public abstract class PrepareServiceTest {
     @Autowired
     protected UserProvider userProvider;
 
-    protected MockHttpServletResponse sendRequestAndGetMockHttpServletResponse(Object addObject) throws Exception {
-        return mvc.perform(post("/api/register")
-                  .contentType(MediaType.APPLICATION_JSON)
-                  .content(objectMapper.writeValueAsBytes(addObject)))
-                  .andReturn().getResponse();
+    protected MockHttpServletResponse sendRequestAndGetMockHttpServletResponse(Object addObject) {
+        try {
+            return mvc.perform(post("/api/register")
+                      .contentType(MediaType.APPLICATION_JSON)
+                      .content(objectMapper.writeValueAsBytes(addObject)))
+                      .andReturn().getResponse();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    protected ResultActions sendPostAndGetResultActions(String urlTemplate, Object addObject) throws Exception {
-       return mvc.perform(post(urlTemplate)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(addObject))
-        );
+    protected ResultActions sendPostAndGetResultActions(String urlTemplate, Object addObject) {
+        try {
+            return mvc.perform(post(urlTemplate)
+                      .contentType(MediaType.APPLICATION_JSON)
+                      .content(objectMapper.writeValueAsBytes(addObject))
+             );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    protected ResultActions sendPutAndGetResultActions(Object addObject) throws Exception {
-        return mvc.perform(put("/api/users")
-                  .contentType(MediaType.APPLICATION_JSON)
-                  .content(objectMapper.writeValueAsBytes(addObject))
-        );
+    protected ResultActions sendPutAndGetResultActions(Object addObject) {
+        try {
+            return mvc.perform(put("/api/users")
+                      .contentType(MediaType.APPLICATION_JSON)
+                      .content(objectMapper.writeValueAsBytes(addObject))
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    protected ResultActions sendPutAndGetResultActions(Object addObject, Object... uriVars) throws Exception {
-        return mvc.perform(put("/api/tasks/{idTask}", uriVars)
-                  .contentType(MediaType.APPLICATION_JSON)
-                  .content(objectMapper.writeValueAsBytes(addObject))
-        );
+    protected ResultActions sendPutAndGetResultActions(Object addObject, Object... uriVars) {
+        try {
+            return mvc.perform(put("/api/tasks/{idTask}", uriVars)
+                      .contentType(MediaType.APPLICATION_JSON)
+                      .content(objectMapper.writeValueAsBytes(addObject))
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    protected ResultActions getActionResult(String urlTemplate) throws Exception {
-        return mvc.perform(get(urlTemplate)
-                  .contentType(MediaType.APPLICATION_JSON));
+    protected ResultActions getActionResult(String urlTemplate) {
+        try {
+            return mvc.perform(get(urlTemplate)
+                      .contentType(MediaType.APPLICATION_JSON));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    protected ResultActions getActionResult(String urlTemplate, Object... uriVars) throws Exception {
-        return mvc.perform(get(urlTemplate, uriVars)
-                  .contentType(MediaType.APPLICATION_JSON));
+    protected ResultActions getActionResult(String urlTemplate, Object... uriVars) {
+        try {
+            return mvc.perform(get(urlTemplate, uriVars)
+                      .contentType(MediaType.APPLICATION_JSON));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    protected ResultActions deleteById(String urlTemplate, Long param) throws Exception {
-        return mvc.perform(delete(urlTemplate, param));
+    protected ResultActions deleteById(String urlTemplate, Long param) {
+        try {
+            return mvc.perform(delete(urlTemplate, param));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    protected ResultActions sendPatchAndGetResultActions(Object... uriVars) throws Exception {
-        return mvc.perform(patch("/api/register/activate/{token}", uriVars)
-                  .contentType(MediaType.APPLICATION_JSON));
+    protected ResultActions sendPatchAndGetResultActions(Object... uriVars) {
+        try {
+            return mvc.perform(patch("/api/register/activate/{token}", uriVars)
+                      .contentType(MediaType.APPLICATION_JSON));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @BeforeTestClass

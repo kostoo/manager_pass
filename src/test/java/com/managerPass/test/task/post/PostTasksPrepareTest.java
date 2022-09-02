@@ -1,19 +1,18 @@
 package com.managerPass.test.task.post;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.managerPass.entity.Enum.EPriority;
-import com.managerPass.entity.Enum.ERole;
+import com.managerPass.jpa.entity.Enum.EPriority;
+import com.managerPass.jpa.entity.Enum.ERole;
 import com.managerPass.payload.request.TaskRequest;
 import com.managerPass.payload.response.TaskResponse;
 import com.managerPass.prepateTest.PrepareServiceTest;
-import com.managerPass.util.TaskConverter;
 import org.springframework.test.web.servlet.ResultActions;
 
 public class PostTasksPrepareTest extends PrepareServiceTest {
 
     protected TaskRequest taskDbFalseGenerate(String nameTask, String message, EPriority ePriority, ERole eRole) {
-        return TaskConverter.taskRequestGenerate(
-                taskProvider.taskGenerate(nameTask, message, ePriority, eRole, false)
+        return taskProvider.taskRequestGenerate(
+                         taskProvider.taskGenerate(nameTask, message, ePriority, eRole, false)
         );
     }
 

@@ -1,6 +1,6 @@
 package com.managerPass.test.user.delete;
 
-import com.managerPass.entity.UserEntity;
+import com.managerPass.jpa.entity.UserEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.rest.core.annotation.Description;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -14,7 +14,7 @@ public class DeleteUserIdUserUserIdUserTest extends DeleteUserIdUserPrepareTest 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Успешное удаление пользователя ")
-    public void givenUser_whenDeleteUsersById_thenDeleteUser_roleAdmin_ok() throws Exception {
+    public void givenUser_whenDeleteUsersById_thenDeleteUser_roleAdmin_ok() {
         //given
         UserEntity user = userGenerate();
 
@@ -28,7 +28,7 @@ public class DeleteUserIdUserUserIdUserTest extends DeleteUserIdUserPrepareTest 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Неудачная попытка удаления несуществующего пользователя")
-    public void whenDeleteUsersById_thenIdUserNotExists_roleAdmin_fail() throws Exception {
+    public void whenDeleteUsersById_thenIdUserNotExists_roleAdmin_fail() {
         //when
         ResultActions resultActions = deleteByIdUsers(0L);
 
@@ -38,7 +38,7 @@ public class DeleteUserIdUserUserIdUserTest extends DeleteUserIdUserPrepareTest 
 
     @Test
     @Description("Неудачная попытка удаления неавторизованным пользователем")
-    public void givenUser_whenDeleteUsersById_thenUnAuthorized_fail() throws Exception {
+    public void givenUser_whenDeleteUsersById_thenUnAuthorized_fail() {
         //given
         userGenerate();
 

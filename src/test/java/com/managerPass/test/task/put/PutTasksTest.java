@@ -1,8 +1,8 @@
 package com.managerPass.test.task.put;
 
-import com.managerPass.entity.Enum.EPriority;
-import com.managerPass.entity.Enum.ERole;
-import com.managerPass.entity.TaskEntity;
+import com.managerPass.jpa.entity.Enum.EPriority;
+import com.managerPass.jpa.entity.Enum.ERole;
+import com.managerPass.jpa.entity.TaskEntity;
 import com.managerPass.payload.request.TaskRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.rest.core.annotation.Description;
@@ -18,7 +18,7 @@ public class PutTasksTest extends PutTasksPrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Успешное обновление задачи c ролью администратора")
-    public void givenTask_whenUpdateTasksById_thenUpdateTask_roleAdmin_ok() throws Exception {
+    public void givenTask_whenUpdateTasksById_thenUpdateTask_roleAdmin_ok() {
         //given
         TaskEntity taskEntity = taskAddGenerate();
         TaskRequest updateTask = taskUpdateGenerate(
@@ -37,7 +37,7 @@ public class PutTasksTest extends PutTasksPrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "USER")
     @Description("Успешное обновление задачи c ролью пользователя")
-    public void givenTask_whenUpdateTasksById_thenUpdateTask_roleUser_ok() throws Exception {
+    public void givenTask_whenUpdateTasksById_thenUpdateTask_roleUser_ok(){
         //given
         TaskEntity taskEntity = taskAddGenerate();
         TaskRequest updateTask = taskUpdateGenerate(
@@ -55,7 +55,7 @@ public class PutTasksTest extends PutTasksPrepareTest {
 
     @Test
     @Description("Неудачная поптыка обновления задачи неавторизированным пользователем")
-    public void givenTask_whenUpdateTasksById_thenUnAuthorized_fail() throws Exception {
+    public void givenTask_whenUpdateTasksById_thenUnAuthorized_fail() {
         //given
         TaskEntity taskEntity = taskAddGenerate();
         TaskRequest updateTask = taskUpdateGenerate(

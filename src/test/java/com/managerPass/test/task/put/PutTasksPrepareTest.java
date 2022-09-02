@@ -1,8 +1,8 @@
 package com.managerPass.test.task.put;
 
-import com.managerPass.entity.Enum.EPriority;
-import com.managerPass.entity.Enum.ERole;
-import com.managerPass.entity.TaskEntity;
+import com.managerPass.jpa.entity.Enum.EPriority;
+import com.managerPass.jpa.entity.Enum.ERole;
+import com.managerPass.jpa.entity.TaskEntity;
 import com.managerPass.payload.request.TaskRequest;
 import com.managerPass.prepateTest.PrepareServiceTest;
 import com.managerPass.util.TaskConverter;
@@ -11,8 +11,8 @@ import org.springframework.test.web.servlet.ResultActions;
 public class PutTasksPrepareTest extends PrepareServiceTest {
 
     protected TaskRequest taskUpdateGenerate(String nameTask, String message, EPriority ePriority, ERole eRole) {
-        return TaskConverter.taskRequestGenerate(
-                taskProvider.taskGenerate(nameTask, message, ePriority, eRole, false)
+        return taskProvider.taskRequestGenerate(
+                    taskProvider.taskGenerate(nameTask, message, ePriority, eRole, false)
         );
     }
 

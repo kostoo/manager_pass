@@ -1,6 +1,6 @@
 package com.managerPass.provider.repository;
 
-import com.managerPass.entity.TaskEntity;
+import com.managerPass.jpa.entity.TaskEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

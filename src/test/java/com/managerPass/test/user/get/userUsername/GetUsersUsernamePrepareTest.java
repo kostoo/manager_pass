@@ -1,7 +1,7 @@
 package com.managerPass.test.user.get.userUsername;
 
-import com.managerPass.entity.Enum.ERole;
-import com.managerPass.entity.UserEntity;
+import com.managerPass.jpa.entity.Enum.ERole;
+import com.managerPass.jpa.entity.UserEntity;
 import com.managerPass.prepateTest.PrepareServiceTest;
 import org.springframework.test.web.servlet.ResultActions;
 

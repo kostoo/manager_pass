@@ -1,7 +1,7 @@
 package com.managerPass.test.auth.registration_token;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.managerPass.entity.Enum.ERole;
+import com.managerPass.jpa.entity.Enum.ERole;
 import com.managerPass.payload.request.SignupRequest;
 import com.managerPass.payload.response.RegistrationResponse;
 import com.managerPass.prepateTest.PrepareServiceTest;

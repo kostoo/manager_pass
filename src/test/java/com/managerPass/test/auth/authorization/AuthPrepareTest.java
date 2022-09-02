@@ -1,6 +1,6 @@
 package com.managerPass.test.auth.authorization;
 
-import com.managerPass.entity.Enum.ERole;
+import com.managerPass.jpa.entity.Enum.ERole;
 import com.managerPass.payload.request.LoginRequest;
 import com.managerPass.prepateTest.PrepareServiceTest;
 import org.springframework.test.web.servlet.ResultActions;
@@ -14,7 +14,7 @@ public class AuthPrepareTest extends PrepareServiceTest {
         );
     }
 
-    public ResultActions sendPostLoginAndGetResultActions(LoginRequest loginRequest) throws Exception {
+    public ResultActions sendPostLoginAndGetResultActions(LoginRequest loginRequest) {
         return sendPostAndGetResultActions("/api/auth", loginRequest);
     }
 

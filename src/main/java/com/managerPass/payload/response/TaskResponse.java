@@ -1,7 +1,7 @@
 package com.managerPass.payload.response;
 
-import com.managerPass.entity.PriorityEntity;
-import com.managerPass.entity.UserEntity;
+import com.managerPass.jpa.entity.PriorityEntity;
+import com.managerPass.jpa.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package com.managerPass.test.task.get.listTasksName;
 
-import com.managerPass.entity.TaskEntity;
+import com.managerPass.jpa.entity.TaskEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.rest.core.annotation.Description;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -15,7 +15,7 @@ public class GetListTasksNameTest extends GetListTasksNamePrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Успешное получение задач по названию c использованием роли администратором")
-    public void givenTask_whenGetTasksName_thenGetListOfTasks_roleAdmin_ok() throws Exception {
+    public void givenTask_whenGetTasksName_thenGetListOfTasks_roleAdmin_ok() {
         //given
         TaskEntity taskEntity = taskAdminGenerate();
 
@@ -29,8 +29,8 @@ public class GetListTasksNameTest extends GetListTasksNamePrepareTest {
     }
 
     @Test
-    @Description("Неудачная попытка получения задач по названию с помощью неавторизированного пользователя")
-    public void givenTask_whenGetTasksName_thenUnAuthorized_fail() throws Exception {
+    @Description("Неудачная попытка получения задач по названию, пользователь не авторизован")
+    public void givenTaskUnAuthorized_whenGetTasksName_thenUnAuthorized_fail() {
         //given
         TaskEntity taskEntity = taskAdminGenerate();
 

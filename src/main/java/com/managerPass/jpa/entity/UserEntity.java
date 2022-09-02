@@ -1,4 +1,4 @@
-package com.managerPass.entity;
+package com.managerPass.jpa.entity;
 
 
 import lombok.AllArgsConstructor;
@@ -76,10 +76,10 @@ public class UserEntity {
     private Set<RoleEntity> roles = new HashSet<>();
 
     @Column(name = "isAccountActive")
-    private Boolean isAccountActive;
+    private Boolean isAccountActive = false;
 
     @Column(name = "isAccountNonBlock")
-    private Boolean isAccountNonBlock;
+    private Boolean isAccountNonBlock = true;
 
     public UserEntity(String username, @Email String email, String password) {
         this.username = username;

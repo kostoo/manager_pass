@@ -1,6 +1,6 @@
 package com.managerPass.test.user.get.listUsersNameLastName;
 
-import com.managerPass.entity.UserEntity;
+import com.managerPass.jpa.entity.UserEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.rest.core.annotation.Description;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -16,7 +16,7 @@ public class GetUsersNameLastnameTest extends GetUsersNameLastNamePrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Успешное получение списка пользователей")
-    public void givenUsers_whenGetUsers_thenGetListOfUser_roleAdmin_ok() throws Exception {
+    public void givenUsers_whenGetUsers_thenGetListOfUser_roleAdmin_ok() {
         //given
         UserEntity addUser1 = userGenerate("user", "test@test.ru");
         UserEntity addUser2 = userGenerate("user1", "test1@test.ru");
@@ -34,7 +34,7 @@ public class GetUsersNameLastnameTest extends GetUsersNameLastNamePrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Успешное получение списка пользователя по имени и фамилии")
-    public void givenUsers_whenGetUsersNameLastName_thenGetListOfUser_roleAdmin_ok() throws Exception {
+    public void givenUsers_whenGetUsersNameLastName_thenGetListOfUser_roleAdmin_ok() {
         //given
         UserEntity addUser1 = userGenerate("user", "test@test.ru", "name", "last name");
         UserEntity addUser2 = userGenerate("user1", "test1@test.ru", "name", "last name");
@@ -56,7 +56,7 @@ public class GetUsersNameLastnameTest extends GetUsersNameLastNamePrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Успешное получение пользователя по имени")
-    public void givenUser_whenGetUsersName_thenGetListOfUser_roleAdmin_ok() throws Exception {
+    public void givenUser_whenGetUsersName_thenGetListOfUser_roleAdmin_ok() {
         //given
         UserEntity user = userGenerate();
 
@@ -75,7 +75,7 @@ public class GetUsersNameLastnameTest extends GetUsersNameLastNamePrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Успешное получение списка пользователей по фамилии")
-    public void givenUser_whenGetUsersLastName_thenGetListOfUser_roleAdmin_ok() throws Exception {
+    public void givenUser_whenGetUsersLastName_thenGetListOfUser_roleAdmin_ok() {
         //given
         UserEntity user = userGenerate();
 
@@ -93,7 +93,7 @@ public class GetUsersNameLastnameTest extends GetUsersNameLastNamePrepareTest {
 
     @Test
     @Description("Неудачное получение списка пользователей неавторизованным пользователем")
-    public void whenGetUsers_thenUnAuthorized_fail() throws Exception {
+    public void whenGetUsers_thenUnAuthorized_fail() {
         //when
         ResultActions resultActions = getActionResult("/api/users");
 

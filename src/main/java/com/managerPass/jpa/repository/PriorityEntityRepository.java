@@ -1,7 +1,7 @@
-package com.managerPass.repository;
+package com.managerPass.jpa.repository;
 
-import com.managerPass.entity.Enum.EPriority;
-import com.managerPass.entity.PriorityEntity;
+import com.managerPass.jpa.entity.Enum.EPriority;
+import com.managerPass.jpa.entity.PriorityEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

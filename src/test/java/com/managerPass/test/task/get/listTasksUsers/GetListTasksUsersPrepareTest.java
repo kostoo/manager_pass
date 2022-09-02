@@ -1,9 +1,9 @@
 package com.managerPass.test.task.get.listTasksUsers;
 
-import com.managerPass.entity.Enum.EPriority;
-import com.managerPass.entity.Enum.ERole;
-import com.managerPass.entity.TaskEntity;
-import com.managerPass.entity.UserEntity;
+import com.managerPass.jpa.entity.Enum.EPriority;
+import com.managerPass.jpa.entity.Enum.ERole;
+import com.managerPass.jpa.entity.TaskEntity;
+import com.managerPass.jpa.entity.UserEntity;
 import com.managerPass.prepateTest.PrepareServiceTest;
 
 public class GetListTasksUsersPrepareTest extends PrepareServiceTest {

@@ -1,9 +1,9 @@
 package com.managerPass.util;
 
-import com.managerPass.entity.Enum.ERole;
-import com.managerPass.entity.PriorityEntity;
-import com.managerPass.entity.TaskEntity;
-import com.managerPass.entity.UserEntity;
+import com.managerPass.jpa.entity.Enum.ERole;
+import com.managerPass.jpa.entity.PriorityEntity;
+import com.managerPass.jpa.entity.TaskEntity;
+import com.managerPass.jpa.entity.UserEntity;
 import com.managerPass.payload.request.SignupRequest;
 import org.apache.commons.lang3.RandomStringUtils;
 

@@ -1,6 +1,6 @@
 package com.managerPass.test.user.put;
 
-import com.managerPass.entity.UserEntity;
+import com.managerPass.jpa.entity.UserEntity;
 import com.managerPass.payload.request.UserRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.rest.core.annotation.Description;
@@ -16,7 +16,7 @@ public class PutUsersTest extends PutUsersPrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Успешное обновление пользователя")
-    public void givenUser_whenUpdateUsers_thenUpdateUser_roleAdmin_ok() throws Exception {
+    public void givenUser_whenUpdateUsers_thenUpdateUser_roleAdmin_ok() {
         //given
         UserEntity user = userGenerate();
 
@@ -35,7 +35,7 @@ public class PutUsersTest extends PutUsersPrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Неудачное обновление пользователя существующиющий email")
-    public void givenUser_whenUpdateUsers_thenUpdateEntityHasExistsEmail_roleAdmin_fail() throws Exception {
+    public void givenUser_whenUpdateUsers_thenUpdateEntityHasExistsEmail_roleAdmin_fail() {
         //given
         UserEntity userAlreadyAddDb = userGenerate("userAlreadyDB", "test0@test.ru");
 
@@ -54,7 +54,7 @@ public class PutUsersTest extends PutUsersPrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Обновление user на существующиющий username")
-    public void givenUser_whenUpdateUsers_thenUpdateEntityHasExistsUsername_roleAdmin_fail() throws Exception {
+    public void givenUser_whenUpdateUsers_thenUpdateEntityHasExistsUsername_roleAdmin_fail() {
         //given
         UserEntity userAlreadyAddDb = userGenerate("userAlreadyDB", "test0@test.ru");
 

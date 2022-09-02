@@ -1,8 +1,8 @@
 package com.managerPass.test.task.get.listTasksUsers;
 
-import com.managerPass.entity.Enum.EPriority;
-import com.managerPass.entity.TaskEntity;
-import com.managerPass.entity.UserEntity;
+import com.managerPass.jpa.entity.Enum.EPriority;
+import com.managerPass.jpa.entity.TaskEntity;
+import com.managerPass.jpa.entity.UserEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.rest.core.annotation.Description;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -18,7 +18,7 @@ public class GetListTasksUsersTest extends GetListTasksUsersPrepareTest {
     @Test
     @WithMockUser(username = "username", roles = "USER")
     @Description("Успешное получение списка задач определенного пользователя")
-    public void givenTasksOfUsers_whenGetTasksUsers_thenGetListTasksOfUser_roleAdmin_ok() throws Exception {
+    public void givenTasksOfUsers_whenGetTasksUsers_thenGetListTasksOfUser_roleAdmin_ok() {
         //given
         UserEntity user = userGenerate("username", "test@email.ru");
         UserEntity anotherUser = userGenerate("test","test@email");
@@ -41,8 +41,8 @@ public class GetListTasksUsersTest extends GetListTasksUsersPrepareTest {
 
     @Test
     @WithMockUser(username = "username", roles = "USER")
-    @Description("Успешное получение задач пользователя по названию приоритета")
-    public void givenTasksOfUser_whenGetTasksByNamePriority_thenGetListTasksOfUser_roleUser_ok() throws Exception {
+    @Description("Успешное получение списка задач пользователя по названию приоритета")
+    public void givenTasksOfUserPriorityLow_whenGetTasksByNamePriority_thenGetListTasksOfUser_roleUser_ok() {
         //given
         UserEntity user = userGenerate("username", "test@email.ru");
 
@@ -63,9 +63,8 @@ public class GetListTasksUsersTest extends GetListTasksUsersPrepareTest {
 
     @Test
     @WithMockUser(username = "username", roles = "USER")
-    @Description("Успешное получение задач по промежутку дат от начал и до конца")
-    public void givenTasksOfUser_whenGetTasksByDateStartFinish_thenGetListTasksOfUserByDate_roleUser_ok()
-                                                                                    throws Exception {
+    @Description("Успешное получение списка задач, переданы параметры дат dateTimeStart, dateTimeFinish")
+    public void givenTasksOfUser_whenGetTasksByDateStartFinish_thenGetListTasksOfUserByDate_roleUser_ok() {
         //given
         UserEntity user = userGenerate("username", "test@email.ru");
 
@@ -83,14 +82,12 @@ public class GetListTasksUsersTest extends GetListTasksUsersPrepareTest {
                      .andExpect(jsonPath("$.*", hasSize(2)))
                      .andExpect(jsonPath("$[0].idTask").value(addEntity.getIdTask()))
                      .andExpect(jsonPath("$[1].idTask").value(addEntity1.getIdTask()));
-
-
     }
 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Неудачная попытка получения задач по несуществующему названию приоритета")
-    public void whenGetTasksByIdPriority_thenIdPriorityNotExists_roleAdmin_fail() throws Exception {
+    public void whenGetTasksByIdPriority_thenIdPriorityNotExists_roleAdmin_fail() {
         //when
         ResultActions resultActions = getActionResult(
                 "/api/tasks/users?idPriority={idPriority}", EPriority.MEDIUM
@@ -103,8 +100,7 @@ public class GetListTasksUsersTest extends GetListTasksUsersPrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "USER")
     @Description("Неудачная попытка получения задач по дате старта, необходим параметр даты конца")
-    public void givenTasksOfUser_whenGetTasksByDateAfter_thenOnlyStartDateTimeIsInvalidParam_roleUser_fail()
-                                                                                          throws Exception {
+    public void givenTasksOfUser_whenGetTasksByDateAfter_thenOnlyStartDateTimeIsInvalidParam_roleUser_fail() {
         //given
         UserEntity user = userGenerate("username", "test@email.ru");
 
@@ -122,8 +118,7 @@ public class GetListTasksUsersTest extends GetListTasksUsersPrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "USER")
     @Description("Неудачная попытка получения задач по дате финиша, , необходим параметр даты начала")
-    public void givenTasksOfUser_whenGetTasksByDateFinish_thenOnlyDateFinishIsInvalidParam_roleAdmin_fail()
-                                                                                     throws Exception {
+    public void givenTasksOfUser_whenGetTasksByDateFinish_thenOnlyDateFinishIsInvalidParam_roleAdmin_fail() {
         //given
         UserEntity user = userGenerate("username", "test@email.ru");
 

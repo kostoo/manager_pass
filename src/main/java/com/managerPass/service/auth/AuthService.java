@@ -1,20 +1,20 @@
 package com.managerPass.service.auth;
 
-import com.managerPass.entity.Enum.ERole;
-import com.managerPass.entity.RoleEntity;
-import com.managerPass.entity.UserEntity;
-import com.managerPass.entity.UserSecurity;
-import com.managerPass.entity.ValidateTokenEntity;
+import com.managerPass.jpa.entity.Enum.ERole;
+import com.managerPass.jpa.entity.RoleEntity;
+import com.managerPass.jpa.entity.UserEntity;
+import com.managerPass.jpa.entity.UserSecurity;
+import com.managerPass.jpa.entity.ValidateTokenEntity;
 import com.managerPass.mail.AppMailSender;
 import com.managerPass.payload.request.LoginRequest;
 import com.managerPass.payload.request.SignupRequest;
 import com.managerPass.payload.response.JwtToken;
 import com.managerPass.payload.response.MessageResponse;
 import com.managerPass.payload.response.RegistrationResponse;
-import com.managerPass.repository.RoleRepository;
-import com.managerPass.repository.UserEntityRepository;
+import com.managerPass.jpa.repository.RoleRepository;
+import com.managerPass.jpa.repository.UserEntityRepository;
 import com.managerPass.config.security.JwtUtils;
-import com.managerPass.service.ValidateTokenRegisterEntityService;
+import com.managerPass.jpa.repository_service.ValidateTokenRegisterRepositoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,7 +42,7 @@ public class AuthService {
     private final PasswordEncoder encoder;
     private final JwtUtils jwtUtils;
     private final AppMailSender mailSender;
-    private final ValidateTokenRegisterEntityService validateTokenRegisterEntityService;
+    private final ValidateTokenRegisterRepositoryService validateTokenRegisterRepositoryService;
 
     @Value("${app.urlToRegister}")
     private String urlToRegister;
@@ -127,7 +127,7 @@ public class AuthService {
         validateTokenEntity.setExpiryDate(expiryDateToken);
         validateTokenEntity.setUserEntity(user);
 
-        validateTokenEntity = validateTokenRegisterEntityService.addToken(validateTokenEntity);
+        validateTokenEntity = validateTokenRegisterRepositoryService.addToken(validateTokenEntity);
 
 
         mailSender.sendEmail(signUpRequest.getEmail(), "activate user",
@@ -138,7 +138,7 @@ public class AuthService {
     }
 
     public ResponseEntity<MessageResponse> activateUser(String token) {
-        ValidateTokenEntity validateTokenEntity = validateTokenRegisterEntityService.findByToken(token);
+        ValidateTokenEntity validateTokenEntity = validateTokenRegisterRepositoryService.findByToken(token);
         UserEntity userEntity = validateTokenEntity.getUserEntity();
 
         if (validateTokenEntity.getExpiryDate().after(new Date())) {

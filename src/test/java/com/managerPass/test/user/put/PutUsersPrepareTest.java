@@ -1,10 +1,9 @@
 package com.managerPass.test.user.put;
 
-import com.managerPass.entity.Enum.ERole;
-import com.managerPass.entity.UserEntity;
+import com.managerPass.jpa.entity.Enum.ERole;
+import com.managerPass.jpa.entity.UserEntity;
 import com.managerPass.payload.request.UserRequest;
 import com.managerPass.prepateTest.PrepareServiceTest;
-import com.managerPass.util.UserConverter;
 import org.springframework.test.web.servlet.ResultActions;
 
 public class PutUsersPrepareTest extends PrepareServiceTest {
@@ -17,10 +16,10 @@ public class PutUsersPrepareTest extends PrepareServiceTest {
     }
 
     protected UserRequest userUpdateGenerate() {
-        return UserConverter.userRequestGenerate(
-                userProvider.userGenerate(
+        return userProvider.userRequestGenerate(
+                    userProvider.userGenerate(
                     "update", "update@email", ERole.ROLE_USER, "nik", "nest", false
-                )
+                    )
         );
     }
 

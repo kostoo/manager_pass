@@ -1,7 +1,7 @@
-package com.managerPass.repository;
+package com.managerPass.jpa.repository;
 
-import com.managerPass.entity.Enum.ERole;
-import com.managerPass.entity.RoleEntity;
+import com.managerPass.jpa.entity.Enum.ERole;
+import com.managerPass.jpa.entity.RoleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

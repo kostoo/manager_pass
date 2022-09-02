@@ -1,6 +1,6 @@
 package com.managerPass.payload.request;
 
-import com.managerPass.entity.Enum.ERole;
+import com.managerPass.jpa.entity.Enum.ERole;
 import lombok.Getter;
 import lombok.Setter;
 import javax.validation.constraints.Email;

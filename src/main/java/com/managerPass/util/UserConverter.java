@@ -1,15 +1,17 @@
 package com.managerPass.util;
 
-import com.managerPass.entity.UserEntity;
+import com.managerPass.jpa.entity.UserEntity;
 import com.managerPass.payload.request.UserRequest;
 import com.managerPass.payload.response.UserResponse;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class UserConverter {
 
-    public static UserEntity UserEntityGenerate(UserRequest userRequest, Long idUser) {
+    public UserEntity userEntityGenerate(UserRequest userRequest, Long idUser) {
         return UserEntity.builder().idUser(idUser)
                                    .name(userRequest.getName())
                                    .lastName(userRequest.getLastName())
@@ -19,7 +21,7 @@ public class UserConverter {
                                    .build();
     }
 
-    public static UserResponse UserResponseGenerate(UserEntity user) {
+    public UserResponse userResponseGenerate(UserEntity user) {
         return UserResponse.builder().idUser(user.getIdUser())
                                      .username(user.getUsername())
                                      .name(user.getName())
@@ -29,7 +31,7 @@ public class UserConverter {
                                      .email(user.getEmail())
                                      .build();
     }
-    public static UserEntity userEntityGenerate(UserRequest userRequest) {
+    public UserEntity userEntityGenerate(UserRequest userRequest) {
         return  UserEntity.builder().username(userRequest.getUsername())
                                     .name(userRequest.getName())
                                     .lastName(userRequest.getLastName())
@@ -38,7 +40,7 @@ public class UserConverter {
                                     .build();
     }
 
-    public static UserRequest userRequestGenerate(UserEntity user) {
+    public UserRequest userRequestGenerate(UserEntity user) {
         return UserRequest.builder()
                           .username(user.getUsername())
                           .name(user.getName())
@@ -47,7 +49,7 @@ public class UserConverter {
                           .build();
     }
 
-    public static List<UserResponse> convertListUserEntityToUserResponse(List<UserEntity> userEntities) {
-        return userEntities.stream().map(UserConverter::UserResponseGenerate).collect(Collectors.toList());
+    public List<UserResponse> convertListUserEntityToUserResponse(List<UserEntity> userEntities) {
+        return userEntities.stream().map(this::userResponseGenerate).collect(Collectors.toList());
     }
 }

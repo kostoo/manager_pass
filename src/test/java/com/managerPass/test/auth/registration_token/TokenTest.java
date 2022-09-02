@@ -1,7 +1,7 @@
 package com.managerPass.test.auth.registration_token;
 
-import com.managerPass.entity.UserEntity;
-import com.managerPass.entity.ValidateTokenEntity;
+import com.managerPass.jpa.entity.UserEntity;
+import com.managerPass.jpa.entity.ValidateTokenEntity;
 import com.managerPass.payload.request.SignupRequest;
 import com.managerPass.payload.response.RegistrationResponse;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ public class TokenTest extends TokenPrepareTest {
 
     @Test
     @Description("Регистрация и успешная активация токена регистрации пользователя ")
-    public void givenSignUpRequest_whenRegistrationActivateTokenReg_thenRegistrationActivateUser_ok() throws Exception {
+    public void givenSignUpRequest_whenRegistrationActivateTokenReg_thenRegistrationActivateUser_ok() {
         //given
         SignupRequest registrationUser = signupRequestGenerate();
         String userName = registrationUser.getUsername();
@@ -38,9 +38,9 @@ public class TokenTest extends TokenPrepareTest {
     }
 
     @Test
-    @Description("Регистрация с неудачной активацией пользователя из-за неправильного токена регистрации пользователя")
-    public void givenRegistrationUser_whenRegistrationAndActivateTokenReg_thenRegistrationUnValidTokenActivate_fail()
-                                                                                               throws Exception {
+    @Description("Регистрация с неудачной активацией пользователя, токен регистрации пользователя отличается " +
+                 "от зарегистрированного")
+    public void givenRegistrationUserWithNotValidToken_whenRegistrationAndActivateTokenReg_thenRegistrationUnValidTokenActivate_fail() {
         //given
         SignupRequest registrationUser = signupRequestGenerate();
         String userName = registrationUser.getUsername();
@@ -60,9 +60,8 @@ public class TokenTest extends TokenPrepareTest {
     }
 
     @Test
-    @Description("Регистрация с неудачной активацией истекшего срока жизни токена регистрации пользователя")
-    public void givenRegistrationUser_whenRegistrationAndActivateToken_thenTokenActivateExpiredToken_fail()
-                                                                                         throws Exception {
+    @Description("Регистрация с неудачной активацией токена, у токена регистрации истек срок жизни ")
+    public void givenRegistrationUserWithAnExpiredTimeToken_whenRegistrationAndActivateToken_thenTokenActivateExpiredToken_fail() {
         //given
         SignupRequest registrationUser = signupRequestGenerate();
         String userName = registrationUser.getUsername();

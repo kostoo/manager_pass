@@ -1,6 +1,6 @@
 package com.managerPass.payload.request;
 
-import com.managerPass.entity.RoleEntity;
+import com.managerPass.jpa.entity.RoleEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

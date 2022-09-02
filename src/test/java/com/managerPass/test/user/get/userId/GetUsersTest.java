@@ -1,6 +1,6 @@
 package com.managerPass.test.user.get.userId;
 
-import com.managerPass.entity.UserEntity;
+import com.managerPass.jpa.entity.UserEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.rest.core.annotation.Description;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -15,7 +15,7 @@ public class GetUsersTest extends GetUsersPrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Успешное получение пользователя по id")
-    public void givenUser_whenGetUsersIdUser_thenGetUser_roleAdmin_ok() throws Exception {
+    public void givenUser_whenGetUsersIdUser_thenGetUser_roleAdmin_ok() {
         //given
         UserEntity user = userGenerate();
 
@@ -35,7 +35,7 @@ public class GetUsersTest extends GetUsersPrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Неудачное получение пользователя по id не существующего пользователя")
-    public void whenGetUsersIdUser_thenIdUserIsNotExists_roleAdmin_fail() throws Exception {
+    public void whenGetUsersIdUser_thenIdUserIsNotExists_roleAdmin_fail() {
         //when
         ResultActions resultActions = getActionResultIdUser(0L);
 
@@ -46,7 +46,7 @@ public class GetUsersTest extends GetUsersPrepareTest {
 
     @Test
     @Description("Неудачное получение пользователя по id неавторизованным пользователем")
-    public void whenGetUsersIdUser_thenUnAuthorized_fail() throws Exception {
+    public void whenGetUsersIdUser_thenUnAuthorized_fail() {
         //when
         ResultActions resultActions = getActionResultIdUser(0L);
 

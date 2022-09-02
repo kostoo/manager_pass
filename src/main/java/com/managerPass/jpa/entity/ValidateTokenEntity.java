@@ -1,4 +1,4 @@
-package com.managerPass.entity;
+package com.managerPass.jpa.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

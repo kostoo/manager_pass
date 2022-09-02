@@ -1,6 +1,6 @@
 package com.managerPass.test.user.post;
 
-import com.managerPass.entity.UserEntity;
+import com.managerPass.jpa.entity.UserEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.rest.core.annotation.Description;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -14,7 +14,7 @@ public class PostUsersTest extends PostUsersPrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Успешное добавление пользователя с обязательными параметрами")
-    public void givenUser_whenPostUsers_thenAddUsers_roleAdmin_ok() throws Exception {
+    public void givenUser_whenPostUsers_thenAddUsers_roleAdmin_ok() {
         //given
         UserEntity user = userGenerate(
                 "name","lastname","username", "email@email", false
@@ -30,7 +30,7 @@ public class PostUsersTest extends PostUsersPrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Неудачное добавление пользователя с существующим username")
-    public void givenUser_whenAddUsers_whenExistsUserName_fail() throws Exception {
+    public void givenUser_whenAddUsers_whenExistsUserName_fail() {
         //given
         userGenerate("name","lastname","username", "email@email", true);
         UserEntity userAlreadyExists = userGenerate(
@@ -47,7 +47,7 @@ public class PostUsersTest extends PostUsersPrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Неудачное добавление пользователя с существующим email")
-    public void givenUser_whenAddUsers_thenEmailExists_fail() throws Exception {
+    public void givenUser_whenAddUsers_thenEmailExists_fail() {
         //given
         userGenerate("name","lastname","username", "email@email", true);
         UserEntity userAlreadyExists = userGenerate(
@@ -64,7 +64,7 @@ public class PostUsersTest extends PostUsersPrepareTest {
 
     @Test
     @Description("Неудачное добавление пользователя, из-за неавторизированного пользователя")
-    public void givenUser_whenAddUsers_thenUnAuthorized_fail() throws Exception {
+    public void givenUser_whenAddUsers_thenUnAuthorized_fail() {
         //given
         UserEntity user = userGenerate(
                 "name","lastname","username", "email@email", false
