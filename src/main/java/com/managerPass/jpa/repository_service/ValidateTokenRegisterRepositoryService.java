@@ -1,7 +1,7 @@
-package com.managerPass.service;
+package com.managerPass.jpa.repository_service;
 
-import com.managerPass.entity.ValidateTokenEntity;
-import com.managerPass.repository.ValidateTokenRepository;
+import com.managerPass.jpa.entity.ValidateTokenEntity;
+import com.managerPass.jpa.repository.ValidateTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -9,7 +9,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
-public class ValidateTokenRegisterEntityService {
+public class ValidateTokenRegisterRepositoryService {
 
     private final ValidateTokenRepository validateTokenRepository;
 

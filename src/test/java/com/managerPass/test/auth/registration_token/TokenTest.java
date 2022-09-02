@@ -1,7 +1,7 @@
 package com.managerPass.test.auth.registration_token;
 
-import com.managerPass.entity.UserEntity;
-import com.managerPass.entity.ValidateTokenEntity;
+import com.managerPass.jpa.entity.UserEntity;
+import com.managerPass.jpa.entity.ValidateTokenEntity;
 import com.managerPass.payload.request.SignupRequest;
 import com.managerPass.payload.response.RegistrationResponse;
 import org.junit.jupiter.api.Test;
@@ -18,8 +18,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class TokenTest extends TokenPrepareTest {
 
     @Test
-    @Description("Регистрация и успешная активация токена регистрации пользователя ")
-    public void givenSignUpRequest_whenRegistrationActivateTokenReg_thenRegistrationActivateUser_ok() throws Exception {
+    @Description("Регистрация и успешная активация токена пользователя")
+    public void givenSignUpRequest_whenRegistrationActivateTokenReg_thenRegistrationActivateUser_ok() {
         //given
         SignupRequest registrationUser = signupRequestGenerate();
         String userName = registrationUser.getUsername();
@@ -32,15 +32,14 @@ public class TokenTest extends TokenPrepareTest {
         assertRegistrationResponse(registrationResponse);
         assert userRepositoryTest.existsByUsername(userName);
 
-        resultActions.andExpect(status().is2xxSuccessful());
+        assertStatus(resultActions, status().is2xxSuccessful());
 
         assert userRepositoryTest.existsByUsernameAndIsAccountActiveEquals(userName, true);
     }
 
     @Test
-    @Description("Регистрация с неудачной активацией пользователя из-за неправильного токена регистрации пользователя")
-    public void givenRegistrationUser_whenRegistrationAndActivateTokenReg_thenRegistrationUnValidTokenActivate_fail()
-                                                                                               throws Exception {
+    @Description("Регистрация с неудачной активацией пользователя, токен регистрации введен не верно" )
+    public void givenRegistrationUserWithNotValidToken_whenRegistrationAndActivateTokenReg_thenRegistrationUnValidTokenActivate_fail() {
         //given
         SignupRequest registrationUser = signupRequestGenerate();
         String userName = registrationUser.getUsername();
@@ -50,19 +49,21 @@ public class TokenTest extends TokenPrepareTest {
 
         String badToken = registrationResponse.getRegistrationToken() + 1;
 
-        sendPatchTokenAndGetResultActions(badToken).andExpect(status().is4xxClientError());
+        ResultActions resultActions = sendPatchTokenAndGetResultActions(badToken);
 
         //then
+
         assertRegistrationResponse(registrationResponse);
+
+        assertStatus(resultActions, status().is4xxClientError());
 
         assert userRepositoryTest.existsByUsername(userName);
 
     }
 
     @Test
-    @Description("Регистрация с неудачной активацией истекшего срока жизни токена регистрации пользователя")
-    public void givenRegistrationUser_whenRegistrationAndActivateToken_thenTokenActivateExpiredToken_fail()
-                                                                                         throws Exception {
+    @Description("Регистрация с неудачной активацией токена, у токена регистрации истек срок жизни")
+    public void givenRegistrationUserWithAnExpiredTimeToken_whenRegistrationAndActivateToken_thenTokenActivateExpiredToken_fail() {
         //given
         SignupRequest registrationUser = signupRequestGenerate();
         String userName = registrationUser.getUsername();
@@ -90,7 +91,7 @@ public class TokenTest extends TokenPrepareTest {
 
         assert userRepositoryTest.existsByUsername(userName);
 
-        resultActions.andExpect(status().is4xxClientError());
+        assertStatus(resultActions, status().is4xxClientError());
 
     }
 }

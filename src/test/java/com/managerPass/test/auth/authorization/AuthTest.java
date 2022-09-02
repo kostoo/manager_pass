@@ -6,13 +6,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @Description("Авторизация пользователя")
 public class AuthTest extends AuthPrepareTest {
 
     @Test
     @Description("Успешная авторизация пользователя")
-    public void givenLoginRequest_whenAuth_thenLogin_ok() throws Exception {
+    public void givenLoginRequest_whenAuth_thenLogin_ok() {
         //given
         LoginRequest loginRequest = new LoginRequest("kosto", "password");
 
@@ -20,14 +19,14 @@ public class AuthTest extends AuthPrepareTest {
         ResultActions resultActions = sendPostLoginAndGetResultActions(loginRequest);
 
         //then
-        resultActions.andExpect(status().is2xxSuccessful());
+        assertStatus(resultActions, status().is2xxSuccessful());
 
         assert userRepositoryTest.existsByUsername(loginRequest.getUsername());
     }
 
     @Test
-    @Description("Неудачная авторизация пользователя c неправильным логином")
-    public void givenLoginRequest_whenAuth_thenInvalidUserName_fail() throws Exception {
+    @Description("Неудачная попытка авторизации пользователя, пользователя с указанным логином не существует")
+    public void givenLoginRequestWithInvalidLogin_whenAuth_thenInvalidUserName_fail() {
         //given
         LoginRequest loginRequest = new LoginRequest("kosto", "password");
 
@@ -35,12 +34,12 @@ public class AuthTest extends AuthPrepareTest {
         ResultActions resultActions = sendPostLoginAndGetResultActions(loginRequest);
 
         //then
-        resultActions.andExpect(status().is4xxClientError());
+        assertStatus(resultActions, status().is4xxClientError());
     }
 
     @Test
-    @Description("Неудачная попытка авторизации пользователя с неправильным паролем")
-    public void givenLoginRequest_whenAuth_thenInvalidPassword_fail() throws Exception {
+    @Description("Неудачная попытка авторизации пользователя, введен неправильный пароль")
+    public void givenLoginRequestWithInvalidPassword_whenAuth_thenInvalidPassword_fail() {
         //given
         LoginRequest loginRequest = new LoginRequest("invalidUser", "password");
 
@@ -48,6 +47,6 @@ public class AuthTest extends AuthPrepareTest {
         ResultActions resultActions = sendPostLoginAndGetResultActions(loginRequest);
 
         //then
-        resultActions.andExpect(status().is4xxClientError());
+        assertStatus(resultActions, status().is4xxClientError());
     }
 }

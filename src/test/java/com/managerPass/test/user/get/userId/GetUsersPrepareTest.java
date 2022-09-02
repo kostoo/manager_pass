@@ -1,13 +1,13 @@
 package com.managerPass.test.user.get.userId;
 
-import com.managerPass.entity.Enum.ERole;
-import com.managerPass.entity.UserEntity;
+import com.managerPass.jpa.entity.Enum.ERole;
+import com.managerPass.jpa.entity.UserEntity;
 import com.managerPass.prepateTest.PrepareServiceTest;
 import org.springframework.test.web.servlet.ResultActions;
 
 public class GetUsersPrepareTest extends PrepareServiceTest {
 
-    protected ResultActions getActionResultIdUser(Long param) throws Exception {
+    protected ResultActions getActionResultIdUser(Long param) {
         return getActionResult("/api/users/{idUser}", param);
     }
 
@@ -19,7 +19,7 @@ public class GetUsersPrepareTest extends PrepareServiceTest {
 
     protected UserEntity userGenerate() {
         return userProvider.userGenerate(
-                "test", "test@test.ru", ERole.ROLE_ADMIN, "nik","nest", true
+                "test", "test@test.ru", ERole.ROLE_ADMIN, "nik", "nest", true
         );
     }
 }

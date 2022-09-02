@@ -1,14 +1,14 @@
 package com.managerPass.test.task.get.tasksIdTask;
 
-import com.managerPass.entity.Enum.EPriority;
-import com.managerPass.entity.Enum.ERole;
-import com.managerPass.entity.TaskEntity;
+import com.managerPass.jpa.entity.Enum.EPriority;
+import com.managerPass.jpa.entity.Enum.ERole;
+import com.managerPass.jpa.entity.TaskEntity;
 import com.managerPass.prepateTest.PrepareServiceTest;
 import org.springframework.test.web.servlet.ResultActions;
 
 public class GetTasksPrepareTest extends PrepareServiceTest {
 
-    protected ResultActions getTasksActionResult(Long uriVars) throws Exception {
+    protected ResultActions getTasksActionResult(Long uriVars) {
        return getActionResult("/api/tasks/{idTask}", uriVars);
     }
 

@@ -1,8 +1,8 @@
 package com.managerPass.test.task.get.listTasksName;
 
-import com.managerPass.entity.Enum.EPriority;
-import com.managerPass.entity.Enum.ERole;
-import com.managerPass.entity.TaskEntity;
+import com.managerPass.jpa.entity.Enum.EPriority;
+import com.managerPass.jpa.entity.Enum.ERole;
+import com.managerPass.jpa.entity.TaskEntity;
 import com.managerPass.prepateTest.PrepareServiceTest;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -21,7 +21,7 @@ public class GetListTasksNamePrepareTest extends PrepareServiceTest {
         );
     }
 
-    protected ResultActions getActionsTasksName(Object... uriVars) throws Exception {
+    protected ResultActions getActionsTasksName(Object... uriVars) {
         return getActionResult("/api/tasks?name={name}", uriVars);
     }
 }

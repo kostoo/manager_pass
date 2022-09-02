@@ -1,4 +1,4 @@
-package com.managerPass.entity.Enum;
+package com.managerPass.jpa.entity.Enum;
 
 public enum ERole {
     ROLE_USER,

@@ -1,9 +1,10 @@
-package com.managerPass.service;
+package com.managerPass.jpa.repository_service;
 
-import com.managerPass.entity.UserEntity;
 import com.managerPass.exception.CustomRestExceptionHandler;
+import com.managerPass.jpa.entity.UserEntity;
+import com.managerPass.jpa.repository.UserEntityRepository;
+import com.managerPass.payload.request.AddUserRequest;
 import com.managerPass.payload.request.UserRequest;
-import com.managerPass.repository.UserEntityRepository;
 import com.managerPass.util.UserConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,31 +19,16 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserEntityService {
+public class UserRepositoryService {
 
     private final UserEntityRepository userEntityRepository;
-
-    public List<UserEntity> getUsers() {
-        return userEntityRepository.findAll();
-    }
+    private final UserConverter userConverter;
 
     public List<UserEntity> getUsersNameLastName(String name, String lastName, Pageable pageable) {
-
-        List<UserEntity> listUsers;
-
-        if (name != null & lastName != null) {
-           listUsers = userEntityRepository.findAllByNameContainsAndLastNameContains(name, lastName , pageable);
-        } else  if (name == null & lastName != null) {
-           listUsers = userEntityRepository.findAllByLastNameContains(lastName, pageable);
-        } else if (name != null) {
-           listUsers = userEntityRepository.findAllByNameContains(name, pageable);
-        } else {
-           listUsers = userEntityRepository.findAll(pageable).getContent();
-        }
-        return listUsers;
+        return userEntityRepository.findAllByNameAndLastName(name, lastName, pageable);
     }
 
-    private UserEntity getUserEntityById(Long idUser) {
+    public UserEntity getUserById(Long idUser) {
         return userEntityRepository.findById(idUser).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User not found Id : %x", idUser))
         );
@@ -54,32 +40,26 @@ public class UserEntityService {
         }
     }
 
-    public UserEntity getUserEntityByUsername(String username) {
+    public UserEntity getUserByUsername(String username) {
         return userEntityRepository.findByUsername(username).orElseThrow(() ->
              new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User %s not found ", username))
         );
     }
 
-    public void deleteUsersIdUser(Long idUser) throws ResponseStatusException {
+    public void deleteUserByIdUser(Long idUser) throws ResponseStatusException {
        existByIdUser(idUser);
        userEntityRepository.deleteById(idUser);
     }
 
-    public UserEntity getUsersIdUser(Long idUser) {
-        return getUserEntityById(idUser);
-    }
-
-    public UserEntity getUsersUserName(String userName) {
-        return getUserEntityByUsername(userName);
-    }
-
-    public UserEntity addUser(UserRequest userRequest) {
+    public UserEntity addUser(AddUserRequest userRequest) {
         try {
 
-            UserEntity userEntity = UserConverter.userEntityGenerate(userRequest);
-
-            userEntity.setIsAccountActive(false);
-            userEntity.setIsAccountNonBlock(true);
+            UserEntity userEntity = UserEntity.builder().username(userRequest.getUsername())
+                                                        .name(userRequest.getName())
+                                                        .lastName(userRequest.getLastName())
+                                                        .email(userRequest.getEmail())
+                                                        .roles(userRequest.getRoles())
+                                                        .build();
 
             return userEntityRepository.save(userEntity);
 
@@ -91,11 +71,11 @@ public class UserEntityService {
     }
 
     public UserEntity updateUser(UserRequest userRequest, Long idUser) throws ResponseStatusException {
-        return userEntityRepository.save(UserConverter.UserEntityGenerate(userRequest, idUser));
+        return userEntityRepository.save(userConverter.userEntityGenerate(userRequest, idUser));
     }
 
     public UserEntity postIsUserBlock(Long idUser, Boolean isAccountNonBlock) {
-        UserEntity userEntity = getUserEntityById(idUser);
+        UserEntity userEntity = getUserById(idUser);
         userEntity.setIsAccountNonBlock(isAccountNonBlock);
 
         return userEntityRepository.save(userEntity);

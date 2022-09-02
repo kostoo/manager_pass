@@ -1,10 +1,11 @@
 package com.managerPass.provider;
 
-import com.managerPass.entity.Enum.EPriority;
-import com.managerPass.entity.Enum.ERole;
-import com.managerPass.entity.PriorityEntity;
-import com.managerPass.entity.TaskEntity;
-import com.managerPass.entity.UserEntity;
+import com.managerPass.jpa.entity.Enum.EPriority;
+import com.managerPass.jpa.entity.Enum.ERole;
+import com.managerPass.jpa.entity.PriorityEntity;
+import com.managerPass.jpa.entity.TaskEntity;
+import com.managerPass.jpa.entity.UserEntity;
+import com.managerPass.payload.request.task.TaskRequest;
 import com.managerPass.provider.repository.TaskRepositoryTest;
 import com.managerPass.util.ObjectGeneratorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +23,23 @@ public class TaskProvider {
     @Autowired
     private UserProvider userProvider;
 
+    public TaskRequest taskRequestGenerate(TaskEntity taskEntity) {
+        return TaskRequest.builder().name(taskEntity.getName())
+                                    .message(taskEntity.getMessage())
+                                    .dateTimeStart(taskEntity.getDateTimeStart())
+                                    .dateTimeFinish(taskEntity.getDateTimeFinish())
+                                    .userEntity(taskEntity.getUserEntity())
+                                    .priority(taskEntity.getPriority())
+                                    .build();
+    }
+
     public TaskEntity taskGenerate(String name, String message, EPriority ePriority, ERole eRole, Boolean addInDb) {
 
         PriorityEntity priorityEntity = priorityProvider.priorityGenerate(ePriority);
 
         TaskEntity task = ObjectGeneratorUtil.taskEntityGeneration(
            name, message, priorityEntity, userProvider.userGenerate(
-                   "test", "test@test.ru", eRole, "nikita","lastname", true
+                   "test", "test@test.ru", eRole, "nikita", "lastname", true
                         )
         );
 

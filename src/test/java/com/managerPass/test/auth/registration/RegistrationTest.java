@@ -2,42 +2,38 @@ package com.managerPass.test.auth.registration;
 
 
 import com.managerPass.payload.request.SignupRequest;
-import com.managerPass.payload.response.RegistrationResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.rest.core.annotation.Description;
 
-@Description("Тестирование регистрации пользователя")
+@Description("Регистрация пользователя")
 public class RegistrationTest extends RegistrationPrepareTest {
 
     @Test
     @Description("Успешная регистрация пользователя")
-    public void givenRegistrationUser_whenRegistration_thenRegistration_ok() throws Exception {
+    public void givenRegistrationUser_whenRegistration_thenRegistration_ok()  {
         //given
         SignupRequest registrationUser = signupRequestGenerate();
         String userName = registrationUser.getUsername();
 
         //when
-        RegistrationResponse registrationResponse = sendSignUpRequestAndGetRegistrationResponse(registrationUser);
+        sendSignUpRequest(registrationUser);
 
         //then
-        assert !registrationResponse.getRegistrationToken().isEmpty();
-
         assert userRepositoryTest.existsByUsername(userName);
     }
 
     @Test
-    @Description("Неудачная попытка регистрации пользователя с существующим email")
-    public void givenRegistrationUser_whenRegistration_thenRegistrationAlreadyEmailInUse_fail() throws Exception {
+    @Description("Неудачная попытка регистрации пользователя, пользователь с данным email уже существует")
+    public void givenRegistrationUserWithExistsEmail_whenRegistration_thenRegistrationAlreadyEmailInUse_fail() {
         //given
         SignupRequest registrationUser = signupRequestGenerate();
 
         //when
-        RegistrationResponse registrationResponse = sendSignUpRequestAndGetRegistrationResponse(registrationUser);
+        sendSignUpRequest(registrationUser);
 
         registrationUser.setUsername("notAlreadyUse");
 
         //then
-        assert !registrationResponse.getRegistrationToken().isEmpty();
 
         assert sendSignUpRequestAndGetErrorMessage(registrationUser).getMessage().equals(
                  String.format("Email %s is already in use!", registrationUser.getEmail())
@@ -45,18 +41,16 @@ public class RegistrationTest extends RegistrationPrepareTest {
     }
 
     @Test
-    @Description("Неудачная попытка регистрации пользователя с существующим username")
-    public void givenRegistrationUser_whenRegistration_thenRegistrationAlreadyUserName_fail() throws Exception {
+    @Description("Неудачная попытка регистрации пользователя, пользователь с данным username уже существует")
+    public void givenRegistrationUserWithExistsUsername_whenRegistration_thenRegistrationAlreadyUserName_fail() {
         //given
         SignupRequest registrationUser = signupRequestGenerate();
         String userName = registrationUser.getUsername();
 
         //when
-        RegistrationResponse registrationResponse = sendSignUpRequestAndGetRegistrationResponse(registrationUser);
+        sendSignUpRequest(registrationUser);
 
         //then
-        assert !registrationResponse.getRegistrationToken().isEmpty();
-
         assert sendSignUpRequestAndGetErrorMessage(registrationUser).getMessage().equals(
                 String.format("Username %s is already taken!", userName)
         );

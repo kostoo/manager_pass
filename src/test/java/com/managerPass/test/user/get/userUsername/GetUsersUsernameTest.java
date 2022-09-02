@@ -1,6 +1,6 @@
 package com.managerPass.test.user.get.userUsername;
 
-import com.managerPass.entity.UserEntity;
+import com.managerPass.jpa.entity.UserEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.rest.core.annotation.Description;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -15,7 +15,7 @@ public class GetUsersUsernameTest extends GetUsersUsernamePrepareTest {
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
     @Description("Успешное получение пользователя по username")
-    public void givenUser_whenGetUsersUserName_thenGetListOfUser_roleAdmin_ok() throws Exception {
+    public void givenUser_whenGetUsersUserName_thenGetListOfUser_roleAdmin_ok() {
         //given
         UserEntity user = userGenerate();
 
@@ -23,15 +23,17 @@ public class GetUsersUsernameTest extends GetUsersUsernamePrepareTest {
         ResultActions resultActions = getActionResultUserName(user.getUsername());
 
         //then
-        resultActions.andExpect(jsonPath("$.idUser").value(user.getIdUser()))
-                     .andExpect(jsonPath("$.username").value(user.getUsername()))
-                     .andExpect(status().isOk());
-
+        expectAll(
+                  resultActions,
+                  status().is2xxSuccessful(),
+                  jsonPath("$.idUser").value(user.getIdUser()),
+                  jsonPath("$.username").value(user.getUsername())
+        );
     }
 
     @Test
-    @Description("Неудачное получение пользователя по username неавторизованным пользователем")
-    public void givenUser_whenGetUsersUserName_thenUnAuthorized_fail() throws Exception {
+    @Description("Неудачное получение пользователя по username, пользователь не авторизован")
+    public void givenUserUnAuthorized_whenGetUsersUserName_thenUnAuthorized_fail() {
         //given
         UserEntity user = userGenerate();
 
@@ -39,6 +41,6 @@ public class GetUsersUsernameTest extends GetUsersUsernamePrepareTest {
         ResultActions resultActions = getActionResultUserName(user.getUsername());
 
         //then
-        resultActions.andExpect(status().isUnauthorized());
+        assertStatus(resultActions, status().isUnauthorized());
     }
 }

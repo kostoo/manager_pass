@@ -1,23 +1,23 @@
 package com.managerPass.service.auth;
 
-import com.managerPass.entity.Enum.ERole;
-import com.managerPass.entity.RoleEntity;
-import com.managerPass.entity.UserEntity;
-import com.managerPass.entity.UserSecurity;
-import com.managerPass.entity.ValidateTokenEntity;
+import com.managerPass.config.security.JwtUtils;
+import com.managerPass.jpa.entity.Enum.ERole;
+import com.managerPass.jpa.entity.RoleEntity;
+import com.managerPass.jpa.entity.UserEntity;
+import com.managerPass.jpa.entity.UserSecurity;
+import com.managerPass.jpa.entity.ValidateTokenEntity;
+import com.managerPass.jpa.repository.RoleRepository;
+import com.managerPass.jpa.repository.UserEntityRepository;
+import com.managerPass.jpa.repository_service.ValidateTokenRegisterRepositoryService;
 import com.managerPass.mail.AppMailSender;
 import com.managerPass.payload.request.LoginRequest;
 import com.managerPass.payload.request.SignupRequest;
 import com.managerPass.payload.response.JwtToken;
 import com.managerPass.payload.response.MessageResponse;
-import com.managerPass.payload.response.RegistrationResponse;
-import com.managerPass.repository.RoleRepository;
-import com.managerPass.repository.UserEntityRepository;
-import com.managerPass.config.security.JwtUtils;
-import com.managerPass.service.ValidateTokenRegisterEntityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,6 +25,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -42,12 +43,12 @@ public class AuthService {
     private final PasswordEncoder encoder;
     private final JwtUtils jwtUtils;
     private final AppMailSender mailSender;
-    private final ValidateTokenRegisterEntityService validateTokenRegisterEntityService;
+    private final ValidateTokenRegisterRepositoryService validateTokenRegisterRepositoryService;
 
     @Value("${app.urlToRegister}")
     private String urlToRegister;
 
-    public ResponseEntity<?> authenticateUser(LoginRequest loginRequest) {
+    public ResponseEntity<JwtToken> authenticateUser(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
         );
@@ -58,7 +59,7 @@ public class AuthService {
         UserSecurity userDetails = (UserSecurity) authentication.getPrincipal();
 
         if (!userDetails.isAccountActive() || !userDetails.isEnabled()) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Account not active"));
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Account not active");
         }
 
         return ResponseEntity.ok(new JwtToken(jwt));
@@ -127,18 +128,18 @@ public class AuthService {
         validateTokenEntity.setExpiryDate(expiryDateToken);
         validateTokenEntity.setUserEntity(user);
 
-        validateTokenEntity = validateTokenRegisterEntityService.addToken(validateTokenEntity);
+        validateTokenEntity = validateTokenRegisterRepositoryService.addToken(validateTokenEntity);
 
 
         mailSender.sendEmail(signUpRequest.getEmail(), "activate user",
                   String.format("Please activate your account %s %s",  urlToRegister, validateTokenEntity.getToken())
         );
 
-        return ResponseEntity.ok(new RegistrationResponse(validateTokenEntity.getToken()));
+        return ResponseEntity.ok().build();
     }
 
     public ResponseEntity<MessageResponse> activateUser(String token) {
-        ValidateTokenEntity validateTokenEntity = validateTokenRegisterEntityService.findByToken(token);
+        ValidateTokenEntity validateTokenEntity = validateTokenRegisterRepositoryService.findByToken(token);
         UserEntity userEntity = validateTokenEntity.getUserEntity();
 
         if (validateTokenEntity.getExpiryDate().after(new Date())) {

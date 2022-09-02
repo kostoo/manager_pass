@@ -6,30 +6,21 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.Set;
 
-@Builder
-@AllArgsConstructor
 @Getter
 @Setter
-public class UserRequest {
+@Builder
+@AllArgsConstructor
+public class UpdateUserRequest {
 
-    @NotNull
     private String name;
 
-    @NotNull
     private String lastName;
 
-    @Size(min = 5, max = 20)
     private String username;
 
-    @Size(min = 5, max = 50)
-    @Email
     private String email;
 
     private Set<RoleEntity> roles ;
-
 }

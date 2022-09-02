@@ -1,8 +1,9 @@
 package com.managerPass.provider;
 
-import com.managerPass.entity.Enum.ERole;
-import com.managerPass.entity.RoleEntity;
-import com.managerPass.entity.UserEntity;
+import com.managerPass.jpa.entity.Enum.ERole;
+import com.managerPass.jpa.entity.RoleEntity;
+import com.managerPass.jpa.entity.UserEntity;
+import com.managerPass.payload.request.UserRequest;
 import com.managerPass.provider.repository.UserRepositoryTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,15 @@ public class UserProvider {
                           .roles(Set.of(roleEntity))
                           .isAccountNonBlock(true)
                           .isAccountActive(true)
+                          .build();
+    }
+
+    public UserRequest userRequestGenerate(UserEntity user) {
+        return UserRequest.builder()
+                          .username(user.getUsername())
+                          .name(user.getName())
+                          .roles(user.getRoles())
+                          .email(user.getEmail())
                           .build();
     }
 

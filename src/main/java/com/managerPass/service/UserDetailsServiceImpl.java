@@ -1,8 +1,8 @@
 package com.managerPass.service;
 
-import com.managerPass.entity.UserEntity;
-import com.managerPass.entity.UserSecurity;
-import com.managerPass.repository.UserEntityRepository;
+import com.managerPass.jpa.entity.UserEntity;
+import com.managerPass.jpa.entity.UserSecurity;
+import com.managerPass.jpa.repository.UserEntityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

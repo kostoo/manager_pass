@@ -1,6 +1,6 @@
 package com.managerPass.config.security;
 
-import com.managerPass.entity.UserSecurity;
+import com.managerPass.jpa.entity.UserSecurity;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

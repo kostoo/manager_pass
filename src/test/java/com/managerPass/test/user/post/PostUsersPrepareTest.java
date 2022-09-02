@@ -1,7 +1,7 @@
 package com.managerPass.test.user.post;
 
-import com.managerPass.entity.Enum.ERole;
-import com.managerPass.entity.UserEntity;
+import com.managerPass.jpa.entity.Enum.ERole;
+import com.managerPass.jpa.entity.UserEntity;
 import com.managerPass.prepateTest.PrepareServiceTest;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -10,7 +10,7 @@ public class PostUsersPrepareTest extends PrepareServiceTest {
     @Override
     public void beforeTest() {
         userProvider.userGenerate(
-                "kosto", "test@test.ru", ERole.ROLE_ADMIN, "name", "lastName",true
+                "kosto", "test@test.ru", ERole.ROLE_ADMIN, "name", "lastName", true
         );
     }
 
@@ -18,7 +18,7 @@ public class PostUsersPrepareTest extends PrepareServiceTest {
         return userProvider.userGenerate(username, email, ERole.ROLE_ADMIN, name, lastname, addInDb);
     }
 
-    protected ResultActions sendPostUsersAndGetResultActions(Object addObject) throws Exception {
+    protected ResultActions sendPostUsersAndGetResultActions(Object addObject) {
         return sendPostAndGetResultActions("/api/users", addObject);
     }
 }

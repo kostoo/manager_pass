@@ -1,9 +1,9 @@
 package com.managerPass.test.task.put;
 
-import com.managerPass.entity.Enum.EPriority;
-import com.managerPass.entity.Enum.ERole;
-import com.managerPass.entity.TaskEntity;
-import com.managerPass.payload.request.TaskRequest;
+import com.managerPass.jpa.entity.Enum.EPriority;
+import com.managerPass.jpa.entity.Enum.ERole;
+import com.managerPass.jpa.entity.TaskEntity;
+import com.managerPass.payload.request.task.TaskRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.rest.core.annotation.Description;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -12,13 +12,13 @@ import org.springframework.test.web.servlet.ResultActions;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Description("Тестирование обновления задач")
+@Description("Обновление задачи")
 public class PutTasksTest extends PutTasksPrepareTest {
 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")
-    @Description("Успешное обновление задачи c ролью администратора")
-    public void givenTask_whenUpdateTasksById_thenUpdateTask_roleAdmin_ok() throws Exception {
+    @Description("Успешное обновление задачи")
+    public void givenTask_whenUpdateTasksById_thenUpdateTask_roleAdmin_ok() {
         //given
         TaskEntity taskEntity = taskAddGenerate();
         TaskRequest updateTask = taskUpdateGenerate(
@@ -29,33 +29,18 @@ public class PutTasksTest extends PutTasksPrepareTest {
         ResultActions resultActions = sendPutTaskResponseAndGetResultActions(updateTask, taskEntity.getIdTask());
 
         //then
-        resultActions.andExpect(status().is2xxSuccessful())
-                     .andExpect(jsonPath("$.idTask").value(taskEntity.getIdTask()))
-                     .andExpect(jsonPath("$.name").value(taskEntity.getName()));
-    }
-
-    @Test
-    @WithMockUser(username = "kosto", roles = "USER")
-    @Description("Успешное обновление задачи c ролью пользователя")
-    public void givenTask_whenUpdateTasksById_thenUpdateTask_roleUser_ok() throws Exception {
-        //given
-        TaskEntity taskEntity = taskAddGenerate();
-        TaskRequest updateTask = taskUpdateGenerate(
-                "updateTaskUser", "update", EPriority.HIGH, ERole.ROLE_USER
+        expectAll(
+                  resultActions,
+                  status().is2xxSuccessful(),
+                  jsonPath("$.idTask").value(taskEntity.getIdTask()),
+                  jsonPath("$.name").value(taskEntity.getName())
         );
 
-        //when
-        ResultActions resultActions = sendPutTaskResponseAndGetResultActions(updateTask, taskEntity.getIdTask());
-
-        //then
-        resultActions.andExpect(status().is2xxSuccessful())
-                     .andExpect(jsonPath("$.idTask").value(taskEntity.getIdTask()))
-                     .andExpect(jsonPath("$.name").value(taskEntity.getName()));
     }
 
     @Test
-    @Description("Неудачная поптыка обновления задачи неавторизированным пользователем")
-    public void givenTask_whenUpdateTasksById_thenUnAuthorized_fail() throws Exception {
+    @Description("Неудачная попытка обновления задачи, пользователь не авторизован")
+    public void givenTaskUnAuthorized_whenUpdateTasksById_thenUnAuthorized_fail() {
         //given
         TaskEntity taskEntity = taskAddGenerate();
         TaskRequest updateTask = taskUpdateGenerate(
@@ -66,6 +51,6 @@ public class PutTasksTest extends PutTasksPrepareTest {
         ResultActions resultActions = sendPutTaskResponseAndGetResultActions(updateTask, taskEntity.getIdTask());
 
         //then
-        resultActions.andExpect(status().isUnauthorized());
+        assertStatus(resultActions, status().isUnauthorized());
     }
 }

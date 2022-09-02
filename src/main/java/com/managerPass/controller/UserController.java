@@ -1,9 +1,9 @@
 package com.managerPass.controller;
 
+import com.managerPass.payload.request.AddUserRequest;
 import com.managerPass.payload.request.UserRequest;
 import com.managerPass.payload.response.UserResponse;
-import com.managerPass.service.UserEntityService;
-import com.managerPass.service.UserResponseService;
+import com.managerPass.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,8 +29,7 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController {
 
-    private final UserEntityService userService;
-    private final UserResponseService userResponseService;
+    private final UserService userService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = " hasRole('ADMIN')")
@@ -42,49 +41,49 @@ public class UserController {
                                                                    @RequestParam(required = false) String lastName) {
         Pageable pageable = PageRequest.of(page, sizePage);
 
-        return ResponseEntity.ok(userResponseService.getUsersNameLastName(name, lastName, pageable));
+        return ResponseEntity.ok(userService.getUsersNameLastName(name, lastName, pageable));
     }
 
     @GetMapping(path = "/username", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = " hasRole('ADMIN')")
     public ResponseEntity<UserResponse> getUsersUsername(@RequestParam String username) {
-        return ResponseEntity.ok(userResponseService.getUsersUserName(username));
+        return ResponseEntity.ok(userService.getUsersUserName(username));
     }
 
     @DeleteMapping(path = "/{idUser}")
     @PreAuthorize(value = " hasRole('ADMIN')")
     public ResponseEntity<?> deleteUsersIdUser(@PathVariable (value = "idUser") Long id) {
-        userService.deleteUsersIdUser(id);
+        userService.deleteUserIdUser(id);
         return ResponseEntity.ok().build();
    }
 
     @GetMapping(path = "/{idUser}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = " hasRole('ADMIN')")
     public ResponseEntity<UserResponse> getUserIdUser(@PathVariable (value = "idUser") Long idUser) {
-        return ResponseEntity.ok().body(userResponseService.getUsersIdUser(idUser));
+        return ResponseEntity.ok().body(userService.getUsersIdUser(idUser));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = " hasRole('ADMIN')")
-    public ResponseEntity<UserResponse> postUsers(@Valid @RequestBody UserRequest userRequest) {
-        return ResponseEntity.ok(userResponseService.addUser(userRequest));
+    public ResponseEntity<UserResponse> postUsers(@Valid @RequestBody AddUserRequest userRequest) {
+        return ResponseEntity.ok(userService.addUser(userRequest));
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = " hasRole('ADMIN')")
     public ResponseEntity<UserResponse> putUsers(@Valid @RequestBody UserRequest userRequest, Long idUser) {
-       return ResponseEntity.ok().body(userResponseService.updateUser(userRequest, idUser));
+       return ResponseEntity.ok().body(userService.updateUser(userRequest, idUser));
     }
 
     @PatchMapping(path = "/block", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = " hasRole('ADMIN')")
     public ResponseEntity<UserResponse> postUsersBlockIdUser(@RequestParam Long idUser) {
-        return ResponseEntity.ok(userResponseService.postIsUserBlock(idUser, true));
+        return ResponseEntity.ok(userService.postIsUserBlock(idUser, true));
     }
 
     @PatchMapping(path = "/unblock", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = " hasRole('ADMIN')")
     public ResponseEntity<UserResponse> patchUsersUnBlockIdUser(@RequestParam Long idUser) {
-        return ResponseEntity.ok(userResponseService.postIsUserBlock(idUser, false));
+        return ResponseEntity.ok(userService.postIsUserBlock(idUser, false));
     }
 }

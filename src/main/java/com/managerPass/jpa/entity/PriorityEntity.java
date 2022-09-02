@@ -1,6 +1,6 @@
-package com.managerPass.entity;
+package com.managerPass.jpa.entity;
 
-import com.managerPass.entity.Enum.EPriority;
+import com.managerPass.jpa.entity.Enum.EPriority;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

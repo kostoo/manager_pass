@@ -1,53 +1,45 @@
 package com.managerPass.test.task.delete;
 
-import com.managerPass.entity.TaskEntity;
+import com.managerPass.jpa.entity.TaskEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.rest.core.annotation.Description;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Description("Тестирование удаления задач")
+@Description("Удаление задач")
 public class DeleteTaskIdTaskTest extends DeleteTasksPrepareTest {
 
     @Test
     @Description("Успешное удаление задачи по id")
     @WithMockUser(username = "kosto", roles = "ADMIN")
-    public void givenTask_whenDeleteTaskById_thenDeleteTask_roleAdmin_ok() throws Exception {
+    public void givenTask_whenDeleteTaskById_thenDeleteTask_roleAdmin_ok() {
         //given
         TaskEntity taskEntity = taskAdminGenerate();
 
         //when
-        deleteByIdTasks(taskEntity.getIdTask()).andExpect(status().is2xxSuccessful());
+        ResultActions resultActions = deleteByIdTasks(taskEntity.getIdTask());
 
         //then
+        assertStatus(resultActions, status().is2xxSuccessful());
+
         assert !taskRepositoryTest.existsById(taskEntity.getIdTask());
     }
 
     @Test
-    @Description("Неудачная попытка удаления несуществующей задачи с использованием роли администратора")
+    @Description("Неудачная попытка удаления задачи, задача с таким id не существует")
     @WithMockUser(username = "kosto", roles = "ADMIN")
-    public void givenTask_whenDeleteTaskById_thenIdTaskNotExists_roleAdmin_fail() throws Exception {
+    public void givenNonExistentTask_whenDeleteTaskById_thenIdTaskNotExists_roleAdmin_fail() {
         //given
         TaskEntity taskEntity = taskAdminGenerate();
 
         //when
-        deleteByIdTasks(0L).andExpect(status().is4xxClientError());
+        ResultActions resultActions = deleteByIdTasks(0L);
 
         //then
+        assertStatus(resultActions, status().is4xxClientError());
         assert taskRepositoryTest.existsById(taskEntity.getIdTask());
     }
 
-    @Test
-    @Description("Неудачная попытка удаления задачи неавторизированным пользователем")
-    public void givenTaskEntity_whenDeleteTaskById_thenUnAuthorized_fail() throws Exception {
-        //given
-        TaskEntity taskEntity = taskAdminGenerate();
-
-        //when
-        deleteByIdTasks(taskEntity.getIdTask()).andExpect(status().isUnauthorized());
-
-        //then
-        assert taskRepositoryTest.existsById(taskEntity.getIdTask());
-    }
 }

@@ -1,14 +1,14 @@
 package com.managerPass.test.task.delete;
 
-import com.managerPass.entity.Enum.EPriority;
-import com.managerPass.entity.Enum.ERole;
-import com.managerPass.entity.TaskEntity;
+import com.managerPass.jpa.entity.Enum.EPriority;
+import com.managerPass.jpa.entity.Enum.ERole;
+import com.managerPass.jpa.entity.TaskEntity;
 import com.managerPass.prepateTest.PrepareServiceTest;
 import org.springframework.test.web.servlet.ResultActions;
 
 public class DeleteTasksPrepareTest extends PrepareServiceTest {
 
-    protected ResultActions deleteByIdTasks(Long param) throws Exception {
+    protected ResultActions deleteByIdTasks(Long param) {
         return deleteById("/api/tasks/{idTask}" , param);
     }
 
