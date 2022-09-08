@@ -19,7 +19,7 @@ public class PostTasksTest extends PostTasksPrepareTest {
     @Description("Успешное добавление задачи c обязательными полями")
     public void givenTaskRequestRequiredParam_whenAddTasksRequiredParameters_thenAddTask_roleAdmin_ok() {
         //given
-        TaskRequest taskRequest = taskDbFalseGenerate("test task", "m", null, ERole.ROLE_ADMIN);
+        TaskRequest taskRequest = taskGenerate("test task", "m", null, ERole.ROLE_ADMIN);
 
         //when
         ResultActions resultActions = sendPostTasksAndGetResultActions(taskRequest);
@@ -36,7 +36,7 @@ public class PostTasksTest extends PostTasksPrepareTest {
     @Description("Успешное добавление задачи со всеми параметрами")
     public void givenTaskRequestAllParam_whenAddTasksAllParam_thenAddTask_roleAdmin_ok() {
         //given
-        TaskRequest taskRequest = taskDbFalseGenerate("task", "m", EPriority.LOW, ERole.ROLE_USER);
+        TaskRequest taskRequest = taskGenerate("task", "m", EPriority.LOW, ERole.ROLE_USER);
 
         //when
         ResultActions resultActions = sendPostTasksAndGetResultActions(taskRequest);
@@ -51,7 +51,7 @@ public class PostTasksTest extends PostTasksPrepareTest {
     @Description("Успешная попытка добавления задачи с приоритетом Low")
     public void givenTaskRequestEPriorityLow_whenAddTasks_thenAddTask_roleUser_ok() {
         //given
-        TaskRequest taskRequest = taskDbFalseGenerate("task", "m", EPriority.MEDIUM, ERole.ROLE_USER);
+        TaskRequest taskRequest = taskGenerate("task", "m", EPriority.MEDIUM, ERole.ROLE_USER);
 
         //when
         ResultActions resultActions = sendPostTasksAndGetResultActions(taskRequest);
@@ -66,7 +66,7 @@ public class PostTasksTest extends PostTasksPrepareTest {
     @Description("Успешная попытка добавления задачи с приоритетом MEDIUM")
     public void givenTaskRequestEPriorityMedium_whenAddTasks_thenAddTask_roleUser_ok() {
         //given
-        TaskRequest taskRequest = taskDbFalseGenerate("task", "m", EPriority.MEDIUM, ERole.ROLE_USER);
+        TaskRequest taskRequest = taskGenerate("task", "m", EPriority.MEDIUM, ERole.ROLE_USER);
 
         //when
         ResultActions resultActions = sendPostTasksAndGetResultActions(taskRequest);
@@ -81,7 +81,7 @@ public class PostTasksTest extends PostTasksPrepareTest {
     @Description("Успешная попытка добавления задачи с приоритетом High")
     public void givenTaskRequestEPriorityHigh_whenAddTasks_thenAddTask_roleUser_ok() {
         //given
-        TaskRequest taskRequest = taskDbFalseGenerate("task", "m", EPriority.HIGH, ERole.ROLE_USER);
+        TaskRequest taskRequest = taskGenerate("task", "m", EPriority.HIGH, ERole.ROLE_USER);
 
         //when
         ResultActions resultActions = sendPostTasksAndGetResultActions(taskRequest);
@@ -96,7 +96,7 @@ public class PostTasksTest extends PostTasksPrepareTest {
     @Description("Неудачная попытка добавления задачи с пустым названием")
     public void givenTaskRequestNameTaskNull_whenAddTasks_thenNameTaskNull_fail() {
         //given
-        TaskRequest taskRequest = taskDbFalseGenerate(null, "m", EPriority.LOW, ERole.ROLE_USER);
+        TaskRequest taskRequest = taskGenerate(null, "m", EPriority.LOW, ERole.ROLE_USER);
 
         //when
         ResultActions resultActions = sendPostTasksAndGetResultActions(taskRequest);
@@ -111,7 +111,7 @@ public class PostTasksTest extends PostTasksPrepareTest {
     @Description("Неудачная попытка добавления задачи с пустым описанием")
     public void givenTaskRequestDescriptionNull_whenAddTasks_thenMessageNotNull_fail() {
         //given
-        TaskRequest taskRequest = taskDbFalseGenerate("name", null, EPriority.LOW, ERole.ROLE_USER);
+        TaskRequest taskRequest = taskGenerate("name", null, EPriority.LOW, ERole.ROLE_USER);
 
         //when
         ResultActions resultActions = sendPostTasksAndGetResultActions(taskRequest);
@@ -124,7 +124,7 @@ public class PostTasksTest extends PostTasksPrepareTest {
     @Description("Неудачная попытка добавления задачи, пользователь не авторизирован")
     public void givenTaskRequestUnAuthorized_whenAddTasks_thenUnAuthorized_fail() {
         //given
-        TaskRequest taskRequest = taskDbFalseGenerate("task", "m", EPriority.LOW, ERole.ROLE_USER);
+        TaskRequest taskRequest = taskGenerate("task", "m", EPriority.LOW, ERole.ROLE_USER);
 
         //when
         ResultActions resultActions = sendPostTasksAndGetResultActions(taskRequest);

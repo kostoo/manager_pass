@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Getter
@@ -16,8 +17,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class UpdateTaskRequest {
 
+    @Size(max = 255)
     private String name;
 
+    @Size(max = 255)
     private String message;
 
     private UserEntity userEntity;

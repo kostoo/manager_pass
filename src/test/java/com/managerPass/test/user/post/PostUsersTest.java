@@ -16,9 +16,7 @@ public class PostUsersTest extends PostUsersPrepareTest {
     @Description("Успешное добавление пользователя с обязательными параметрами")
     public void givenUser_whenPostUsers_thenAddUsers_roleAdmin_ok() {
         //given
-        UserEntity user = userGenerate(
-                "name", "lastname", "username", "email@email", false
-        );
+        UserEntity user = userGenerate("name", "lastname", "username", "email@email");
 
         //when
         ResultActions resultActions = sendPostUsersAndGetResultActions(user);
@@ -33,10 +31,8 @@ public class PostUsersTest extends PostUsersPrepareTest {
     @Description("Неудачное добавление пользователя, username уже используется")
     public void givenUserUsernameAlreadyExists_whenAddUsers_whenExistsUserName_fail() {
         //given
-        userGenerate("name", "lastname", "username", "email@email", true);
-        UserEntity userAlreadyExists = userGenerate(
-                "name", "lastname", "username", "email1@email", false
-        );
+        userGenerateDb("name", "lastname", "username", "email@email");
+        UserEntity userAlreadyExists = userGenerate("name", "lastname", "username", "email1@email");
 
         //when
         ResultActions resultActions = sendPostUsersAndGetResultActions(userAlreadyExists);
@@ -50,10 +46,8 @@ public class PostUsersTest extends PostUsersPrepareTest {
     @Description("Неудачное добавление пользователя, email уже используется")
     public void givenUserEmailAlreadyExists_whenAddUsers_thenEmailExists_fail() {
         //given
-        userGenerate("name", "lastname", "username", "email@email", true);
-        UserEntity userAlreadyExists = userGenerate(
-                "name", "lastname", "userName", "email@email", false
-        );
+        userGenerateDb("name", "lastname", "username", "email@email");
+        UserEntity userAlreadyExists = userGenerate("name", "lastname", "userName", "email@email");
 
         //when
         ResultActions resultActions = sendPostUsersAndGetResultActions(userAlreadyExists);
@@ -66,9 +60,7 @@ public class PostUsersTest extends PostUsersPrepareTest {
     @Description("Неудачное добавление пользователя, пользователь не авторизирован")
     public void givenUserUnAuthorized_whenAddUsers_thenUnAuthorized_fail() {
         //given
-        UserEntity user = userGenerate(
-                "name", "lastname", "username", "email@email", false
-        );
+        UserEntity user = userGenerate("name", "lastname", "username", "email@email");
 
         //when
         ResultActions resultActions = sendPostUsersAndGetResultActions(user);

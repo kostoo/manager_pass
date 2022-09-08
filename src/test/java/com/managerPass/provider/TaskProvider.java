@@ -33,35 +33,42 @@ public class TaskProvider {
                                     .build();
     }
 
-    public TaskEntity taskGenerate(String name, String message, EPriority ePriority, ERole eRole, Boolean addInDb) {
+    public TaskEntity taskGenerate(String name, String message, EPriority ePriority, ERole eRole) {
 
         PriorityEntity priorityEntity = priorityProvider.priorityGenerate(ePriority);
 
-        TaskEntity task = ObjectGeneratorUtil.taskEntityGeneration(
-           name, message, priorityEntity, userProvider.userGenerate(
-                   "test", "test@test.ru", eRole, "nikita", "lastname", true
-                        )
+        return ObjectGeneratorUtil.taskEntityGeneration(name, message, priorityEntity,
+                userProvider.userGenerateDb("test", "test@test.ru", eRole, "nikita", "lastname")
         );
-
-        if (addInDb) {
-            return taskRepositoryTest.save(task);
-        } else {
-            return task;
-        }
     }
 
-    public TaskEntity taskGenerate(String name, String message, EPriority ePriority, UserEntity user, Boolean addInDb) {
+    public TaskEntity taskGenerateDb(String name, String message, EPriority ePriority, ERole eRole) {
+
+        PriorityEntity priorityEntity = priorityProvider.priorityGenerate(ePriority);
+
+        return taskRepositoryTest.save(ObjectGeneratorUtil.taskEntityGeneration(name, message, priorityEntity,
+                userProvider.userGenerateDb("test", "test@test.ru", eRole, "nikita", "lastname")
+        ));
+    }
+
+    public TaskEntity taskGenerate(String name, String message, EPriority ePriority, UserEntity user) {
+
+        PriorityEntity priorityEntity = priorityProvider.priorityGenerate(ePriority);
+
+        return ObjectGeneratorUtil.taskEntityGeneration(name, message, priorityEntity, user);
+
+    }
+
+    public TaskEntity taskGenerateDb(String name, String message, EPriority ePriority, UserEntity user) {
 
         PriorityEntity priorityEntity = priorityProvider.priorityGenerate(ePriority);
 
         TaskEntity task = ObjectGeneratorUtil.taskEntityGeneration(name, message, priorityEntity, user);
 
-        if (addInDb) {
-            return taskRepositoryTest.save(task);
-        } else {
-            return task;
-        }
+        return taskRepositoryTest.save(task);
+
     }
+
 
     public Boolean existTaskById(Long id) {
         return taskRepositoryTest.existsById(id);

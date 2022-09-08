@@ -13,15 +13,15 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 
     public static ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex) {
 
-        final ArrayList<String> errors = new ArrayList<>();
-        for (final ConstraintViolation<?> violation : ex.getConstraintViolations()) {
+        ArrayList<String> errors = new ArrayList<>();
+        for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
             errors.add(
                     String.format("%s  %s : %s)", violation.getRootBeanClass().getName(), violation.getPropertyPath(),
                             violation.getMessage())
             );
         }
 
-        final ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
     }
 }

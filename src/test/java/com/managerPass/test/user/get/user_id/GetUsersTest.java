@@ -1,4 +1,4 @@
-package com.managerPass.test.user.get.userId;
+package com.managerPass.test.user.get.user_id;
 
 import com.managerPass.jpa.entity.UserEntity;
 import org.junit.jupiter.api.Test;

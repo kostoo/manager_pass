@@ -9,9 +9,9 @@ import org.springframework.test.web.servlet.ResultActions;
 
 public class PutTasksPrepareTest extends PrepareServiceTest {
 
-    protected TaskRequest taskUpdateGenerate(String nameTask, String message, EPriority ePriority, ERole eRole) {
+    protected TaskRequest taskUpdateGenerate(String nameTask, ERole eRole) {
         return taskProvider.taskRequestGenerate(
-                    taskProvider.taskGenerate(nameTask, message, ePriority, eRole, false)
+                taskProvider.taskGenerate(nameTask, "update message", EPriority.LOW, eRole)
         );
     }
 
@@ -20,14 +20,10 @@ public class PutTasksPrepareTest extends PrepareServiceTest {
     }
 
     protected TaskEntity taskAddGenerate() {
-        return taskProvider.taskGenerate(
-                "test task", "message", EPriority.HIGH, ERole.ROLE_ADMIN, true
-        );
+        return taskProvider.taskGenerate("test task", "message", EPriority.HIGH, ERole.ROLE_ADMIN);
     }
     @Override
     public void beforeTest() {
-        userProvider.userGenerate(
-                "kosto", "password", ERole.ROLE_ADMIN, "nik", "nest", true
-        );
+        userProvider.userGenerateDb("kosto", "password", ERole.ROLE_ADMIN, "nik", "nest");
     }
 }

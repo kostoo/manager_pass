@@ -11,17 +11,13 @@ import org.springframework.test.web.servlet.ResultActions;
 
 public class PostTasksPrepareTest extends PrepareServiceTest {
 
-    protected TaskRequest taskDbFalseGenerate(String nameTask, String message, EPriority ePriority, ERole eRole) {
-        return taskProvider.taskRequestGenerate(
-                         taskProvider.taskGenerate(nameTask, message, ePriority, eRole, false)
-        );
+    protected TaskRequest taskGenerate(String nameTask, String message, EPriority ePriority, ERole eRole) {
+        return taskProvider.taskRequestGenerate(taskProvider.taskGenerate(nameTask, message, ePriority, eRole));
     }
 
     @Override
     public void beforeTest() {
-        userProvider.userGenerate(
-             "kosto", "test@test.ru", ERole.ROLE_ADMIN, "nikita", "lastname", true
-        );
+        userProvider.userGenerateDb("kosto", "test@test.ru", ERole.ROLE_ADMIN, "nikita", "lastname");
     }
 
     protected ResultActions sendPostTasksAndGetResultActions(Object addObject) {

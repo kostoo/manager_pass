@@ -1,4 +1,4 @@
-package com.managerPass.test.task.get.tasksIdTask;
+package com.managerPass.test.task.get.task_id;
 
 import com.managerPass.jpa.entity.TaskEntity;
 import org.junit.jupiter.api.Test;

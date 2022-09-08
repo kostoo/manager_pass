@@ -1,8 +1,8 @@
 package com.managerPass.service;
 
-import com.managerPass.jpa.repository_service.UserRepositoryService;
-import com.managerPass.payload.request.AddUserRequest;
-import com.managerPass.payload.request.UserRequest;
+import com.managerPass.jpa.service.UserRepositoryService;
+import com.managerPass.payload.request.user.AddUserRequest;
+import com.managerPass.payload.request.user.UpdateUserRequest;
 import com.managerPass.payload.response.UserResponse;
 import com.managerPass.util.UserConverter;
 import lombok.RequiredArgsConstructor;
@@ -19,13 +19,13 @@ public class UserService {
     private final UserConverter userConverter;
     private final UserRepositoryService userRepositoryService;
 
-    public List<UserResponse> getUsersNameLastName(String name, String lastName, Pageable pageable) {
+    public List<UserResponse> getUsers(String name, String lastName, Pageable pageable) {
         return userConverter.convertListUserEntityToUserResponse(
-                userRepositoryService.getUsersNameLastName(name, lastName, pageable)
+                userRepositoryService.getUsers(name, lastName, pageable)
         );
     }
 
-    public UserResponse getUsersIdUser(Long idUser) {
+    public UserResponse getUsersId(Long idUser) {
         return userConverter.userResponseGenerate(userRepositoryService.getUserById(idUser));
     }
 
@@ -37,15 +37,15 @@ public class UserService {
         return userConverter.userResponseGenerate(userRepositoryService.addUser(addUserRequest));
     }
 
-    public UserResponse updateUser(UserRequest userRequest, Long idUser) throws ResponseStatusException {
-        return userConverter.userResponseGenerate(userRepositoryService.updateUser(userRequest, idUser));
+    public UserResponse updateUser(UpdateUserRequest updateUser, Long idUser) throws ResponseStatusException {
+        return userConverter.userResponseGenerate(userRepositoryService.updateUser(updateUser, idUser));
     }
 
-    public UserResponse postIsUserBlock(Long idUser, Boolean isAccountNonBlock) {
-        return userConverter.userResponseGenerate(userRepositoryService.postIsUserBlock(idUser, isAccountNonBlock));
+    public UserResponse changeStatusBlockUser(Long idUser, Boolean isAccountNonBlock) {
+        return userConverter.userResponseGenerate(userRepositoryService.changeUserStatusBlock(idUser, isAccountNonBlock));
     }
 
-    public void deleteUserIdUser(Long idUser) {
+    public void deleteUserId(Long idUser) {
         userRepositoryService.deleteUserByIdUser(idUser);
     }
 }

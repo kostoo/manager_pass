@@ -1,16 +1,17 @@
-package com.managerPass.jpa.repository_service;
+package com.managerPass.jpa.service;
 
 import com.managerPass.exception.CustomRestExceptionHandler;
 import com.managerPass.jpa.entity.UserEntity;
 import com.managerPass.jpa.repository.UserEntityRepository;
-import com.managerPass.payload.request.AddUserRequest;
-import com.managerPass.payload.request.UserRequest;
-import com.managerPass.util.UserConverter;
+import com.managerPass.payload.request.user.AddUserRequest;
+import com.managerPass.payload.request.user.UpdateUserRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.ConstraintViolationException;
@@ -22,9 +23,8 @@ import java.util.List;
 public class UserRepositoryService {
 
     private final UserEntityRepository userEntityRepository;
-    private final UserConverter userConverter;
 
-    public List<UserEntity> getUsersNameLastName(String name, String lastName, Pageable pageable) {
+    public List<UserEntity> getUsers(String name, String lastName, Pageable pageable) {
         return userEntityRepository.findAllByNameAndLastName(name, lastName, pageable);
     }
 
@@ -46,6 +46,7 @@ public class UserRepositoryService {
         );
     }
 
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public void deleteUserByIdUser(Long idUser) throws ResponseStatusException {
        existByIdUser(idUser);
        userEntityRepository.deleteById(idUser);
@@ -70,11 +71,31 @@ public class UserRepositoryService {
         }
     }
 
-    public UserEntity updateUser(UserRequest userRequest, Long idUser) throws ResponseStatusException {
-        return userEntityRepository.save(userConverter.userEntityGenerate(userRequest, idUser));
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public UserEntity updateUser(UpdateUserRequest updateUser, Long idUser) throws ResponseStatusException {
+
+        UserEntity user = getUserById(idUser);
+
+        if (updateUser.getName() != null) {
+            user.setName(updateUser.getName());
+        }
+        if (updateUser.getLastName() != null) {
+            user.setLastName(updateUser.getLastName());
+        }
+        if (updateUser.getUsername() != null) {
+            user.setUsername(updateUser.getUsername());
+        }
+        if (updateUser.getEmail() != null) {
+            user.setEmail(updateUser.getEmail());
+        }
+        if (updateUser.getRoles() != null) {
+            user.setRoles(updateUser.getRoles());
+        }
+
+        return userEntityRepository.save(user);
     }
 
-    public UserEntity postIsUserBlock(Long idUser, Boolean isAccountNonBlock) {
+    public UserEntity changeUserStatusBlock(Long idUser, Boolean isAccountNonBlock) {
         UserEntity userEntity = getUserById(idUser);
         userEntity.setIsAccountNonBlock(isAccountNonBlock);
 

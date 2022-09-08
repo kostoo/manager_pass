@@ -1,4 +1,4 @@
-package com.managerPass.jpa.repository_service;
+package com.managerPass.jpa.service;
 
 import com.managerPass.jpa.entity.Enum.EPriority;
 import com.managerPass.jpa.entity.PriorityEntity;

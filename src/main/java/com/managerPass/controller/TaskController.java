@@ -1,7 +1,7 @@
 package com.managerPass.controller;
 
 import com.managerPass.jpa.entity.Enum.EPriority;
-import com.managerPass.jpa.repository_service.TaskRepositoryService;
+import com.managerPass.jpa.service.TaskRepositoryService;
 import com.managerPass.payload.request.task.AddTaskRequest;
 import com.managerPass.payload.request.task.UpdateTaskRequest;
 import com.managerPass.payload.response.TaskResponse;
@@ -44,7 +44,7 @@ public class TaskController {
    @GetMapping(path = "/{idTask}", produces = MediaType.APPLICATION_JSON_VALUE)
    @PreAuthorize(value = "hasRole('USER') or hasRole('ADMIN')")
    public ResponseEntity<TaskResponse> getTasksIdTask(@PathVariable Long idTask) {
-     return ResponseEntity.ok(taskService.getByIdTask(idTask));
+     return ResponseEntity.ok(taskService.getById(idTask));
    }
 
    @DeleteMapping(path = "/{idTask}")
@@ -87,8 +87,8 @@ public class TaskController {
       Pageable pageable = PageRequest.of(page, sizePage);
 
       return ResponseEntity.ok().body(
-              taskService.getAllByAuthUserWithNamePriorityPageableDateTimeStartDateTimeFinish(
-                                    namePriority, pageable, startDateTime, finishDateTime
+              taskService.getAllByUserByNamePriorityOrDateTimeStartAndDateTimeFinish(
+                      namePriority, pageable, startDateTime, finishDateTime
               )
       );
    }

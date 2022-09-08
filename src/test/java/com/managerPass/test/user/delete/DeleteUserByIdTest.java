@@ -9,7 +9,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Description("Удаление пользователя")
-public class DeleteUserIdTest extends DeleteUserIdUserPrepareTest {
+public class DeleteUserByIdTest extends DeleteUserByIdPrepareTest {
 
     @Test
     @WithMockUser(username = "kosto", roles = "ADMIN")

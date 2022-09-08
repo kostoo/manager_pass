@@ -1,7 +1,7 @@
 package com.managerPass.controller;
 
-import com.managerPass.payload.request.AddUserRequest;
-import com.managerPass.payload.request.UserRequest;
+import com.managerPass.payload.request.user.AddUserRequest;
+import com.managerPass.payload.request.user.UpdateUserRequest;
 import com.managerPass.payload.response.UserResponse;
 import com.managerPass.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +41,7 @@ public class UserController {
                                                                    @RequestParam(required = false) String lastName) {
         Pageable pageable = PageRequest.of(page, sizePage);
 
-        return ResponseEntity.ok(userService.getUsersNameLastName(name, lastName, pageable));
+        return ResponseEntity.ok(userService.getUsers(name, lastName, pageable));
     }
 
     @GetMapping(path = "/username", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -53,14 +53,14 @@ public class UserController {
     @DeleteMapping(path = "/{idUser}")
     @PreAuthorize(value = " hasRole('ADMIN')")
     public ResponseEntity<?> deleteUsersIdUser(@PathVariable (value = "idUser") Long id) {
-        userService.deleteUserIdUser(id);
+        userService.deleteUserId(id);
         return ResponseEntity.ok().build();
    }
 
     @GetMapping(path = "/{idUser}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = " hasRole('ADMIN')")
     public ResponseEntity<UserResponse> getUserIdUser(@PathVariable (value = "idUser") Long idUser) {
-        return ResponseEntity.ok().body(userService.getUsersIdUser(idUser));
+        return ResponseEntity.ok().body(userService.getUsersId(idUser));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -71,19 +71,19 @@ public class UserController {
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = " hasRole('ADMIN')")
-    public ResponseEntity<UserResponse> putUsers(@Valid @RequestBody UserRequest userRequest, Long idUser) {
-       return ResponseEntity.ok().body(userService.updateUser(userRequest, idUser));
+    public ResponseEntity<UserResponse> putUsers(@Valid @RequestBody UpdateUserRequest updateUser, Long idUser) {
+       return ResponseEntity.ok().body(userService.updateUser(updateUser, idUser));
     }
 
     @PatchMapping(path = "/block", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = " hasRole('ADMIN')")
-    public ResponseEntity<UserResponse> postUsersBlockIdUser(@RequestParam Long idUser) {
-        return ResponseEntity.ok(userService.postIsUserBlock(idUser, true));
+    public ResponseEntity<UserResponse> patchUsersBlockIdUser(@RequestParam Long idUser) {
+        return ResponseEntity.ok(userService.changeStatusBlockUser(idUser, true));
     }
 
     @PatchMapping(path = "/unblock", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = " hasRole('ADMIN')")
     public ResponseEntity<UserResponse> patchUsersUnBlockIdUser(@RequestParam Long idUser) {
-        return ResponseEntity.ok(userService.postIsUserBlock(idUser, false));
+        return ResponseEntity.ok(userService.changeStatusBlockUser(idUser, false));
     }
 }

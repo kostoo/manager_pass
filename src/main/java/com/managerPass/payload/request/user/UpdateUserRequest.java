@@ -1,4 +1,4 @@
-package com.managerPass.payload.request;
+package com.managerPass.payload.request.user;
 
 import com.managerPass.jpa.entity.RoleEntity;
 import lombok.AllArgsConstructor;
@@ -6,30 +6,26 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
-@Builder
-@AllArgsConstructor
 @Getter
 @Setter
-public class UserRequest {
+@Builder
+@AllArgsConstructor
+public class UpdateUserRequest {
 
-    @NotNull
+    @Size(max = 255)
     private String name;
 
-    @NotNull
+    @Size(max = 255)
     private String lastName;
 
-    @Size(min = 5, max = 20)
+    @Size(max = 20)
     private String username;
 
-    @Size(min = 5, max = 50)
-    @Email
+    @Size(max = 50)
     private String email;
 
     private Set<RoleEntity> roles ;
-
 }

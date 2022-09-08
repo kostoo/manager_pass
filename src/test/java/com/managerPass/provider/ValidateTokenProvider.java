@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class ValidateTokenProvider {
 
     @Autowired
-    ValidateTokenRepositoryTest validateTokenRepositoryTest;
+    private ValidateTokenRepositoryTest validateTokenRepositoryTest;
 
     public ValidateTokenEntity getValidateTokenEntityByUserEntityIdUser(Long idUser) {
         return validateTokenRepositoryTest.getValidateTokenEntityByUserEntity_IdUser(idUser);

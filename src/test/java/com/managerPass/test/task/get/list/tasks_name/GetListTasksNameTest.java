@@ -1,4 +1,4 @@
-package com.managerPass.test.task.get.listTasksName;
+package com.managerPass.test.task.get.list.tasks_name;
 
 import com.managerPass.jpa.entity.TaskEntity;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,6 @@ public class GetListTasksNameTest extends GetListTasksNamePrepareTest {
         ResultActions resultActions = getActionResult("/api/tasks?name={name}", taskEntity.getName());
 
         //then
-
         assertStatus(resultActions, status().is2xxSuccessful());
 
         expectAll(

@@ -1,7 +1,7 @@
 package com.managerPass.service;
 
 import com.managerPass.jpa.entity.Enum.EPriority;
-import com.managerPass.jpa.repository_service.TaskRepositoryService;
+import com.managerPass.jpa.service.TaskRepositoryService;
 import com.managerPass.payload.request.task.AddTaskRequest;
 import com.managerPass.payload.request.task.UpdateTaskRequest;
 import com.managerPass.payload.response.TaskResponse;
@@ -24,8 +24,8 @@ public class TaskService {
         return taskConverter.convertListTaskEntityToTaskResponse(taskRepositoryService.getAll(name));
     }
 
-    public TaskResponse getByIdTask(Long id) {
-        return taskConverter.taskResponseGenerate(taskRepositoryService.getByIdTask(id));
+    public TaskResponse getById(Long id) {
+        return taskConverter.taskResponseGenerate(taskRepositoryService.getTaskById(id));
     }
 
     public TaskResponse addTask(AddTaskRequest addTaskRequest) {
@@ -36,13 +36,13 @@ public class TaskService {
         return taskConverter.taskResponseGenerate(taskRepositoryService.updateTask(taskRequest, idTask));
     }
 
-    public List<TaskResponse> getAllByAuthUserWithNamePriorityPageableDateTimeStartDateTimeFinish(
-                                                                              EPriority namePriority, Pageable pageable,
-                                                                              LocalDateTime dateTimeStart,
-                                                                              LocalDateTime dateTimeFinish) {
+    public List<TaskResponse> getAllByUserByNamePriorityOrDateTimeStartAndDateTimeFinish(EPriority namePriority,
+                                                                                         Pageable pageable,
+                                                                                         LocalDateTime dateTimeStart,
+                                                                                         LocalDateTime dateTimeFinish) {
 
         return taskConverter.convertListTaskEntityToTaskResponse(
-                taskRepositoryService.getAllByAuthUserWithEPriorityPageableDateTimeStartDateTimeFinish(
+                taskRepositoryService.getAllByAuthUserByEPriorityOrDateTimeStartAndDateTimeFinish(
                         namePriority, pageable, dateTimeStart, dateTimeFinish
                 )
         );

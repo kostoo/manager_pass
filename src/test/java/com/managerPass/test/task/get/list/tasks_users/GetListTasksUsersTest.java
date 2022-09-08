@@ -1,4 +1,4 @@
-package com.managerPass.test.task.get.listTasksUsers;
+package com.managerPass.test.task.get.list.tasks_users;
 
 import com.managerPass.jpa.entity.Enum.EPriority;
 import com.managerPass.jpa.entity.TaskEntity;

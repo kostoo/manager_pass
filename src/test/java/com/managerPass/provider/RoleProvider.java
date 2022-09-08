@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class RoleProvider {
 
     @Autowired
-    RoleRepositoryTest roleRepositoryTest;
+    private RoleRepositoryTest roleRepositoryTest;
 
     public RoleEntity roleGenerate(ERole eRole) {
         RoleEntity roleEntity = new RoleEntity();

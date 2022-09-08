@@ -9,9 +9,7 @@ public class AuthPrepareTest extends PrepareServiceTest {
 
     @Override
     public void beforeTest() {
-        userProvider.userGenerate(
-            "kosto", "test@test.ru", ERole.ROLE_ADMIN, "nikita", "lastname", true
-        );
+        userProvider.userGenerateDb("kosto", "test@test.ru", ERole.ROLE_ADMIN, "nikita", "lastname");
     }
 
     public ResultActions sendPostLoginAndGetResultActions(LoginRequest loginRequest) {

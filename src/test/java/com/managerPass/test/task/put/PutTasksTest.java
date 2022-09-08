@@ -1,6 +1,5 @@
 package com.managerPass.test.task.put;
 
-import com.managerPass.jpa.entity.Enum.EPriority;
 import com.managerPass.jpa.entity.Enum.ERole;
 import com.managerPass.jpa.entity.TaskEntity;
 import com.managerPass.payload.request.task.TaskRequest;
@@ -22,7 +21,7 @@ public class PutTasksTest extends PutTasksPrepareTest {
         //given
         TaskEntity taskEntity = taskAddGenerate();
         TaskRequest updateTask = taskUpdateGenerate(
-                "updateTaskAdmin", "update message", EPriority.LOW, ERole.ROLE_ADMIN
+                "updateTaskAdmin", ERole.ROLE_ADMIN
         );
 
         //when
@@ -44,7 +43,7 @@ public class PutTasksTest extends PutTasksPrepareTest {
         //given
         TaskEntity taskEntity = taskAddGenerate();
         TaskRequest updateTask = taskUpdateGenerate(
-                "updateTaskUser", "update message", EPriority.LOW, ERole.ROLE_USER
+                "updateTaskUser", ERole.ROLE_USER
         );
 
         //when

@@ -8,7 +8,7 @@ import com.managerPass.jpa.entity.UserSecurity;
 import com.managerPass.jpa.entity.ValidateTokenEntity;
 import com.managerPass.jpa.repository.RoleRepository;
 import com.managerPass.jpa.repository.UserEntityRepository;
-import com.managerPass.jpa.repository_service.ValidateTokenRegisterRepositoryService;
+import com.managerPass.jpa.service.ValidateTokenRegisterRepositoryService;
 import com.managerPass.mail.AppMailSender;
 import com.managerPass.payload.request.LoginRequest;
 import com.managerPass.payload.request.SignupRequest;

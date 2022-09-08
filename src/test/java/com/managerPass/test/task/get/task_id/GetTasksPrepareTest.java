@@ -1,4 +1,4 @@
-package com.managerPass.test.task.get.tasksIdTask;
+package com.managerPass.test.task.get.task_id;
 
 import com.managerPass.jpa.entity.Enum.EPriority;
 import com.managerPass.jpa.entity.Enum.ERole;
@@ -13,13 +13,11 @@ public class GetTasksPrepareTest extends PrepareServiceTest {
     }
 
     protected TaskEntity taskAdminGenerate() {
-        return taskProvider.taskGenerate("test task", "message", EPriority.HIGH, ERole.ROLE_ADMIN, true);
+        return taskProvider.taskGenerateDb("test task", "message", EPriority.HIGH, ERole.ROLE_ADMIN);
     }
 
     @Override
     public void beforeTest() {
-        userProvider.userGenerate(
-             "kosto", "test@test.ru", ERole.ROLE_ADMIN, "nikita", "lastname", true
-        );
+        userProvider.userGenerateDb("kosto", "test@test.ru", ERole.ROLE_ADMIN, "nikita", "lastname");
     }
 }

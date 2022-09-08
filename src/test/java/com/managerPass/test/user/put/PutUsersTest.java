@@ -1,7 +1,7 @@
 package com.managerPass.test.user.put;
 
 import com.managerPass.jpa.entity.UserEntity;
-import com.managerPass.payload.request.UserRequest;
+import com.managerPass.payload.request.user.UserRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.rest.core.annotation.Description;
 import org.springframework.security.test.context.support.WithMockUser;
