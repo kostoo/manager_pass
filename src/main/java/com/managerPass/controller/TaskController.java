@@ -24,6 +24,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -37,19 +40,19 @@ public class TaskController {
    
    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
    @PreAuthorize(value = "hasRole('ADMIN')")
-   public ResponseEntity<List<TaskResponse>> getTasks(@RequestParam(required = false) String name) {
+   public ResponseEntity<List<TaskResponse>> getTasks(@RequestParam(required = false) @Size(max = 60) String name) {
       return ResponseEntity.ok(taskService.getAll(name));
    }
 
    @GetMapping(path = "/{idTask}", produces = MediaType.APPLICATION_JSON_VALUE)
    @PreAuthorize(value = "hasRole('USER') or hasRole('ADMIN')")
-   public ResponseEntity<TaskResponse> getTasksIdTask(@PathVariable Long idTask) {
+   public ResponseEntity<TaskResponse> getTasksIdTask(@PathVariable @Min(1) Long idTask) {
      return ResponseEntity.ok(taskService.getById(idTask));
    }
 
    @DeleteMapping(path = "/{idTask}")
    @PreAuthorize(value = "hasRole('USER') or hasRole('ADMIN')")
-   public ResponseEntity<?> deleteTasksIdTask(@PathVariable(value = "idTask") Long idTask) {
+   public ResponseEntity<?> deleteTasksIdTask(@PathVariable(value = "idTask") @Min(1) Long idTask) {
       taskRepositoryService.deleteByIdTask(idTask);
       return ResponseEntity.ok().build();
    }
@@ -64,7 +67,7 @@ public class TaskController {
                produces = MediaType.APPLICATION_JSON_VALUE)
    @PreAuthorize(value = "hasRole('USER') or hasRole('ADMIN')")
    public ResponseEntity<TaskResponse> putTasks(@Valid @RequestBody UpdateTaskRequest updateTaskRequest,
-                                                @PathVariable Long idTask) {
+                                                @PathVariable @Min(1) Long idTask) {
 
       return ResponseEntity.ok(taskService.updateTask(updateTaskRequest, idTask));
    }
@@ -72,7 +75,8 @@ public class TaskController {
    @GetMapping(path = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
    @PreAuthorize(value = "hasRole('USER') or hasRole('ADMIN')")
    public ResponseEntity<List<TaskResponse>> getTasksUsers(@RequestParam(defaultValue = "0") int page,
-                                                           @RequestParam(defaultValue = "10") int sizePage,
+                                                           @RequestParam(defaultValue = "10") @Min(1) @Max(100)
+                                                           int sizePage,
 
                                                            @RequestParam(required = false) EPriority namePriority,
 

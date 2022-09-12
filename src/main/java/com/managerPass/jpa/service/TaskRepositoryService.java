@@ -1,6 +1,5 @@
 package com.managerPass.jpa.service;
 
-import com.managerPass.exception.CustomRestExceptionHandler;
 import com.managerPass.jpa.entity.Enum.EPriority;
 import com.managerPass.jpa.entity.TaskEntity;
 import com.managerPass.jpa.repository.TaskEntityRepository;
@@ -68,7 +67,7 @@ public class TaskRepositoryService {
             return taskEntityRepository.save(task);
 
         } catch (ConstraintViolationException e) {
-            log.warn(e.getClass().getName(), CustomRestExceptionHandler.handleConstraintViolation(e));
+            log.warn(e.getClass().getName(), e.getMessage());
 
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
@@ -102,7 +101,7 @@ public class TaskRepositoryService {
             return taskEntityRepository.save(task);
 
         } catch (ConstraintViolationException e) {
-            log.warn(e.getClass().getName(), CustomRestExceptionHandler.handleConstraintViolation(e));
+            log.warn(e.getClass().getName(), e.getMessage());
 
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
@@ -120,7 +119,8 @@ public class TaskRepositoryService {
         return pageUtil.convertPageToList(
                     taskEntityRepository.findAllByUserEntityIdUserAndPriorityIdOrDateTimeStartAndDateTimeFinish(
                               idPriority, idUser, dateTimeStart, dateTimeFinish, pageable
-       ));
+                    )
+        );
     }
 
 }

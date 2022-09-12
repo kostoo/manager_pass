@@ -22,6 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @RestController
@@ -33,33 +36,30 @@ public class UserController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = " hasRole('ADMIN')")
-    public ResponseEntity<List<UserResponse>> getUsersNameLastName(@RequestParam(defaultValue = "0") int page,
-                                                                   @RequestParam(defaultValue = "10") int sizePage,
+    public ResponseEntity<List<UserResponse>> getUsers(@RequestParam(defaultValue = "0") int page,
+                                                       @RequestParam(defaultValue = "10") @Min(1) @Max(100)
+                                                       int sizePage,
 
-                                                                   @RequestParam(required = false) String name,
+                                                       @RequestParam(required = false) @Size(max = 100) String name,
 
-                                                                   @RequestParam(required = false) String lastName) {
+                                                       @RequestParam(required = false) @Size(max = 100)
+                                                       String lastName) {
+
         Pageable pageable = PageRequest.of(page, sizePage);
 
         return ResponseEntity.ok(userService.getUsers(name, lastName, pageable));
     }
 
-    @GetMapping(path = "/username", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize(value = " hasRole('ADMIN')")
-    public ResponseEntity<UserResponse> getUsersUsername(@RequestParam String username) {
-        return ResponseEntity.ok(userService.getUsersUserName(username));
-    }
-
     @DeleteMapping(path = "/{idUser}")
     @PreAuthorize(value = " hasRole('ADMIN')")
-    public ResponseEntity<?> deleteUsersIdUser(@PathVariable (value = "idUser") Long id) {
-        userService.deleteUserId(id);
+    public ResponseEntity<?> deleteUsersIdUser(@PathVariable(value = "idUser") @Min(1) Long idUser) {
+        userService.deleteUserId(idUser);
         return ResponseEntity.ok().build();
    }
 
     @GetMapping(path = "/{idUser}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = " hasRole('ADMIN')")
-    public ResponseEntity<UserResponse> getUserIdUser(@PathVariable (value = "idUser") Long idUser) {
+    public ResponseEntity<UserResponse> getUserIdUser(@PathVariable(value = "idUser") @Min(1) Long idUser) {
         return ResponseEntity.ok().body(userService.getUsersId(idUser));
     }
 
@@ -77,13 +77,13 @@ public class UserController {
 
     @PatchMapping(path = "/block", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = " hasRole('ADMIN')")
-    public ResponseEntity<UserResponse> patchUsersBlockIdUser(@RequestParam Long idUser) {
+    public ResponseEntity<UserResponse> patchUsersBlockIdUser(@RequestParam @Min(1) Long idUser) {
         return ResponseEntity.ok(userService.changeStatusBlockUser(idUser, true));
     }
 
     @PatchMapping(path = "/unblock", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize(value = " hasRole('ADMIN')")
-    public ResponseEntity<UserResponse> patchUsersUnBlockIdUser(@RequestParam Long idUser) {
+    public ResponseEntity<UserResponse> patchUsersUnBlockIdUser(@RequestParam @Min(1) Long idUser) {
         return ResponseEntity.ok(userService.changeStatusBlockUser(idUser, false));
     }
 }

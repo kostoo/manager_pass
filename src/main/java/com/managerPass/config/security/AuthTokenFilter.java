@@ -23,6 +23,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class AuthTokenFilter extends OncePerRequestFilter {
 
+    private static final int BEGIN_INDEX_SUBSTRING = 7;
     private final JwtUtils jwtUtils;
     private final UserDetailsServiceImpl userDetailsService;
 
@@ -53,7 +54,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         String headerAuth = request.getHeader("Authorization");
 
         if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-            return headerAuth.substring(7);
+            return headerAuth.substring(BEGIN_INDEX_SUBSTRING);
         }
 
         return null;

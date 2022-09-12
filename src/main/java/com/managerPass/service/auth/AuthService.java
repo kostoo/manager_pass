@@ -65,21 +65,22 @@ public class AuthService {
         return ResponseEntity.ok(new JwtToken(jwt));
     }
 
-    public ResponseEntity<?> registerUser(SignupRequest signUpRequest) {
+    public ResponseEntity<MessageResponse> registerUser(SignupRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             log.warn(String.format("Username %s is already taken!", signUpRequest.getUsername()));
 
-            return ResponseEntity.badRequest().body(
-               new MessageResponse(String.format("Username %s is already taken!", signUpRequest.getUsername())
-            ));
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, String.format("Username %s is already taken!", signUpRequest.getUsername())
+            );
+
         }
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             log.warn(String.format("Email %s is already in use!", signUpRequest.getEmail()));
 
-            return ResponseEntity.badRequest().body(new MessageResponse(
-                    String.format("Email %s is already in use!", signUpRequest.getEmail())
-            ));
+            throw new ResponseStatusException(
+                   HttpStatus.BAD_REQUEST, String.format("Email %s is already in use!", signUpRequest.getEmail())
+            );
         }
 
         UserEntity user = new UserEntity(
@@ -135,7 +136,7 @@ public class AuthService {
                   String.format("Please activate your account %s %s",  urlToRegister, validateTokenEntity.getToken())
         );
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new MessageResponse("user registered"));
     }
 
     public ResponseEntity<MessageResponse> activateUser(String token) {

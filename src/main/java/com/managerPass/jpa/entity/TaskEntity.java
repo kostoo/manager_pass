@@ -19,7 +19,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -45,12 +44,10 @@ public class TaskEntity {
     @Column(name = "id_task")
     private Long idTask;
 
-    @NotNull
     @Size(min = 4)
     @Column(name = "name")
     private String name;
 
-    @NotNull
     @Column(name = "message", length = 1024)
     private String message;
 

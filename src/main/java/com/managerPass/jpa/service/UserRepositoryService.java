@@ -1,6 +1,5 @@
 package com.managerPass.jpa.service;
 
-import com.managerPass.exception.CustomRestExceptionHandler;
 import com.managerPass.jpa.entity.UserEntity;
 import com.managerPass.jpa.repository.UserEntityRepository;
 import com.managerPass.payload.request.user.AddUserRequest;
@@ -28,7 +27,7 @@ public class UserRepositoryService {
         return userEntityRepository.findAllByNameAndLastName(name, lastName, pageable);
     }
 
-    public UserEntity getUserById(Long idUser) {
+    public UserEntity getUserByIdUser(Long idUser) {
         return userEntityRepository.findById(idUser).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User not found Id : %x", idUser))
         );
@@ -65,7 +64,7 @@ public class UserRepositoryService {
             return userEntityRepository.save(userEntity);
 
         } catch (ConstraintViolationException e) {
-            log.warn(e.getClass().getName(), CustomRestExceptionHandler.handleConstraintViolation(e));
+            log.warn(e.getClass().getName(), e.getMessage());
 
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
@@ -74,7 +73,7 @@ public class UserRepositoryService {
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public UserEntity updateUser(UpdateUserRequest updateUser, Long idUser) throws ResponseStatusException {
 
-        UserEntity user = getUserById(idUser);
+        UserEntity user = getUserByIdUser(idUser);
 
         if (updateUser.getName() != null) {
             user.setName(updateUser.getName());
@@ -96,7 +95,7 @@ public class UserRepositoryService {
     }
 
     public UserEntity changeUserStatusBlock(Long idUser, Boolean isAccountNonBlock) {
-        UserEntity userEntity = getUserById(idUser);
+        UserEntity userEntity = getUserByIdUser(idUser);
         userEntity.setIsAccountNonBlock(isAccountNonBlock);
 
         return userEntityRepository.save(userEntity);

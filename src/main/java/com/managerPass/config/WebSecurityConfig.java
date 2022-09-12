@@ -23,8 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private static final int strengthPasswordEncoder = 12;
-
+    private static final int STRENGHT_PASSWORD_ENCODER = 12;
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthEntryPointJwt unauthorizedHandler;
     private final AuthTokenFilter authTokenFilter;
@@ -42,7 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(strengthPasswordEncoder);
+        return new BCryptPasswordEncoder(STRENGHT_PASSWORD_ENCODER);
     }
 
     @Override

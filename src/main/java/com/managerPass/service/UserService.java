@@ -26,7 +26,7 @@ public class UserService {
     }
 
     public UserResponse getUsersId(Long idUser) {
-        return userConverter.userResponseGenerate(userRepositoryService.getUserById(idUser));
+        return userConverter.userResponseGenerate(userRepositoryService.getUserByIdUser(idUser));
     }
 
     public UserResponse getUsersUserName(String username) {
